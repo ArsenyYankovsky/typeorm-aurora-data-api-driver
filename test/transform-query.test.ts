@@ -1,4 +1,4 @@
-import DataApiDriver from '../src/typeorm-data-api-driver'
+import DataApiDriver from '../src/aurora-data-api-driver'
 
 describe('aurora data api > query transformation', () => {
 
