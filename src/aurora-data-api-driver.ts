@@ -15,7 +15,11 @@ export default class DataApiDriver {
       return `:${paramName}`
     })
 
-    if (parameters && parameters.length > 0 && parameters.length % numberOfParametersInQueryString !== 0) {
+    if (
+      parameters &&
+      parameters.length > 0 &&
+      parameters.length % numberOfParametersInQueryString !== 0
+    ) {
       throw new Error(`Number of parameters mismatch, got ${numberOfParametersInQueryString} in query string \
             and ${parameters.length} in input`)
     }
@@ -25,7 +29,7 @@ export default class DataApiDriver {
     if (parameters && parameters.length > 0) {
       const numberOfObjects = parameters.length / numberOfParametersInQueryString
 
-      for (let i = 0; i < (numberOfObjects); i += 1) {
+      for (let i = 0; i < numberOfObjects; i += 1) {
         const parameterObject: any = {}
 
         for (let y = 0; y < numberOfParametersInQueryString; y += 1) {
@@ -40,7 +44,7 @@ export default class DataApiDriver {
 
     return {
       queryString: newQueryString,
-      parameters: transformedParameters,
+      parameters: transformedParameters
     }
   }
 
@@ -58,7 +62,13 @@ export default class DataApiDriver {
 
   private transaction: any = null
 
-  constructor(region: string, secretArn: string, resourceArn: string, database: string, loggerFn?: (query: string, parameters: any) => void) {
+  constructor(
+    region: string,
+    secretArn: string,
+    resourceArn: string,
+    database: string,
+    loggerFn?: (query: string, parameters: any) => void
+  ) {
     this.region = region
     this.secretArn = secretArn
     this.resourceArn = resourceArn
@@ -68,8 +78,8 @@ export default class DataApiDriver {
       resourceArn,
       database,
       options: {
-        region,
-      },
+        region
+      }
     })
     this.loggerFn = loggerFn
   }
@@ -83,7 +93,10 @@ export default class DataApiDriver {
 
     const clientOrTransaction = this.transaction || this.client
 
-    const result = await clientOrTransaction.query(transformedQueryData.queryString, transformedQueryData.parameters)
+    const result = await clientOrTransaction.query(
+      transformedQueryData.queryString,
+      transformedQueryData.parameters
+    )
 
     if (result.records) {
       return result.records
@@ -102,17 +115,19 @@ export default class DataApiDriver {
 
   public async commitTransaction(): Promise<void> {
     if (!this.transaction) {
-      throw new Error('Transaction doesn\'t exist')
+      throw new Error("Transaction doesn't exist")
     }
 
-    await this.transaction.rollback()
+    await this.transaction.commit()
+    this.transaction = null
   }
 
   public async rollbackTransaction(): Promise<void> {
     if (!this.transaction) {
-      throw new Error('Transaction doesn\'t exist')
+      throw new Error("Transaction doesn't exist")
     }
 
     await this.transaction.rollback()
+    this.transaction = null
   }
 }
