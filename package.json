@@ -23,7 +23,8 @@
     "prebuild": "rimraf dist",
     "build": "tsc --module commonjs && rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src",
     "start": "rollup -c rollup.config.ts -w",
-    "test": "jest",
+    "test:unit": "jest unit",
+    "test:func": "jest func",
     "test:watch": "jest --watch",
     "test:prod": "npm run lint && npm run test -- --no-cache",
     "deploy-docs": "ts-node tools/gh-pages-publish",
@@ -115,6 +116,7 @@
     "tslint-config-prettier": "^1.15.0",
     "tslint-config-standard": "^8.0.1",
     "typedoc": "^0.12.0",
+    "typeorm": "git://github.com/ArsenyYankovsky/typeorm#feature/aurora-data-api",
     "typescript": "^3.0.3"
   },
   "dependencies": {
