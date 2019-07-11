@@ -7,7 +7,7 @@ import json from 'rollup-plugin-json'
 
 const pkg = require('./package.json')
 
-const libraryName = 'typeorm-data-api-driver'
+const libraryName = 'typeorm-aurora-data-api-driver'
 
 export default {
   input: `src/${libraryName}.ts`,

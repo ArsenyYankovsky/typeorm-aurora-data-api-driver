@@ -3,9 +3,9 @@
   "version": "0.0.0-development",
   "description": "",
   "keywords": [],
-  "main": "dist/typeorm-data-api-driver.umd.js",
-  "module": "dist/typeorm-data-api-driver.es5.js",
-  "typings": "dist/types/typeorm-data-api-driver.d.ts",
+  "main": "dist/typeorm-aurora-data-api-driver.umd.js",
+  "module": "dist/typeorm-aurora-data-api-driver.es5.js",
+  "typings": "dist/types/typeorm-aurora-data-api-driver.d.ts",
   "files": [
     "dist"
   ],
