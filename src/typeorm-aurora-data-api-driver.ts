@@ -1,5 +1,5 @@
 // @ts-ignore
-import * as createDataApiClient from 'data-api-client'
+import createDataApiClient from 'data-api-client'
 
 export default class DataApiDriver {
   public static transformQueryAndParameters(query: string, parameters?: any[]): any {
@@ -44,7 +44,7 @@ export default class DataApiDriver {
 
     return {
       queryString: newQueryString,
-      parameters: transformedParameters
+      parameters: transformedParameters,
     }
   }
 
@@ -67,7 +67,7 @@ export default class DataApiDriver {
     secretArn: string,
     resourceArn: string,
     database: string,
-    loggerFn?: (query: string, parameters: any) => void
+    loggerFn?: (query: string, parameters: any) => void,
   ) {
     this.region = region
     this.secretArn = secretArn
@@ -78,8 +78,8 @@ export default class DataApiDriver {
       resourceArn,
       database,
       options: {
-        region
-      }
+        region,
+      },
     })
     this.loggerFn = loggerFn
   }
@@ -95,7 +95,7 @@ export default class DataApiDriver {
 
     const result = await clientOrTransaction.query(
       transformedQueryData.queryString,
-      transformedQueryData.parameters
+      transformedQueryData.parameters,
     )
 
     if (result.records) {

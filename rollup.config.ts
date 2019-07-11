@@ -7,7 +7,7 @@ import json from 'rollup-plugin-json'
 
 const pkg = require('./package.json')
 
-const libraryName = 'typeorm-data-api-driver'
+const libraryName = 'typeorm-aurora-data-api-driver'
 
 export default {
   input: `src/${libraryName}.ts`,
@@ -16,7 +16,7 @@ export default {
     { file: pkg.module, format: 'es', sourcemap: true },
   ],
   // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
-  external: [],
+  external: ['aws-sdk'],
   watch: {
     include: 'src/**',
   },

@@ -2,7 +2,7 @@ version: 2
 jobs:
   checks:
     docker:
-      - image: 'circleci/node:latest'
+      - image: 'node:latest'
     steps:
       - checkout
       - run:
@@ -13,11 +13,11 @@ jobs:
           command: yarn lint
       - run:
           name: test
-          command: yarn test
+          command: yarn test:unit
 
   release:
     docker:
-      - image: 'circleci/node:latest'
+      - image: 'node:latest'
     steps:
       - checkout
       - run:
@@ -27,6 +27,26 @@ jobs:
           name: release
           command: yarn semantic-release || true
 
+  functional-test:
+    docker:
+      - image: 'node:latest'
+    steps:
+      - checkout
+      - run:
+          name: yarn
+          command: yarn
+      - run:
+          name: create link
+          command: npm link
+      - run:
+          name: checkout typeorm
+          command: git clone --single-branch --branch feature/aurora-data-api https://github.com/ArsenyYankovsky/typeorm.git #TODO: change to checkout master once PR is merged
+      - run:
+          name: build typeorm with current package
+          command: cd typeorm/ && npm i && npm link typeorm-aurora-data-api-driver && npm run package && cd build/package && npm link
+      - run:
+          name: run functional test
+          command: npm i aws-sdk && npm link typeorm && yarn test:func
 
 workflows:
   version: 2
@@ -37,10 +57,24 @@ workflows:
             branches:
               only:
                 - master
+      - functional-test:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - checks
       - release:
           filters:
             branches:
               only:
                 - master
+          requires:
+            - functional-test
+
+  check-commit:
+    jobs:
+      - checks
+      - functional-test:
           requires:
             - checks

@@ -1,7 +1,6 @@
-import DataApiDriver from '../src/aurora-data-api-driver'
+import DataApiDriver from '../src/typeorm-aurora-data-api-driver'
 
 describe('aurora data api > query transformation', () => {
-
   it('should correctly transform a single parameter query', async () => {
     const query = 'select * from posts where id = ?'
     const parameters = [1]
@@ -18,17 +17,22 @@ describe('aurora data api > query transformation', () => {
 
     const result = DataApiDriver.transformQueryAndParameters(query, parameters)
 
-    expect(result.queryString).toEqual('select * from posts where id = :param_0 and text = "?" and title = "\\"?\\""')
+    expect(result.queryString).toEqual(
+      'select * from posts where id = :param_0 and text = "?" and title = "\\"?\\""'
+    )
     expect(result.parameters).toEqual([{ param_0: 1 }])
   })
 
   it('should correctly transform a query with escaped apostrophes', async () => {
-    const query = "select * from posts where id = ? and text = '?' and title = '\\'?\\'' and description = \"\'?\'\""
+    const query =
+      "select * from posts where id = ? and text = '?' and title = '\\'?\\'' and description = \"'?'\""
     const parameters = [1]
 
     const result = DataApiDriver.transformQueryAndParameters(query, parameters)
 
-    expect(result.queryString).toEqual("select * from posts where id = :param_0 and text = '?' and title = '\\'?\\'' and description = \"\'?\'\"")
+    expect(result.queryString).toEqual(
+      "select * from posts where id = :param_0 and text = '?' and title = '\\'?\\'' and description = \"'?'\""
+    )
     expect(result.parameters).toEqual([{ param_0: 1 }])
   })
 })
