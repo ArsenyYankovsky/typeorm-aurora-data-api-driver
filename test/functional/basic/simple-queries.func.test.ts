@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { createConnection } from 'D:\\Development\\Workspace\\typeorm\\build\\package'
+import { createConnection } from 'typeorm'
 import { Post } from './entity/Post'
 
 describe('aurora data api > simple queries', () => {
