@@ -24,7 +24,7 @@
     "build": "tsc --module commonjs && rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src",
     "start": "rollup -c rollup.config.ts -w",
     "test:unit": "jest unit",
-    "test:func": "jest func",
+    "test:func": "jest func  --runInBand --detectOpenHandles",
     "test:watch": "jest --watch",
     "test:prod": "npm run lint && npm run test -- --no-cache",
     "deploy-docs": "ts-node tools/gh-pages-publish",
