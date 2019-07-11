@@ -39,30 +39,19 @@
     }
   },
   "jest": {
-    "transform": {
-      ".(ts|tsx)": "ts-jest"
-    },
+    "verbose": true,
     "testEnvironment": "node",
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
-      "js"
-    ],
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "/test/"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 90,
-        "functions": 95,
-        "lines": 95,
-        "statements": 95
-      }
-    },
-    "collectCoverageFrom": [
-      "src/*.{js,ts}"
+      "js",
+      "jsx",
+      "json",
+      "node"
     ]
   },
   "devDependencies": {
