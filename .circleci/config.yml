@@ -37,13 +37,13 @@ jobs:
           command: yarn
       - run:
           name: create link
-          command: npm link
+          command: npm link --unsafe-perm
       - run:
           name: checkout typeorm
           command: git clone --single-branch --branch feature/aurora-data-api https://github.com/ArsenyYankovsky/typeorm.git #TODO: change to checkout master once PR is merged
       - run:
           name: build typeorm with current package
-          command: cd typeorm/ && npm i && sudo npm link typeorm-aurora-data-api && ../dist && npm run package
+          command: cd typeorm/ && npm i && npm link typeorm-aurora-data-api --unsafe-perm && ../dist && npm run package
       - run:
           name: run functional test
           command: cd ../ && npm i aws-sdk && yarn test:func
