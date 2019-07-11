@@ -94,12 +94,6 @@ export default class DataApiDriver {
       transformedQueryData.parameters,
     )
 
-    if (this.loggerFn) {
-      this.loggerFn(JSON.stringify(result))
-    }
-
-    console.log(JSON.stringify(result))
-
     if (result.records) {
       return result.records
     }
