@@ -95,9 +95,10 @@ export default class DataApiDriver {
     )
 
     if (this.loggerFn) {
-      console.log(JSON.stringify(result))
       this.loggerFn(JSON.stringify(result))
     }
+
+    console.log(JSON.stringify(result))
 
     if (result.records) {
       return result.records
