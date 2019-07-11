@@ -46,7 +46,7 @@ jobs:
           command: cd typeorm/ && npm i && npm link typeorm-aurora-data-api-driver && npm run package && cd build/package && npm link
       - run:
           name: run functional test
-          command: cd ../../../ && npm i aws-sdk && npm link typeorm && yarn test:func
+          command: npm i aws-sdk && npm link typeorm && yarn test:func
 
 workflows:
   version: 2
