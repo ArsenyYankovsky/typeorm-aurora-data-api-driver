@@ -31,6 +31,7 @@ jobs:
     docker:
       - image: 'circleci/node:latest'
     steps:
+      - checkout
       - run:
           name: build current module
           command: yarn build
@@ -66,4 +67,6 @@ workflows:
   check-commit:
     jobs:
       - checks
-      - functional-test
+      - functional-test:
+          requires:
+            - checks
