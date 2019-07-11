@@ -1,13 +1,46 @@
 version: 2
 jobs:
-  build:
+  checks:
     docker:
       - image: 'circleci/node:latest'
     steps:
       - checkout
       - run:
-          name: install
-          command: npm install
+          name: yarn
+          command: yarn
+      - run:
+          name: lint
+          command: yarn lint
+      - run:
+          name: test
+          command: yarn test
+
+  release:
+    docker:
+      - image: 'circleci/node:latest'
+    steps:
+      - checkout
+      - run:
+          name: yarn
+          command: yarn
       - run:
           name: release
-          command: npm run semantic-release || true
+          command: yarn semantic-release || true
+
+
+workflows:
+  version: 2
+  release:
+    jobs:
+      - checks:
+          filters:
+            branches:
+              only:
+                - master
+      - functional-tests:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - checks

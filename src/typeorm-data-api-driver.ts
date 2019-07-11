@@ -12,7 +12,7 @@ export default class DataApiDriver {
 
       numberOfParametersInQueryString += 1
 
-      return `'${paramName}`
+      return `:${paramName}`
     })
 
     if (parameters && parameters.length > 0 && parameters.length % numberOfParametersInQueryString !== 0) {
