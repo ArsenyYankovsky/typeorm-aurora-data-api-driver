@@ -58,7 +58,7 @@ export default class DataApiDriver {
 
   private readonly client: any
 
-  private readonly loggerFn?: (query: string, parameters: any) => void
+  private readonly loggerFn?: (query: string, parameters?: any) => void
 
   private transaction: any = null
 
@@ -67,7 +67,7 @@ export default class DataApiDriver {
     secretArn: string,
     resourceArn: string,
     database: string,
-    loggerFn?: (query: string, parameters: any) => void,
+    loggerFn?: (query: string, parameters?: any) => void,
   ) {
     this.region = region
     this.secretArn = secretArn
@@ -97,6 +97,10 @@ export default class DataApiDriver {
       transformedQueryData.queryString,
       transformedQueryData.parameters,
     )
+
+    if (this.loggerFn) {
+      this.loggerFn(JSON.stringify(result))
+    }
 
     if (result.records) {
       return result.records
