@@ -24,7 +24,7 @@
     "build": "tsc --module commonjs && rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src",
     "start": "rollup -c rollup.config.ts -w",
     "test:unit": "jest unit",
-    "test:func": "jest func",
+    "test:func": "jest func  --runInBand --detectOpenHandles",
     "test:watch": "jest --watch",
     "test:prod": "npm run lint && npm run test -- --no-cache",
     "deploy-docs": "ts-node tools/gh-pages-publish",
@@ -39,6 +39,7 @@
     }
   },
   "jest": {
+    "verbose": true,
     "transform": {
       ".(ts|tsx)": "ts-jest"
     },
@@ -70,7 +71,7 @@
     "@commitlint/config-conventional": "^7.1.2",
     "@types/jest": "^23.3.2",
     "@types/node": "^10.11.0",
-    "aws-sdk": "^2.491.0",
+    "aws-sdk": "^2.492.0",
     "colors": "^1.3.2",
     "commitizen": "^3.0.0",
     "coveralls": "^3.0.2",

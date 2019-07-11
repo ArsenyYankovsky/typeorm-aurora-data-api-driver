@@ -58,16 +58,14 @@ export default class DataApiDriver {
 
   private readonly client: any
 
-  private readonly loggerFn?: (query: string, parameters: any) => void
-
-  private transaction: any = null
+  private readonly loggerFn?: (query: string, parameters?: any) => void
 
   constructor(
     region: string,
     secretArn: string,
     resourceArn: string,
     database: string,
-    loggerFn?: (query: string, parameters: any) => void,
+    loggerFn?: (query: string, parameters?: any) => void,
   ) {
     this.region = region
     this.secretArn = secretArn
@@ -91,9 +89,7 @@ export default class DataApiDriver {
       this.loggerFn(transformedQueryData.queryString, transformedQueryData.parameters)
     }
 
-    const clientOrTransaction = this.transaction || this.client
-
-    const result = await clientOrTransaction.query(
+    const result = await this.client.query(
       transformedQueryData.queryString,
       transformedQueryData.parameters,
     )
@@ -105,29 +101,15 @@ export default class DataApiDriver {
     return result
   }
 
-  public startTransaction(): any {
-    if (this.transaction) {
-      throw new Error('Transaction already started')
-    }
-
-    this.transaction = this.client.transaction()
+  public async startTransaction(): Promise<void> {
+    await this.query('START TRANSACTION')
   }
 
   public async commitTransaction(): Promise<void> {
-    if (!this.transaction) {
-      throw new Error("Transaction doesn't exist")
-    }
-
-    await this.transaction.commit()
-    this.transaction = null
+    await this.query('COMMIT')
   }
 
   public async rollbackTransaction(): Promise<void> {
-    if (!this.transaction) {
-      throw new Error("Transaction doesn't exist")
-    }
-
-    await this.transaction.rollback()
-    this.transaction = null
+    await this.query('ROLLBACK')
   }
 }
