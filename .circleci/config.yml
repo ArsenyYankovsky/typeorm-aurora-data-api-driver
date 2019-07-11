@@ -43,10 +43,10 @@ jobs:
           command: git clone --single-branch --branch feature/aurora-data-api https://github.com/ArsenyYankovsky/typeorm.git #TODO: change to checkout master once PR is merged
       - run:
           name: build typeorm with current package
-          command: cd typeorm/ && npm i && npm link typeorm-aurora-data-api-driver && ../dist && npm run package
+          command: cd typeorm/ && npm i && npm link typeorm-aurora-data-api-driver && npm link
       - run:
           name: run functional test
-          command: cd ../ && npm i aws-sdk && yarn test:func
+          command: cd ../ && npm i aws-sdk && npm link typeorm && yarn test:func
 
 workflows:
   version: 2
