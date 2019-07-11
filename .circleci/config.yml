@@ -33,6 +33,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: yarn
+          command: yarn
+      - run:
           name: build current module
           command: yarn build
       - run:
