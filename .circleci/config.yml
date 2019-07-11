@@ -58,10 +58,10 @@ workflows:
               only:
                 - master
       - functional-test:
-          - filters:
-              branches:
-                only:
-                  - master
+          filters:
+            branches:
+              only:
+                - master
           requires:
             - checks
       - release:
