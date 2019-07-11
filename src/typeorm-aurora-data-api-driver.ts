@@ -60,8 +60,6 @@ export default class DataApiDriver {
 
   private readonly loggerFn?: (query: string, parameters?: any) => void
 
-  private transaction: any = null
-
   constructor(
     region: string,
     secretArn: string,
@@ -91,9 +89,7 @@ export default class DataApiDriver {
       this.loggerFn(transformedQueryData.queryString, transformedQueryData.parameters)
     }
 
-    const clientOrTransaction = this.transaction || this.client
-
-    const result = await clientOrTransaction.query(
+    const result = await this.client.query(
       transformedQueryData.queryString,
       transformedQueryData.parameters,
     )
