@@ -3,6 +3,7 @@ coverage
 .nyc_output
 .DS_Store
 *.log
+dist
 .vscode
 .idea
 compiled
