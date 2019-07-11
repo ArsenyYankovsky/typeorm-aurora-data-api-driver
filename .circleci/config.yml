@@ -75,6 +75,6 @@ workflows:
   check-commit:
     jobs:
       - checks
-      - functional-test
+      - functional-test:
           requires:
             - checks
