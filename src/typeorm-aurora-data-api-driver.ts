@@ -105,29 +105,15 @@ export default class DataApiDriver {
     return result
   }
 
-  public startTransaction(): any {
-    if (this.transaction) {
-      throw new Error('Transaction already started')
-    }
-
-    this.transaction = this.client.transaction()
+  public async startTransaction(): Promise<void> {
+    await this.query('START TRANSACTION')
   }
 
   public async commitTransaction(): Promise<void> {
-    if (!this.transaction) {
-      throw new Error("Transaction doesn't exist")
-    }
-
-    await this.transaction.commit()
-    this.transaction = null
+    await this.query('COMMIT')
   }
 
   public async rollbackTransaction(): Promise<void> {
-    if (!this.transaction) {
-      throw new Error("Transaction doesn't exist")
-    }
-
-    await this.transaction.rollback()
-    this.transaction = null
+    await this.query('ROLLBACK')
   }
 }
