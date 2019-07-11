@@ -8,11 +8,11 @@ describe('aurora data api > simple queries', () => {
   it('should do a simple select', async () => {
     const connection = await createConnection({
       type: 'aurora-data-api',
-      database: process.env.database,
-      secretArn: process.env.secretArn,
-      resourceArn: process.env.resourceArn,
-      region: process.env.region,
-      logging: true
+      database: process.env.database!,
+      secretArn: process.env.secretArn!,
+      resourceArn: process.env.resourceArn!,
+      region: process.env.region!,
+      logging: true,
     })
 
     const result = await connection.query('select 1')
@@ -25,13 +25,13 @@ describe('aurora data api > simple queries', () => {
   it('should create a table and be able to query it', async () => {
     const connection = await createConnection({
       type: 'aurora-data-api',
-      database: process.env.database,
-      secretArn: process.env.secretArn,
-      resourceArn: process.env.resourceArn,
-      region: process.env.region,
+      database: process.env.database!,
+      secretArn: process.env.secretArn!,
+      resourceArn: process.env.resourceArn!,
+      region: process.env.region!,
       entities: [Post],
       synchronize: true,
-      logging: true
+      logging: true,
     })
 
     const postRepository = connection.getRepository(Post)
@@ -62,13 +62,13 @@ describe('aurora data api > simple queries', () => {
   it('batch insert', async () => {
     const connection = await createConnection({
       type: 'aurora-data-api',
-      database: process.env.database,
-      secretArn: process.env.secretArn,
-      resourceArn: process.env.resourceArn,
-      region: process.env.region,
+      database: process.env.database!,
+      secretArn: process.env.secretArn!,
+      resourceArn: process.env.resourceArn!,
+      region: process.env.region!,
       entities: [Post],
       synchronize: true,
-      logging: true
+      logging: true,
     })
 
     const postRepository = connection.getRepository(Post)
