@@ -36,11 +36,8 @@ jobs:
           name: yarn
           command: yarn
       - run:
-          name: build current module
-          command: yarn build
-      - run:
           name: create link
-          command: sudo npm link
+          command: npm link
       - run:
           name: checkout typeorm
           command: git clone --single-branch --branch feature/aurora-data-api https://github.com/ArsenyYankovsky/typeorm.git #TODO: change to checkout master once PR is merged
