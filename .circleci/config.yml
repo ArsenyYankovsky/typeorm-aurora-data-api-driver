@@ -36,6 +36,9 @@ jobs:
           name: yarn
           command: yarn
       - run:
+          name: build
+          command: yarn build
+      - run:
           name: create link
           command: npm link
       - run:
