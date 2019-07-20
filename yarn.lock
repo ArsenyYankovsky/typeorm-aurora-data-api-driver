@@ -6450,12 +6450,6 @@ typedoc@^0.12.0:
     typedoc-default-themes "^0.5.0"
     typescript "3.0.x"
 
-typeorm-aurora-data-api-driver@ArsenyYankovsky/typeorm-aurora-data-api-driver#transaction-delegation:
-  version "0.0.0-development"
-  resolved "https://codeload.github.com/ArsenyYankovsky/typeorm-aurora-data-api-driver/tar.gz/ba11893a6b3af9c6c60ea5a47e9abe8dc504c060"
-  dependencies:
-    data-api-client "^1.0.0-beta"
-
 typescript@3.0.x:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.0.3.tgz#4853b3e275ecdaa27f78fda46dc273a7eb7fc1c8"
