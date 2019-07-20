@@ -108,7 +108,7 @@ export default class DataApiDriver {
     console.log('starting transaction')
     const { transactionId } = await this.client.beginTransaction()
     this.transactionId = transactionId
-    console.log('started transaction')
+    console.log('started transaction ', transactionId)
   }
 
   public async commitTransaction(): Promise<void> {
