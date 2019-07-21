@@ -1479,9 +1479,9 @@ dashdash@^1.12.0:
   dependencies:
     assert-plus "^1.0.0"
 
-data-api-client@^1.0.0-beta:
+data-api-client@samin/data-api-client#patch-1:
   version "1.0.0-beta"
-  resolved "https://registry.yarnpkg.com/data-api-client/-/data-api-client-1.0.0-beta.tgz#70a015435bbf4017b32450ca04a35ddeed44f365"
+  resolved "https://codeload.github.com/samin/data-api-client/tar.gz/d5b60d22bd52ca378d4eb52ee0a1a49bd7697f2f"
   dependencies:
     sqlstring "^2.3.1"
 
