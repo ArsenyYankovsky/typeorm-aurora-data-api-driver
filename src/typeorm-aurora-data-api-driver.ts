@@ -60,6 +60,8 @@ export default class DataApiDriver {
 
   private readonly loggerFn?: (query: string, parameters?: any) => void
 
+  private transactionId?: string
+
   constructor(
     region: string,
     secretArn: string,
@@ -89,10 +91,11 @@ export default class DataApiDriver {
       this.loggerFn(transformedQueryData.queryString, transformedQueryData.parameters)
     }
 
-    const result = await this.client.query(
-      transformedQueryData.queryString,
-      transformedQueryData.parameters,
-    )
+    const result = await this.client.query({
+      sql: transformedQueryData.queryString,
+      parameters: transformedQueryData.parameters,
+      transactionId: this.transactionId,
+    })
 
     if (result.records) {
       return result.records
@@ -102,14 +105,17 @@ export default class DataApiDriver {
   }
 
   public async startTransaction(): Promise<void> {
-    await this.query('START TRANSACTION')
+    const { transactionId } = await this.client.beginTransaction()
+    this.transactionId = transactionId
   }
 
   public async commitTransaction(): Promise<void> {
-    await this.query('COMMIT')
+    await this.client.commitTransaction({ transactionId: this.transactionId })
+    this.transactionId = undefined
   }
 
   public async rollbackTransaction(): Promise<void> {
-    await this.query('ROLLBACK')
+    await this.client.rollbackTransaction({ transactionId: this.transactionId })
+    this.transactionId = undefined
   }
 }

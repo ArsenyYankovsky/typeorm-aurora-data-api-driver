@@ -101,6 +101,6 @@
     "typescript": "^3.0.3"
   },
   "dependencies": {
-    "data-api-client": "^1.0.0-beta"
+    "data-api-client": "ArsenyYankovsky/data-api-client#patch-1"
   }
 }
