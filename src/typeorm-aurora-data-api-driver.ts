@@ -105,23 +105,17 @@ export default class DataApiDriver {
   }
 
   public async startTransaction(): Promise<void> {
-    console.log('starting transaction')
     const { transactionId } = await this.client.beginTransaction()
     this.transactionId = transactionId
-    console.log('started transaction ', transactionId)
   }
 
   public async commitTransaction(): Promise<void> {
-    console.log('comitting transaction ', this.transactionId)
     await this.client.commitTransaction({ transactionId: this.transactionId })
     this.transactionId = undefined
-    console.log('comitted transaction')
   }
 
   public async rollbackTransaction(): Promise<void> {
-    console.log('rolling back transaction ', this.transactionId)
     await this.client.rollbackTransaction({ transactionId: this.transactionId })
     this.transactionId = undefined
-    console.log('rolled back transaction')
   }
 }
