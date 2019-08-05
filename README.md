@@ -28,4 +28,16 @@ npm i --save typeorm-aurora-data-api-driver
     })
 ```
 
+After you done that you can use the connection just as you did with any other connection:
 
+```
+  const postRepository = connection.getRepository(Post)
+
+  const post = new Post()
+
+  post.title = 'My First Post'
+  post.text = 'Post Text'
+  post.likesCount = 4
+
+  const insertResult = await postRepository.save(post)
+```
