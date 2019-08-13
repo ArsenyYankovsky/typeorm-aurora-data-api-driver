@@ -13,6 +13,11 @@ describe('aurora data api > simple queries', () => {
       resourceArn: process.env.resourceArn!,
       region: process.env.region!,
       logging: true,
+      extra: {
+        httpOptions: {
+          connectTimeout: 120000,
+        },
+      },
     })
 
     const result = await connection.query('select 1')
