@@ -18,6 +18,9 @@ describe('aurora data api > simple queries', () => {
           connectTimeout: 120000,
         },
         maxRetries: 50,
+        retryDelayOptions: {
+          base: 10000,
+        },
       },
     })
 
