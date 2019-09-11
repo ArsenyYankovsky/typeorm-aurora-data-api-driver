@@ -1,13 +1,13 @@
-import { createConnection } from 'typeorm'
+const typeorm = require('typeorm')
 
 const wakeUpDb = async () => {
   try {
-    const connection = await createConnection({
+    const connection = await typeorm.createConnection({
       type: 'aurora-data-api',
-      database: process.env.database!,
-      secretArn: process.env.secretArn!,
-      resourceArn: process.env.resourceArn!,
-      region: process.env.region!,
+      database: process.env.database,
+      secretArn: process.env.secretArn,
+      resourceArn: process.env.resourceArn,
+      region: process.env.region,
       logging: true,
       extra: {
         httpOptions: {
