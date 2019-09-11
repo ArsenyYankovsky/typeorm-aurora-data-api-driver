@@ -48,6 +48,9 @@ jobs:
           name: build typeorm with current package
           command: cd typeorm/ && npm i && npm run package && cd build/package && npm link && rm -rf node_modules/typeorm-aurora-data-api-driver && npm link typeorm-aurora-data-api-driver
       - run:
+          name: wake up test database
+          command: ts-node test/functional/utils/wake-db-up.ts
+      - run:
           name: run functional test
           command: npm i aws-sdk && npm link typeorm && yarn test:func
 
