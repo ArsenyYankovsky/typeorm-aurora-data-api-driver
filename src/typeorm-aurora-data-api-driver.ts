@@ -67,6 +67,7 @@ export default class DataApiDriver {
     secretArn: string,
     resourceArn: string,
     database: string,
+    extra: any,
     loggerFn?: (query: string, parameters?: any) => void,
   ) {
     this.region = region
@@ -79,6 +80,7 @@ export default class DataApiDriver {
       database,
       options: {
         region,
+        ...extra,
       },
     })
     this.loggerFn = loggerFn

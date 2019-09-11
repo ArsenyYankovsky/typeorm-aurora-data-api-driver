@@ -3,7 +3,7 @@ import { createConnection } from 'typeorm'
 import { Post } from './entity/Post'
 
 describe('aurora data api > simple queries', () => {
-  jest.setTimeout(10000)
+  jest.setTimeout(240000)
 
   it('should do a simple select', async () => {
     const connection = await createConnection({
@@ -13,6 +13,15 @@ describe('aurora data api > simple queries', () => {
       resourceArn: process.env.resourceArn!,
       region: process.env.region!,
       logging: true,
+      extra: {
+        httpOptions: {
+          connectTimeout: 120000,
+        },
+        maxRetries: 50,
+        retryDelayOptions: {
+          base: 10000,
+        },
+      },
     })
 
     const result = await connection.query('select 1')

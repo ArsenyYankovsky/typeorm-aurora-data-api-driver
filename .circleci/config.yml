@@ -43,13 +43,19 @@ jobs:
           command: npm link
       - run:
           name: checkout typeorm
-          command: git clone --single-branch --branch feature/aurora-data-api https://github.com/ArsenyYankovsky/typeorm.git #TODO: change to checkout master once PR is merged
+          command: git clone --single-branch --branch feature/aurora-data-api https://github.com/ArsenyYankovsky/typeorm.git
       - run:
           name: build typeorm with current package
           command: cd typeorm/ && npm i && npm run package && cd build/package && npm link && rm -rf node_modules/typeorm-aurora-data-api-driver && npm link typeorm-aurora-data-api-driver
       - run:
+          name: link built typeorm
+          command: npm i aws-sdk && npm link typeorm
+      - run:
+          name: wake up test database
+          command: node test/functional/utils/wake-db-up.js
+      - run:
           name: run functional test
-          command: npm i aws-sdk && npm link typeorm && yarn test:func
+          command: yarn test:func
 
 workflows:
   version: 2
@@ -74,6 +80,28 @@ workflows:
                 - master
           requires:
             - functional-test
+
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - checks:
+          filters:
+            branches:
+              only:
+                - master
+      - functional-test:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - checks
 
   check-commit:
     jobs:
