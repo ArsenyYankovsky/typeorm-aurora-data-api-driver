@@ -119,7 +119,7 @@ workflows:
             branches:
               only:
                 - fix-nightly
-      - functional-test:
+      - functional-test-released:
           filters:
             branches:
               only:
