@@ -103,24 +103,24 @@ workflows:
             - functional-test
 
   nightly:
-#    triggers:
-#      - schedule:
-#          cron: "0 0 * * *"
-#          filters:
-#            branches:
-#              only:
-#                - master
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - master
     jobs:
       - checks:
           filters:
             branches:
               only:
-                - fix-nightly
+                - master
       - functional-test-released:
           filters:
             branches:
               only:
-                - fix-nightly
+                - master
           requires:
             - checks
 
