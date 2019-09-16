@@ -39,9 +39,6 @@ jobs:
           name: yarn
           command: yarn
       - run:
-          name: build
-          command: yarn build
-      - run:
           name: install additional dependencies
           command: yarn add typeorm aws-sdk typeorm-aurora-data-api-driver
       - run:

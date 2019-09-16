@@ -24,12 +24,10 @@ const wakeUpDb = async () => {
 
     await connection.close()
   } catch (e) {
-    // ignore timeout exception
+    await new Promise((resolve) => {
+      setTimeout(resolve, 60000)
+    })
   }
-
-  await new Promise((resolve) => {
-    setTimeout(resolve, 60000)
-  })
 }
 
 wakeUpDb()
