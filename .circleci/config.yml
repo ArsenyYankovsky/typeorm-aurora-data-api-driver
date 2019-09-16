@@ -30,6 +30,27 @@ jobs:
           name: release
           command: yarn semantic-release || true
 
+  functional-test-released:
+    docker:
+      - image: 'node:latest'
+    steps:
+      - checkout
+      - run:
+          name: yarn
+          command: yarn
+      - run:
+          name: build
+          command: yarn build
+      - run:
+          name: install additional dependencies
+          command: yarn add typeorm aws-sdk typeorm-aurora-data-api-driver
+      - run:
+          name: wake up test database
+          command: node test/functional/utils/wake-db-up.js
+      - run:
+          name: run functional test
+          command: yarn test:func
+
   functional-test:
     docker:
       - image: 'node:latest'
@@ -85,24 +106,24 @@ workflows:
             - functional-test
 
   nightly:
-    triggers:
-      - schedule:
-          cron: "0 0 * * *"
-          filters:
-            branches:
-              only:
-                - master
+#    triggers:
+#      - schedule:
+#          cron: "0 0 * * *"
+#          filters:
+#            branches:
+#              only:
+#                - master
     jobs:
       - checks:
           filters:
             branches:
               only:
-                - master
+                - fix-nightly
       - functional-test:
           filters:
             branches:
               only:
-                - master
+                - fix-nightly
           requires:
             - checks
 
