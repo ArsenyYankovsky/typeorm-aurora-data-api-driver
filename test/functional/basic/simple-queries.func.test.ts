@@ -28,7 +28,6 @@ describe('aurora data api > simple queries', () => {
 
     const result = await connection.query('select 1')
 
-    expect(logSpy).toHaveBeenCalledWith('query:')
     expect(logSpy).toHaveBeenCalledWith('select 1')
     expect(logSpy).toBeCalledTimes(2)
 
