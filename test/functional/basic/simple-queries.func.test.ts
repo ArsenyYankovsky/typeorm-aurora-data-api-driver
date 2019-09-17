@@ -13,6 +13,7 @@ describe('aurora data api > simple queries', () => {
       resourceArn: process.env.resourceArn!,
       region: process.env.region!,
       logging: true,
+      logger: 'simple-console',
       extra: {
         httpOptions: {
           connectTimeout: 120000,
@@ -24,7 +25,12 @@ describe('aurora data api > simple queries', () => {
       },
     })
 
+    const logSpy = jest.spyOn(global.console, 'log')
+
     const result = await connection.query('select 1')
+
+    expect(logSpy).toHaveBeenCalledWith('query: select 1')
+    expect(logSpy).toBeCalledTimes(1)
 
     expect(result[0][1]).toBe(1)
 
