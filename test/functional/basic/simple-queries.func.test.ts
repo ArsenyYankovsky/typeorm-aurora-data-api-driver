@@ -13,6 +13,7 @@ describe('aurora data api > simple queries', () => {
       resourceArn: process.env.resourceArn!,
       region: process.env.region!,
       logging: true,
+      logger: 'simple-console',
       extra: {
         httpOptions: {
           connectTimeout: 120000,
@@ -28,6 +29,7 @@ describe('aurora data api > simple queries', () => {
 
     const result = await connection.query('select 1')
 
+    expect(logSpy).toHaveBeenCalledWith('query:')
     expect(logSpy).toHaveBeenCalledWith('select 1')
     expect(logSpy).toBeCalledTimes(2)
 
