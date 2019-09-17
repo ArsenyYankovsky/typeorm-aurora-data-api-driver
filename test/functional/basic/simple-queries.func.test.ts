@@ -24,7 +24,11 @@ describe('aurora data api > simple queries', () => {
       },
     })
 
+    const logSpy = jest.spyOn(global.console, 'log')
+
     const result = await connection.query('select 1')
+
+    expect(logSpy).toHaveBeenCalledWith('select 1')
 
     expect(result[0][1]).toBe(1)
 
