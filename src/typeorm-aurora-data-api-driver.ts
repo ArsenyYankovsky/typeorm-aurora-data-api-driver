@@ -1,19 +1,36 @@
 // @ts-ignore
 import createDataApiClient from 'data-api-client'
 
+const quoteCharacters = ['\'', '"']
+
 export default class DataApiDriver {
   public static transformQueryAndParameters(query: string, parameters?: any[]): any {
-    const queryParamRegex = /\?(?=(([^(")\\]*(\\.|"([^"\\]*\\.)*[^"\\]*"))*[^"]*$))(?=(([^(')\\]*(\\.|'([^'\\]*\\.)*[^'\\]*'))*[^']*$))/g
-
     let numberOfParametersInQueryString = 0
 
-    const newQueryString = query.replace(queryParamRegex, () => {
-      const paramName = `param_${numberOfParametersInQueryString}`
+    let newQueryString = ''
+    let currentQuote = null
 
-      numberOfParametersInQueryString += 1
+    for (let i = 0; i < query.length; i += 1) {
+      const currentCharacter = query[i]
+      const currentCharacterEscaped = i !== 0 && query[i - 1] === '\\'
 
-      return `:${paramName}`
-    })
+      if (currentCharacter === '?' && !currentQuote) {
+        const paramName = `:param_${numberOfParametersInQueryString}`
+
+        numberOfParametersInQueryString += 1
+        newQueryString += paramName
+      } else if (quoteCharacters.includes(currentCharacter) && !currentCharacterEscaped) {
+        if (!currentQuote) {
+          currentQuote = currentCharacter
+        } else if (currentQuote === currentCharacter) {
+          currentQuote = null
+        }
+
+        newQueryString += currentCharacter
+      } else {
+        newQueryString += currentCharacter
+      }
+    }
 
     if (
       parameters &&
