@@ -16,4 +16,7 @@ export class Post {
 
   @Column({ nullable: false })
   public likesCount!: number
+
+  @Column({ nullable: false, type: 'datetime' })
+  public publishedAt!: Date
 }
