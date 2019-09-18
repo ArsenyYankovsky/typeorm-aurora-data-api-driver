@@ -74,7 +74,7 @@ describe('aurora data api > simple queries', () => {
     await connection.close()
   })
 
-  it('batch insert', async () => {
+  it('batch insert - with dates', async () => {
     const connection = await createConnection({
       type: 'aurora-data-api',
       database: process.env.database!,
@@ -93,12 +93,14 @@ describe('aurora data api > simple queries', () => {
     post.title = 'My First Post'
     post.text = 'Post Text'
     post.likesCount = 4
+    post.publishedAt = new Date()
 
     const secondPost = new Post()
 
     secondPost.title = 'My Second Post'
     secondPost.text = 'Post Text'
     secondPost.likesCount = 5
+    secondPost.publishedAt = new Date()
 
     await postRepository.save([post, secondPost])
 
