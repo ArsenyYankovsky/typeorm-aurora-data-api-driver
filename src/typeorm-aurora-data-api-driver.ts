@@ -102,6 +102,8 @@ export default class DataApiDriver {
   }
 
   public async query(query: string, parameters?: any[]): Promise<any> {
+    console.log('query before transformation: ', query)
+    console.log(' parameters: ', JSON.stringify(parameters))
     const transformedQueryData = DataApiDriver.transformQueryAndParameters(query, parameters)
 
     if (this.loggerFn) {
