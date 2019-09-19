@@ -7,7 +7,7 @@ describe('aurora data api > simple queries', () => {
   jest.setTimeout(240000)
 
   it('should do a simple select', async () => {
-    await useCleanDatabase({}, async (connection) => {
+    await useCleanDatabase({}, async connection => {
       const logSpy = jest.spyOn(global.console, 'log')
 
       const result = await connection.query('select 1')
@@ -20,8 +20,9 @@ describe('aurora data api > simple queries', () => {
   })
 
   it('should create a table and be able to query it', async () => {
-    await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
+    await useCleanDatabase({ entities: [Post, Category] }, async connection => {
       const postRepository = connection.getRepository(Post)
+      await postRepository.delete({})
 
       const post = new Post()
 
@@ -44,8 +45,9 @@ describe('aurora data api > simple queries', () => {
   })
 
   it('batch insert - with dates', async () => {
-    await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
+    await useCleanDatabase({ entities: [Post, Category] }, async connection => {
       const postRepository = connection.getRepository(Post)
+      await postRepository.delete({})
 
       const post = new Post()
 
@@ -80,9 +82,10 @@ describe('aurora data api > simple queries', () => {
   })
 
   it('should be able to create and query a many-to-many relationship', async () => {
-    await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
+    await useCleanDatabase({ entities: [Post, Category] }, async connection => {
       // Create categories
       const categoryRepository = connection.getRepository(Category)
+      await categoryRepository.delete({})
 
       const firstCategory = await categoryRepository.save(
         categoryRepository.create({
@@ -98,6 +101,7 @@ describe('aurora data api > simple queries', () => {
 
       // Create a post and associate with created categories
       const postRepository = connection.getRepository(Post)
+      await postRepository.delete({})
 
       const post = postRepository.create({
         title: 'Post with categories',
