@@ -26,7 +26,7 @@ export const createConnection = async (partialOptions: Partial<ConnectionOptions
 export const createConnectionAndResetData = async (
   partialOptions: Partial<ConnectionOptions> = {},
 ) => {
-  const connection = await createConnection()
+  const connection = await createConnection(partialOptions)
   await connection.synchronize(true)
   return connection
 }
