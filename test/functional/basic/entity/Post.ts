@@ -1,6 +1,5 @@
-import { Column, Entity } from 'typeorm'
-import { PrimaryColumn } from 'typeorm'
-import { Generated } from 'typeorm'
+import { Column, Entity, Generated, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm'
+import { Category } from './Category'
 
 @Entity('aurora_data_api_test_post')
 export class Post {
@@ -19,4 +18,8 @@ export class Post {
 
   @Column({ nullable: false, type: 'datetime', default: () => 'now()' })
   public publishedAt!: Date
+
+  @ManyToMany(type => Category)
+  @JoinTable()
+  public categories!: Category[]
 }
