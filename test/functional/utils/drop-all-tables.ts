@@ -7,6 +7,6 @@ export const dropAllTables = async (connection: Connection) => {
 }
 
 export const dropAllTablesAndCloseConnection = async (connection: Connection) => {
-  await dropAllTables(connection)
+  // await dropAllTables(connection)
   await connection.close()
 }
