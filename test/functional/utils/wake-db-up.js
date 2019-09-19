@@ -1,4 +1,4 @@
-import * as typeorm from "typeorm";
+const typeorm = require("typeorm");
 
 const wakeUpDb = async () => {
   try {
