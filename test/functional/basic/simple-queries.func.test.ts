@@ -38,6 +38,8 @@ describe('aurora data api > simple queries', () => {
   })
 
   it('should create a table and be able to query it', async () => {
+    console.log(process.env.database)
+
     const connection = await createConnection({
       type: 'aurora-data-api',
       database: process.env.database!,
