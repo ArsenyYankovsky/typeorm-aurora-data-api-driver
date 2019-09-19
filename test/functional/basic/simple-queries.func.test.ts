@@ -99,15 +99,15 @@ describe('aurora data api > simple queries', () => {
 
     const postId = insertResult.id
 
-    const dbPost = await postRepository.findOne(postId)
+    const dbPost = await postRepository.findOne({ id: postId })
 
-    dbPost.publishedAt = new Date()
+    dbPost!.publishedAt = new Date()
 
-    await postRepository.save(dbPost)
+    await postRepository.save(dbPost!)
 
     const updatedPost = await postRepository.findOne(postId)
 
-    expect(updatedPost.publishedAt > new Date(2017, 1, 1)).toBeTruthy()
+    expect(updatedPost!.publishedAt > new Date(2017, 1, 1)).toBeTruthy()
 
     await connection.query('DROP TABLE aurora_data_api_test_post;')
 
