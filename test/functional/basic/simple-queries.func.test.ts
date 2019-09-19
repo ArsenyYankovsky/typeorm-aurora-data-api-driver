@@ -48,7 +48,10 @@ describe('aurora data api > simple queries', () => {
     expect(dbPost!.text).toBe('Post Text')
     expect(dbPost!.likesCount).toBe(4)
 
-    await dropAllTablesAndCloseConnection(connection)
+    await postRepository.delete(post)
+    await connection.close()
+
+    // await dropAllTablesAndCloseConnection(connection)
   })
 
   it('batch insert - with dates', async () => {
@@ -89,7 +92,11 @@ describe('aurora data api > simple queries', () => {
       expect(dbPost!.publishedAt).toBeInstanceOf(Date)
     }
 
-    await dropAllTablesAndCloseConnection(connection)
+    await postRepository.delete(post)
+    await postRepository.delete(secondPost)
+    await connection.close()
+
+    // await dropAllTablesAndCloseConnection(connection)
   })
 
   it('should be able to create and query a many-to-many relationship', async () => {
