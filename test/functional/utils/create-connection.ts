@@ -1,3 +1,4 @@
+import { connect } from 'tls'
 import { ConnectionOptions, createConnection as typeormCreateConnection } from 'typeorm'
 
 export const createConnection = async (partialOptions: Partial<ConnectionOptions> = {}) => {
@@ -26,7 +27,8 @@ export const createConnection = async (partialOptions: Partial<ConnectionOptions
 export const createConnectionAndResetData = async (
   partialOptions: Partial<ConnectionOptions> = {},
 ) => {
-  const connection = await createConnection({ ...partialOptions, synchronize: true })
+  const connection = await createConnection({ ...partialOptions, synchronize: false })
+  await connection.dropDatabase()
   await connection.synchronize(true)
   return connection
 }

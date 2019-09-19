@@ -70,7 +70,6 @@ describe('aurora data api > simple queries', () => {
     secondPost.likesCount = 5
     secondPost.publishedAt = new Date()
 
-    await postRepository.clear()
     await postRepository.save([post, secondPost])
 
     const dbPosts = await postRepository.find()
@@ -121,7 +120,6 @@ describe('aurora data api > simple queries', () => {
       categories: [firstCategory, secondCategory],
     })
 
-    await postRepository.clear()
     await postRepository.save(post)
 
     // Assert
