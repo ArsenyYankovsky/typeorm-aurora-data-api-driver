@@ -22,3 +22,11 @@ export const createConnection = async (partialOptions: Partial<ConnectionOptions
     },
   })
 }
+
+export const createConnectionAndResetData = async (
+  partialOptions: Partial<ConnectionOptions> = {},
+) => {
+  const connection = await createConnection()
+  await connection.synchronize(true)
+  return connection
+}

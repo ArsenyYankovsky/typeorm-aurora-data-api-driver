@@ -1,7 +1,5 @@
 import 'reflect-metadata'
-import { Query } from 'typeorm/driver/Query'
-import { createConnection } from '../utils/create-connection'
-import { dropAllTablesAndCloseConnection } from '../utils/drop-all-tables'
+import { createConnection, createConnectionAndResetData } from '../utils/create-connection'
 import { Category } from './entity/Category'
 import { Post } from './entity/Post'
 
@@ -24,9 +22,8 @@ describe('aurora data api > simple queries', () => {
   })
 
   it('should create a table and be able to query it', async () => {
-    const connection = await createConnection({
+    const connection = await createConnectionAndResetData({
       entities: [Post, Category],
-      synchronize: true,
     })
 
     const postRepository = connection.getRepository(Post)
@@ -49,16 +46,12 @@ describe('aurora data api > simple queries', () => {
     expect(dbPost!.text).toBe('Post Text')
     expect(dbPost!.likesCount).toBe(4)
 
-    await connection.query('DROP TABLE aurora_data_api_test_post;')
     await connection.close()
-
-    // await dropAllTablesAndCloseConnection(connection)
   })
 
   it('batch insert - with dates', async () => {
-    const connection = await createConnection({
+    const connection = await createConnectionAndResetData({
       entities: [Post, Category],
-      synchronize: true,
     })
 
     const postRepository = connection.getRepository(Post)
@@ -93,17 +86,12 @@ describe('aurora data api > simple queries', () => {
       expect(dbPost!.publishedAt).toBeInstanceOf(Date)
     }
 
-    await connection.query('DROP TABLE aurora_data_api_test_post;')
     await connection.close()
-
-    // await dropAllTablesAndCloseConnection(connection)
   })
 
   it('should be able to create and query a many-to-many relationship', async () => {
-    const connection = await createConnection({
+    const connection = await createConnectionAndResetData({
       entities: [Post, Category],
-      synchronize: true,
-      logging: true,
     })
 
     // Create categories
@@ -147,8 +135,5 @@ describe('aurora data api > simple queries', () => {
     }
 
     await connection.close()
-
-    // Initially keep the data for querying
-    // await dropAllTablesAndCloseConnection(connection)
   })
 })
