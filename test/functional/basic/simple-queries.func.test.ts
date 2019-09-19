@@ -24,7 +24,7 @@ describe('aurora data api > simple queries', () => {
 
   it('should create a table and be able to query it', async () => {
     const connection = await createConnection({
-      entities: [Post],
+      entities: [Post, Category],
       synchronize: true,
     })
 
@@ -53,7 +53,7 @@ describe('aurora data api > simple queries', () => {
 
   it('batch insert - with dates', async () => {
     const connection = await createConnection({
-      entities: [Post],
+      entities: [Post, Category],
       synchronize: true,
     })
 
