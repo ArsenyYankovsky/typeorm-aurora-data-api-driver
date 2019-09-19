@@ -116,7 +116,7 @@ describe('aurora data api > simple queries', () => {
       // Assert
       const dbPosts = await postRepository.findByIds(
         [storedPost.id, 'blah'], { relations: ['categories'] })
-      
+
       expect(dbPosts.length).toBe(1)
 
       const dbPost = dbPosts[0]
