@@ -74,6 +74,46 @@ describe('aurora data api > simple queries', () => {
     await connection.close()
   })
 
+  it('should be able to update', async () => {
+    const connection = await createConnection({
+      type: 'aurora-data-api',
+      database: process.env.database!,
+      secretArn: process.env.secretArn!,
+      resourceArn: process.env.resourceArn!,
+      region: process.env.region!,
+      entities: [Post],
+      synchronize: true,
+      logging: true,
+    })
+
+    const postRepository = connection.getRepository(Post)
+
+    const post = new Post()
+
+    post.title = 'My First Post'
+    post.text = 'Post Text'
+    post.likesCount = 4
+    post.publishedAt = new Date(2017, 1, 1)
+
+    const insertResult = await postRepository.save(post)
+
+    const postId = insertResult.id
+
+    const dbPost = await postRepository.findOne(postId)
+
+    dbPost.publishedAt = new Date()
+
+    await postRepository.save(dbPost)
+
+    const updatedPost = await postRepository.findOne(postId)
+
+    expect(updatedPost.publishedAt > new Date(2017, 1, 1)).toBeTruthy()
+
+    await connection.query('DROP TABLE aurora_data_api_test_post;')
+
+    await connection.close()
+  })
+
   it('batch insert - with dates', async () => {
     const connection = await createConnection({
       type: 'aurora-data-api',
