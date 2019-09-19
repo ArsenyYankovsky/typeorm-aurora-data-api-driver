@@ -111,19 +111,16 @@ describe('aurora data api > simple queries', () => {
         categories: [firstCategory, secondCategory],
       })
 
-      await postRepository.save(post)
+      const storedPost = await postRepository.save(post)
 
       // Assert
-      const dbPosts = await postRepository.find({ relations: ['categories'] })
-      expect(dbPosts).toBeTruthy()
-      expect(dbPosts.length).toBe(1)
+      const dbPost = await postRepository.findOne(storedPost.id, { relations: ['categories'] })
 
-      for (const dbPost of dbPosts) {
-        expect(dbPost.categories).toBeTruthy()
-        expect(dbPost.categories.length).toBe(2)
-        expect(dbPost.categories[0].name).toBe('first')
-        expect(dbPost.categories[1].name).toBe('second')
-      }
+      expect(dbPost).toBeTruthy()
+      expect(dbPost!.categories).toBeTruthy()
+      expect(dbPost!.categories.length).toBe(2)
+      expect(dbPost!.categories[0].name).toBe('first')
+      expect(dbPost!.categories[1].name).toBe('second')
     })
   })
 })
