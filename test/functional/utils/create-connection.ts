@@ -45,6 +45,6 @@ export const useCleanDatabase = async (
   try {
     await invoke(connection)
   } finally {
-    connection.close()
+    await connection.close()
   }
 }
