@@ -1,4 +1,5 @@
 import 'reflect-metadata'
+import { Query } from 'typeorm/driver/Query'
 import { createConnection } from '../utils/create-connection'
 import { dropAllTablesAndCloseConnection } from '../utils/drop-all-tables'
 import { Category } from './entity/Category'
@@ -48,7 +49,7 @@ describe('aurora data api > simple queries', () => {
     expect(dbPost!.text).toBe('Post Text')
     expect(dbPost!.likesCount).toBe(4)
 
-    await postRepository.delete(post)
+    await connection.query('DROP TABLE aurora_data_api_test_post;')
     await connection.close()
 
     // await dropAllTablesAndCloseConnection(connection)
@@ -92,8 +93,7 @@ describe('aurora data api > simple queries', () => {
       expect(dbPost!.publishedAt).toBeInstanceOf(Date)
     }
 
-    await postRepository.delete(post)
-    await postRepository.delete(secondPost)
+    await connection.query('DROP TABLE aurora_data_api_test_post;')
     await connection.close()
 
     // await dropAllTablesAndCloseConnection(connection)
