@@ -114,7 +114,8 @@ describe('aurora data api > simple queries', () => {
       const storedPost = await postRepository.save(post)
 
       // Assert
-      const dbPost = await postRepository.findOne(storedPost.id, { relations: ['categories'] })
+      const dbPost = await postRepository.findOne(
+        storedPost.id, { relations: ['categories'] })
 
       expect(dbPost).toBeTruthy()
       expect(dbPost!.categories).toBeTruthy()
