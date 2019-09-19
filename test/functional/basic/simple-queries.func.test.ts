@@ -5,7 +5,7 @@ import { Post } from './entity/Post'
 describe('aurora data api > simple queries', () => {
   jest.setTimeout(240000)
 
-  it.skip('should do a simple select', async () => {
+  it('should do a simple select', async () => {
     const connection = await createConnection({
       type: 'aurora-data-api',
       database: process.env.database!,
@@ -38,8 +38,6 @@ describe('aurora data api > simple queries', () => {
   })
 
   it('should create a table and be able to query it', async () => {
-    console.log(process.env.database)
-
     const connection = await createConnection({
       type: 'aurora-data-api',
       database: process.env.database!,
@@ -76,7 +74,7 @@ describe('aurora data api > simple queries', () => {
     await connection.close()
   })
 
-  it('should be able to update', async () => {
+  it('should be able to update a post', async () => {
     const connection = await createConnection({
       type: 'aurora-data-api',
       database: process.env.database!,
