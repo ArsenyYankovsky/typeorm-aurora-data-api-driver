@@ -3,8 +3,8 @@ import { Post } from './Post'
 
 @Entity('aurora_data_api_test_category')
 export class Category {
-  @PrimaryColumn('uuid')
-  @Generated()
+  @PrimaryColumn()
+  @Generated('uuid')
   public id!: string
 
   @Column()
