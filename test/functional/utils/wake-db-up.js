@@ -1,4 +1,4 @@
-const typeorm = require("typeorm");
+const typeorm = require('typeorm')
 
 const wakeUpDb = async () => {
   try {
@@ -11,19 +11,19 @@ const wakeUpDb = async () => {
       logging: true,
       extra: {
         httpOptions: {
-          connectTimeout: 120000
+          connectTimeout: 120000,
         },
         maxRetries: 50,
         retryDelayOptions: {
-          base: 10000
-        }
-      }
-    });
-    await connection.query("select 1");
-    await connection.close();
+          base: 10000,
+        },
+      },
+    })
+    await connection.query("select 1")
+    await connection.close()
   } catch {
-    await new Promise(resolve => setTimeout(resolve, 60000));
+    await new Promise(resolve => setTimeout(resolve, 60000))
   }
 };
 
-wakeUpDb();
+wakeUpDb()

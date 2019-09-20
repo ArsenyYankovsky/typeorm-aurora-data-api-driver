@@ -22,7 +22,6 @@ describe('aurora data api > simple queries', () => {
   it('should create a table and be able to query it', async () => {
     await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
       const postRepository = connection.getRepository(Post)
-      await postRepository.delete({})
 
       const post = new Post()
       post.title = 'My First Post'
@@ -40,10 +39,9 @@ describe('aurora data api > simple queries', () => {
     })
   })
 
-  it('batch insert - with dates', async () => {
+  it('should batch insert with dates', async () => {
     await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
       const postRepository = connection.getRepository(Post)
-      await postRepository.delete({})
 
       const post = new Post()
       post.title = 'My First Post'
@@ -77,7 +75,6 @@ describe('aurora data api > simple queries', () => {
     await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
       // Create categories
       const categoryRepository = connection.getRepository(Category)
-      await categoryRepository.delete({})
 
       const firstCategory = await categoryRepository.save(
         categoryRepository.create({
@@ -93,7 +90,6 @@ describe('aurora data api > simple queries', () => {
 
       // Create a post and associate with created categories
       const postRepository = connection.getRepository(Post)
-      await postRepository.delete({})
 
       const post = postRepository.create({
         title: 'Post with categories',
