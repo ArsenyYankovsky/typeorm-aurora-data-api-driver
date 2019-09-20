@@ -1,7 +1,7 @@
 import { Column, Entity, Generated, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm'
 import { Category } from './Category'
 
-@Entity('aurora_data_api_test_post')
+@Entity()
 export class Post {
   @PrimaryColumn('integer')
   @Generated()
