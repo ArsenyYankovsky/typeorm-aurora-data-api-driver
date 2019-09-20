@@ -30,11 +30,7 @@ export const createConnection = async (partialOptions: Partial<ConnectionOptions
 export const createConnectionAndResetData = async (
   partialOptions: Partial<ConnectionOptions> = {},
 ) => {
-  const connection = await createConnection({ ...partialOptions, synchronize: false })
-  // FIXME: Why doesn't this work?
-  await connection.dropDatabase()
-  await connection.synchronize(true)
-  return connection
+  return createConnection({ ...partialOptions, synchronize: true, dropSchema: true })
 }
 
 export const useCleanDatabase = async (
