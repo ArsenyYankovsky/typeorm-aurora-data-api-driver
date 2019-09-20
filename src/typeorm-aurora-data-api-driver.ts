@@ -1,21 +1,34 @@
 // @ts-ignore
 import createDataApiClient from 'data-api-client'
 
-export const transformQuery = (query: string): [string, number] => {
+export const transformQuery = (query: string, parameters?: any[]): [string, number] => {
   const quoteCharacters = ['\'', '"']
 
   let newQueryString = ''
   let currentQuote = null
   let numberOfParametersInQueryString = 0
+  let extendedParameterCount = 0
 
   for (let i = 0; i < query.length; i += 1) {
     const currentCharacter = query[i]
     const currentCharacterEscaped = i !== 0 && query[i - 1] === '\\'
 
     if (currentCharacter === '?' && !currentQuote) {
-      const paramName = `:param_${numberOfParametersInQueryString}`
-      numberOfParametersInQueryString += 1
-      newQueryString += paramName
+      // If parameter is an array then expand out and use e_param_X to avoid conflicts with param_X
+      const parameter = parameters![numberOfParametersInQueryString]
+      if (Array.isArray(parameter)) {
+        parameter.forEach((_, index) => {
+          const isLastParameter = index === parameter.length - 1
+          const paramName = `:e_param_${extendedParameterCount}${isLastParameter ? '' : ', '}`
+          extendedParameterCount += 1
+          newQueryString += paramName
+        })
+      } else {
+        const paramName = `:param_${numberOfParametersInQueryString}`
+        numberOfParametersInQueryString += 1
+        newQueryString += paramName
+      }
+
       continue
     }
 
@@ -44,6 +57,7 @@ export const transformParameters = (numberOfParametersInQueryString: number, par
       and ${parameters.length} in input`)
   }
 
+  let extendedParameterCount = 0
   const transformedParameters: any[] = []
 
   if (parameters && parameters.length > 0) {
@@ -53,7 +67,12 @@ export const transformParameters = (numberOfParametersInQueryString: number, par
       const parameterObject: any = {}
 
       for (let y = 0; y < numberOfParametersInQueryString; y += 1) {
-        parameterObject[`param_${y}`] = parameters[i + y]
+        const parameter = parameters[i + y]
+
+        Array.isArray(parameter)
+          // tslint:disable-next-line: no-increment-decrement
+          ? parameter.forEach(element => parameterObject[`e_param_${extendedParameterCount++}`] = element)
+          : parameterObject[`param_${y}`] = parameter
       }
 
       transformedParameters.push(parameterObject)
@@ -64,7 +83,7 @@ export const transformParameters = (numberOfParametersInQueryString: number, par
 }
 
 export const transformQueryAndParameters = (query: string, parameters?: any[]) => {
-  const [queryString, numberOfParametersInQueryString] = transformQuery(query)
+  const [queryString, numberOfParametersInQueryString] = transformQuery(query, parameters)
   const transformedParameters = transformParameters(numberOfParametersInQueryString, parameters)
 
   return {
