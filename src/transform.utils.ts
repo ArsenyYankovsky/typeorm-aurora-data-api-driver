@@ -70,7 +70,7 @@ export const transformParameters = (
         const parameter = parameters[i + y]
 
         if (Array.isArray(parameter)) {
-          parameter.forEach(element => {
+          parameter.forEach((element) => {
             parameterObject[`e_param_${extendedParameterCount}`] = element
             extendedParameterCount += 1
           })
