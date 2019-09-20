@@ -1,7 +1,7 @@
 // @ts-ignore
 import createDataApiClient from 'data-api-client'
 
-export const transformQuery = (query: string, parameters?: any[]): [string, number] => {
+const transformQuery = (query: string, parameters?: any[]): [string, number] => {
   const quoteCharacters = ['\'', '"']
 
   let newQueryString = ''
@@ -46,7 +46,7 @@ export const transformQuery = (query: string, parameters?: any[]): [string, numb
   return [newQueryString, numberOfParametersInQueryString]
 }
 
-export const transformParameters = (numberOfParametersInQueryString: number, parameters?: any[]) => {
+const transformParameters = (numberOfParametersInQueryString: number, parameters?: any[]) => {
   if (
     parameters &&
     parameters.length > 0 &&
@@ -62,8 +62,6 @@ export const transformParameters = (numberOfParametersInQueryString: number, par
 
   if (parameters && parameters.length > 0) {
     const numberOfObjects = parameters.length / numberOfParametersInQueryString
-
-    console.log(numberOfObjects)
 
     for (let i = 0; i < numberOfObjects; i += 1) {
       const parameterObject: any = {}
@@ -84,7 +82,7 @@ export const transformParameters = (numberOfParametersInQueryString: number, par
   return transformedParameters
 }
 
-export const transformQueryAndParameters = (query: string, parameters?: any[]) => {
+const transformQueryAndParameters = (query: string, parameters?: any[]) => {
   const [queryString, numberOfParametersInQueryString] = transformQuery(query, parameters)
   const transformedParameters = transformParameters(numberOfParametersInQueryString, parameters)
 
@@ -104,7 +102,7 @@ export default class DataApiDriver {
     private readonly secretArn: string,
     private readonly resourceArn: string,
     private readonly database: string,
-    private readonly loggerFn: (query: string, parameters?: any) => void = () => undefined,
+    private readonly loggerFn: (query: string, parameters?: any[]) => void = () => undefined,
   ) {
     this.region = region
     this.secretArn = secretArn
