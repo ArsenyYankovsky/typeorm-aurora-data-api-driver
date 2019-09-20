@@ -1,5 +1,5 @@
 export const transformQuery = (query: string, parameters?: any[]): [string, number] => {
-  const quoteCharacters = ['\'', '"']
+  const quoteCharacters = ["'", '"']
 
   let newQueryString = ''
   let currentQuote = null
@@ -14,17 +14,15 @@ export const transformQuery = (query: string, parameters?: any[]): [string, numb
       const parameter = parameters![numberOfParametersInQueryString]
 
       if (Array.isArray(parameter)) {
-        const extendedParamNames: string[] = []
-
-        parameter.forEach(() => {
-          extendedParamNames.push(`:e_param_${extendedParameterCount}`)
-          extendedParameterCount += 1
-        })
-
-        newQueryString += extendedParamNames.join(', ')
+        newQueryString += parameter
+          .map(() => {
+            const value = `:e_param_${extendedParameterCount}`
+            extendedParameterCount += 1
+            return value
+          })
+          .join(', ')
       } else {
-        const paramName = `:param_${numberOfParametersInQueryString}`
-        newQueryString += paramName
+        newQueryString += `:param_${numberOfParametersInQueryString}`
       }
 
       numberOfParametersInQueryString += 1
@@ -44,7 +42,10 @@ export const transformQuery = (query: string, parameters?: any[]): [string, numb
   return [newQueryString, numberOfParametersInQueryString]
 }
 
-export const transformParameters = (numberOfParametersInQueryString: number, parameters?: any[]) => {
+export const transformParameters = (
+  numberOfParametersInQueryString: number,
+  parameters?: any[],
+) => {
   if (
     parameters &&
     parameters.length > 0 &&
@@ -52,7 +53,8 @@ export const transformParameters = (numberOfParametersInQueryString: number, par
   ) {
     throw new Error(
       `Number of parameters mismatch, got ${numberOfParametersInQueryString} in query string \
-      and ${parameters.length} in input`)
+      and ${parameters.length} in input`,
+    )
   }
 
   let extendedParameterCount = 0
@@ -68,7 +70,7 @@ export const transformParameters = (numberOfParametersInQueryString: number, par
         const parameter = parameters[i + y]
 
         if (Array.isArray(parameter)) {
-          parameter.forEach((element) => {
+          parameter.forEach(element => {
             parameterObject[`e_param_${extendedParameterCount}`] = element
             extendedParameterCount += 1
           })

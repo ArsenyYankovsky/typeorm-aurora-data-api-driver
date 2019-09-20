@@ -1,0 +1,10 @@
+{
+  "folders": [
+	{
+		"path": "/code"
+	}
+],
+  "settings": {
+    "editor.defaultFormatter": "ms-vscode.vscode-typescript-tslint-plugin"
+  }
+}
