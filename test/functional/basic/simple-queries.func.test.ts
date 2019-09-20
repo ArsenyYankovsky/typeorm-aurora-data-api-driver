@@ -22,10 +22,8 @@ describe('aurora data api > simple queries', () => {
   it('should create a table and be able to query it', async () => {
     await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
       const postRepository = connection.getRepository(Post)
-      await postRepository.delete({})
 
       const post = new Post()
-
       post.title = 'My First Post'
       post.text = 'Post Text'
       post.likesCount = 4
@@ -33,11 +31,9 @@ describe('aurora data api > simple queries', () => {
       const insertResult = await postRepository.save(post)
 
       const postId = insertResult.id
-
       const dbPost = await postRepository.findOne({ id: postId })
 
       expect(dbPost).toBeTruthy()
-
       expect(dbPost!.title).toBe('My First Post')
       expect(dbPost!.text).toBe('Post Text')
       expect(dbPost!.likesCount).toBe(4)
@@ -47,17 +43,14 @@ describe('aurora data api > simple queries', () => {
   it('batch insert - with dates', async () => {
     await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
       const postRepository = connection.getRepository(Post)
-      await postRepository.delete({})
 
       const post = new Post()
-
       post.title = 'My First Post'
       post.text = 'Post Text'
       post.likesCount = 4
       post.publishedAt = new Date()
 
       const secondPost = new Post()
-
       secondPost.title = 'My Second Post'
       secondPost.text = 'Post Text'
       secondPost.likesCount = 5
@@ -66,9 +59,7 @@ describe('aurora data api > simple queries', () => {
       await postRepository.save([post, secondPost])
 
       const dbPosts = await postRepository.find()
-
       expect(dbPosts).toBeTruthy()
-
       expect(dbPosts.length).toBe(2)
 
       for (const dbPost of dbPosts) {
@@ -85,8 +76,6 @@ describe('aurora data api > simple queries', () => {
     await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
       // Create categories
       const categoryRepository = connection.getRepository(Category)
-      await categoryRepository.delete({})
-
       const firstCategory = await categoryRepository.save(
         categoryRepository.create({
           name: 'first',
@@ -101,8 +90,6 @@ describe('aurora data api > simple queries', () => {
 
       // Create a post and associate with created categories
       const postRepository = connection.getRepository(Post)
-      await postRepository.delete({})
-
       const post = postRepository.create({
         title: 'Post with categories',
         text: 'Text',

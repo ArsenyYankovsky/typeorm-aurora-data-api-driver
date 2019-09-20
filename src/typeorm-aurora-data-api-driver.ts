@@ -14,7 +14,6 @@ const transformQuery = (query: string, parameters?: any[]): [string, number] => 
     const currentCharacterEscaped = i !== 0 && query[i - 1] === '\\'
 
     if (currentCharacter === '?' && !currentQuote) {
-      // If parameter is an array then expand out and use e_param_X to avoid conflicts with param_X
       const parameter = parameters![numberOfParametersInQueryString]
       if (Array.isArray(parameter)) {
         parameter.forEach((_, index) => {
