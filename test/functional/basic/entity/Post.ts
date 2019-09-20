@@ -3,9 +3,9 @@ import { Category } from './Category'
 
 @Entity()
 export class Post {
-  @PrimaryColumn('integer')
-  @Generated()
-  public id!: number
+  @PrimaryColumn()
+  @Generated('uuid')
+  public id!: string
 
   @Column()
   public title!: string
