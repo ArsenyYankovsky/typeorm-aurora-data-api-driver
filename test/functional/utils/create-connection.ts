@@ -30,6 +30,11 @@ export const createConnection = async (partialOptions: Partial<ConnectionOptions
 export const createConnectionAndResetData = async (
   partialOptions: Partial<ConnectionOptions> = {},
 ) => {
+  // FIXME: Whatever happens here the data is not dropped!
+  // Tried: await connection.synchronize(true)
+  // Tried: await connection.dropDatase()
+  // And the following synchronize/dropSchema combination
+  // Bizarre - so for now deleting the data in the tests as need to move on....
   return createConnection({ ...partialOptions, synchronize: true, dropSchema: true })
 }
 
