@@ -1,11 +1,11 @@
-import DataApiDriver from '../src/typeorm-aurora-data-api-driver'
+import { transformQueryAndParameters } from '../src/typeorm-aurora-data-api-driver'
 
 describe('aurora data api > query transformation', () => {
   it('should correctly transform a single parameter query', async () => {
     const query = 'select * from posts where id = ?'
     const parameters = [1]
 
-    const result = DataApiDriver.transformQueryAndParameters(query, parameters)
+    const result = transformQueryAndParameters(query, parameters)
 
     expect(result.queryString).toEqual('select * from posts where id = :param_0')
     expect(result.parameters).toEqual([{ param_0: 1 }])
@@ -15,7 +15,7 @@ describe('aurora data api > query transformation', () => {
     const query = 'select * from posts where id = ? and text = "?" and title = "\\"?\\""'
     const parameters = [1]
 
-    const result = DataApiDriver.transformQueryAndParameters(query, parameters)
+    const result = transformQueryAndParameters(query, parameters)
 
     expect(result.queryString).toEqual(
       'select * from posts where id = :param_0 and text = "?" and title = "\\"?\\""',
@@ -28,7 +28,7 @@ describe('aurora data api > query transformation', () => {
       "select * from posts where id = ? and text = '?' and title = '\\'?\\'' and description = \"'?'\""
     const parameters = [1]
 
-    const result = DataApiDriver.transformQueryAndParameters(query, parameters)
+    const result = transformQueryAndParameters(query, parameters)
 
     expect(result.queryString).toEqual(
       "select * from posts where id = :param_0 and text = '?' and title = '\\'?\\'' and description = \"'?'\"",
@@ -46,7 +46,7 @@ describe('aurora data api > query transformation', () => {
     group by DATE(CONVERT_TZ(dateTime, 'UTC', 'UTC')) order by dateTime asc
   `
 
-    const result = DataApiDriver.transformQueryAndParameters(query, [1, 2, 3])
+    const result = transformQueryAndParameters(query, [1, 2, 3])
 
     expect(result.parameters).toEqual([{ param_0: 1, param_1: 2, param_2: 3 }])
   })

@@ -1,95 +1,95 @@
 // @ts-ignore
 import createDataApiClient from 'data-api-client'
 
-const quoteCharacters = ['\'', '"']
+export const transformQuery = (query: string): [string, number] => {
+  const quoteCharacters = ['\'', '"']
 
-export default class DataApiDriver {
-  public static transformQueryAndParameters(query: string, parameters?: any[]): any {
-    let numberOfParametersInQueryString = 0
+  let newQueryString = ''
+  let currentQuote = null
+  let numberOfParametersInQueryString = 0
 
-    let newQueryString = ''
-    let currentQuote = null
+  for (let i = 0; i < query.length; i += 1) {
+    const currentCharacter = query[i]
+    const currentCharacterEscaped = i !== 0 && query[i - 1] === '\\'
 
-    for (let i = 0; i < query.length; i += 1) {
-      const currentCharacter = query[i]
-      const currentCharacterEscaped = i !== 0 && query[i - 1] === '\\'
+    if (currentCharacter === '?' && !currentQuote) {
+      const paramName = `:param_${numberOfParametersInQueryString}`
+      numberOfParametersInQueryString += 1
+      newQueryString += paramName
+      continue
+    }
 
-      if (currentCharacter === '?' && !currentQuote) {
-        const paramName = `:param_${numberOfParametersInQueryString}`
-
-        numberOfParametersInQueryString += 1
-        newQueryString += paramName
-      } else if (quoteCharacters.includes(currentCharacter) && !currentCharacterEscaped) {
-        if (!currentQuote) {
-          currentQuote = currentCharacter
-        } else if (currentQuote === currentCharacter) {
-          currentQuote = null
-        }
-
-        newQueryString += currentCharacter
-      } else {
-        newQueryString += currentCharacter
+    if (quoteCharacters.includes(currentCharacter) && !currentCharacterEscaped) {
+      if (!currentQuote) {
+        currentQuote = currentCharacter
+      } else if (currentQuote === currentCharacter) {
+        currentQuote = null
       }
     }
 
-    if (
-      parameters &&
-      parameters.length > 0 &&
-      parameters.length % numberOfParametersInQueryString !== 0
-    ) {
-      throw new Error(`Number of parameters mismatch, got ${numberOfParametersInQueryString} in query string \
-            and ${parameters.length} in input`)
-    }
+    newQueryString += currentCharacter
+  }
 
-    const transformedParameters: any[] = []
+  return [newQueryString, numberOfParametersInQueryString]
+}
 
-    if (parameters && parameters.length > 0) {
-      const numberOfObjects = parameters.length / numberOfParametersInQueryString
+export const transformParameters = (numberOfParametersInQueryString: number, parameters?: any[]) => {
+  if (
+    parameters &&
+    parameters.length > 0 &&
+    parameters.length % numberOfParametersInQueryString !== 0
+  ) {
+    throw new Error(
+      `Number of parameters mismatch, got ${numberOfParametersInQueryString} in query string \
+      and ${parameters.length} in input`)
+  }
 
-      for (let i = 0; i < numberOfObjects; i += 1) {
-        const parameterObject: any = {}
+  const transformedParameters: any[] = []
 
-        for (let y = 0; y < numberOfParametersInQueryString; y += 1) {
-          const paramName = `param_${y}`
+  if (parameters && parameters.length > 0) {
+    const numberOfObjects = parameters.length / numberOfParametersInQueryString
 
-          parameterObject[paramName] = parameters[i + y]
-        }
+    for (let i = 0; i < numberOfObjects; i += 1) {
+      const parameterObject: any = {}
 
-        transformedParameters.push(parameterObject)
+      for (let y = 0; y < numberOfParametersInQueryString; y += 1) {
+        parameterObject[`param_${y}`] = parameters[i + y]
       }
-    }
 
-    return {
-      queryString: newQueryString,
-      parameters: transformedParameters,
+      transformedParameters.push(parameterObject)
     }
   }
 
-  private readonly region: string
+  return transformedParameters
+}
 
-  private readonly secretArn: string
+export const transformQueryAndParameters = (query: string, parameters?: any[]) => {
+  const [queryString, numberOfParametersInQueryString] = transformQuery(query)
+  const transformedParameters = transformParameters(numberOfParametersInQueryString, parameters)
 
-  private readonly resourceArn: string
+  return {
+    queryString,
+    parameters: transformedParameters,
+  }
+}
 
-  private readonly database: string
-
+export default class DataApiDriver {
   private readonly client: any
-
-  private readonly loggerFn?: (query: string, parameters?: any) => void
 
   private transactionId?: string
 
   constructor(
-    region: string,
-    secretArn: string,
-    resourceArn: string,
-    database: string,
-    loggerFn?: (query: string, parameters?: any) => void,
+    private readonly region: string,
+    private readonly secretArn: string,
+    private readonly resourceArn: string,
+    private readonly database: string,
+    private readonly loggerFn: (query: string, parameters?: any) => void = () => undefined,
   ) {
     this.region = region
     this.secretArn = secretArn
     this.resourceArn = resourceArn
     this.database = database
+    this.loggerFn = loggerFn
     this.client = createDataApiClient({
       secretArn,
       resourceArn,
@@ -98,15 +98,12 @@ export default class DataApiDriver {
         region,
       },
     })
-    this.loggerFn = loggerFn
   }
 
   public async query(query: string, parameters?: any[]): Promise<any> {
-    const transformedQueryData = DataApiDriver.transformQueryAndParameters(query, parameters)
+    const transformedQueryData = transformQueryAndParameters(query, parameters)
 
-    if (this.loggerFn) {
-      this.loggerFn(transformedQueryData.queryString, transformedQueryData.parameters)
-    }
+    this.loggerFn(transformedQueryData.queryString, transformedQueryData.parameters)
 
     const result = await this.client.query({
       sql: transformedQueryData.queryString,
@@ -114,11 +111,7 @@ export default class DataApiDriver {
       transactionId: this.transactionId,
     })
 
-    if (result.records) {
-      return result.records
-    }
-
-    return result
+    return result.records || result
   }
 
   public async startTransaction(): Promise<void> {
