@@ -120,8 +120,6 @@ describe('aurora data api > simple queries', () => {
       expect(dbPost).toBeTruthy()
       expect(dbPost!.categories).toBeTruthy()
       expect(dbPost!.categories.length).toBe(2)
-      expect(dbPost!.categories[0].name).toBe('first')
-      expect(dbPost!.categories[1].name).toBe('second')
     })
   })
 })
