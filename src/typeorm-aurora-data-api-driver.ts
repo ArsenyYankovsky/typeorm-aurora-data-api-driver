@@ -82,17 +82,17 @@ const transformParameters = (numberOfParametersInQueryString: number, parameters
   return transformedParameters
 }
 
-const transformQueryAndParameters = (query: string, parameters?: any[]) => {
-  const [queryString, numberOfParametersInQueryString] = transformQuery(query, parameters)
-  const transformedParameters = transformParameters(numberOfParametersInQueryString, parameters)
-
-  return {
-    queryString,
-    parameters: transformedParameters,
-  }
-}
-
 export default class DataApiDriver {
+  public static transformQueryAndParameters(query: string, parameters?: any[]): any {
+    const [queryString, numberOfParametersInQueryString] = transformQuery(query, parameters)
+    const transformedParameters = transformParameters(numberOfParametersInQueryString, parameters)
+
+    return {
+      queryString,
+      parameters: transformedParameters,
+    }
+  }
+
   private readonly client: any
 
   private transactionId?: string
@@ -120,7 +120,7 @@ export default class DataApiDriver {
   }
 
   public async query(query: string, parameters?: any[]): Promise<any> {
-    const transformedQueryData = transformQueryAndParameters(query, parameters)
+    const transformedQueryData = DataApiDriver.transformQueryAndParameters(query, parameters)
 
     this.loggerFn(transformedQueryData.queryString, transformedQueryData.parameters)
 
