@@ -63,6 +63,8 @@ export const transformParameters = (numberOfParametersInQueryString: number, par
   if (parameters && parameters.length > 0) {
     const numberOfObjects = parameters.length / numberOfParametersInQueryString
 
+    console.log(numberOfObjects)
+
     for (let i = 0; i < numberOfObjects; i += 1) {
       const parameterObject: any = {}
 
