@@ -45,7 +45,7 @@ export const transformParameters = (
   parameters: any[] = [],
 ) => {
   let indexOffset = 0
-  return [parameters.reduce(
+  const transformed = parameters.reduce(
     (parameterObject, parameter, index) => {
       if (Array.isArray(parameter)) {
         parameter.forEach((element) => {
@@ -56,8 +56,11 @@ export const transformParameters = (
         parameterObject[`param_${index + indexOffset}`] = parameter
       }
       return parameterObject
-    }, {}),
-  ]
+    }, {})
+
+  if (transformed.param_0) {
+    return [transformed]
+  }
 }
 
 export const transformQueryAndParameters = (query: string, parameters?: any[]): any => {
