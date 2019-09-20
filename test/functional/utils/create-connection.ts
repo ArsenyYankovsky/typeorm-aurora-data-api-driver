@@ -33,7 +33,7 @@ export const createConnectionAndResetData = async (
   const connection = await createConnection({ ...partialOptions, synchronize: false })
   await connection.query(`DROP DATABASE ${process.env.database};`)
   await connection.query(`CREATE DATABASE ${process.env.database};`)
-  await connection.query(`SELECT DATABASE ${process.env.database};`)
+  await connection.query(`USE DATABASE ${process.env.database};`)
   await connection.synchronize(true)
   return connection
 }
