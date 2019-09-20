@@ -59,9 +59,9 @@ describe('aurora data api > query transformation', () => {
     const result = transformQueryAndParameters(query, [id, [id, id2, id, id2]])
 
     expect(result.queryString).toEqual(
-      'select * from posts where id in (:param_0) and id in (:e_param_0, :e_param_1, :e_param_2, :e_param_3)',
+      'select * from posts where id in (:param_0) and id in (:param_1, :param_2, :param_3, :param_4)',
     )
 
-    expect(result.parameters).toEqual([{ param_0: id, e_param_0: id, e_param_1: id2, e_param_2: id, e_param_3: id2 }])
+    expect(result.parameters).toEqual([{ param_0: id, param_1: id, param_2: id2, param_3: id, param_4: id2 }])
   })
 })

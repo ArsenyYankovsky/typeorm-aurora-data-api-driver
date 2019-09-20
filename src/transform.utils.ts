@@ -1,10 +1,10 @@
-export const transformQuery = (query: string, parameters?: any[]): [string, number] => {
+export const transformQuery = (query: string, parameters?: any[]): [string, number, number] => {
   const quoteCharacters = ["'", '"']
 
   let newQueryString = ''
   let currentQuote = null
   let numberOfParametersInQueryString = 0
-  let extendedParameterCount = 0
+  let totalAdditionalParameters = 0
 
   for (let i = 0; i < query.length; i += 1) {
     const currentCharacter = query[i]
@@ -14,18 +14,16 @@ export const transformQuery = (query: string, parameters?: any[]): [string, numb
       const parameter = parameters![numberOfParametersInQueryString]
 
       if (Array.isArray(parameter)) {
-        newQueryString += parameter
-          .map(() => {
-            const value = `:e_param_${extendedParameterCount}`
-            extendedParameterCount += 1
-            return value
-          })
-          .join(', ')
-      } else {
-        newQueryString += `:param_${numberOfParametersInQueryString}`
-      }
+        const additionalParameters =
+          parameter.map((_, index) => `:param_${numberOfParametersInQueryString + index}`)
 
-      numberOfParametersInQueryString += 1
+        totalAdditionalParameters += additionalParameters.length - 1
+        newQueryString += additionalParameters.join(', ')
+        numberOfParametersInQueryString += 1
+      } else {
+        newQueryString += `:param_${numberOfParametersInQueryString + totalAdditionalParameters}`
+        numberOfParametersInQueryString += 1
+      }
     } else {
       if (quoteCharacters.includes(currentCharacter) && !currentCharacterEscaped) {
         if (!currentQuote) {
@@ -39,59 +37,44 @@ export const transformQuery = (query: string, parameters?: any[]): [string, numb
     }
   }
 
-  return [newQueryString, numberOfParametersInQueryString]
+  const totalNumberOfParameters = numberOfParametersInQueryString + totalAdditionalParameters
+  return [newQueryString, numberOfParametersInQueryString, totalNumberOfParameters]
 }
 
 export const transformParameters = (
-  numberOfParametersInQueryString: number,
-  parameters?: any[],
+  parameters: any[] = [],
 ) => {
-  if (
-    parameters &&
-    parameters.length > 0 &&
-    parameters.length % numberOfParametersInQueryString !== 0
-  ) {
+  let indexOffset = 0
+  return [parameters.reduce(
+    (parameterObject, parameter, index) => {
+      if (Array.isArray(parameter)) {
+        parameter.forEach((element) => {
+          parameterObject[`param_${index + indexOffset}`] = element
+          indexOffset += 1
+        })
+      } else {
+        parameterObject[`param_${index + indexOffset}`] = parameter
+      }
+      return parameterObject
+    }, {}),
+  ]
+}
+
+export const transformQueryAndParameters = (query: string, parameters?: any[]): any => {
+  const [
+    queryString,
+    numberOfParametersInQueryString,
+  ] = transformQuery(query, parameters)
+
+  if (parameters && parameters.length !== numberOfParametersInQueryString) {
     throw new Error(
       `Number of parameters mismatch, got ${numberOfParametersInQueryString} in query string \
       and ${parameters.length} in input`,
     )
   }
 
-  let extendedParameterCount = 0
-  const transformedParameters: any[] = []
-
-  if (parameters && parameters.length > 0) {
-    const numberOfObjects = parameters.length / numberOfParametersInQueryString
-
-    for (let i = 0; i < numberOfObjects; i += 1) {
-      const parameterObject: any = {}
-
-      for (let y = 0; y < numberOfParametersInQueryString; y += 1) {
-        const parameter = parameters[i + y]
-
-        if (Array.isArray(parameter)) {
-          parameter.forEach((element) => {
-            parameterObject[`e_param_${extendedParameterCount}`] = element
-            extendedParameterCount += 1
-          })
-        } else {
-          parameterObject[`param_${y}`] = parameter
-        }
-      }
-
-      transformedParameters.push(parameterObject)
-    }
-  }
-
-  return transformedParameters
-}
-
-export const transformQueryAndParameters = (query: string, parameters?: any[]): any => {
-  const [queryString, numberOfParametersInQueryString] = transformQuery(query, parameters)
-  const transformedParameters = transformParameters(numberOfParametersInQueryString, parameters)
-
   return {
     queryString,
-    parameters: transformedParameters,
+    parameters: transformParameters(parameters),
   }
 }
