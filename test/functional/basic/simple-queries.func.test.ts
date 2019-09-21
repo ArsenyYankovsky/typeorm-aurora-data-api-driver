@@ -139,4 +139,29 @@ describe('aurora data api > simple queries', () => {
       expect(dbPost!.updatedAt).toEqual(updatedAt)
     })
   })
+
+  it('should be able to correctly deal with parameter sets', async () => {
+    await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
+      const queryRunner = connection.createQueryRunner()
+
+      // Run a parameterised query (batch)
+      const batchParameters = ['one', 'two', 'three', 'four']
+
+      await queryRunner.query(
+        'INSERT INTO category VALUES(name = ?)',
+        batchParameters,
+      )
+
+      // Query back the inserted categories
+      const categoryRepository = connection.getRepository(Category)
+      const categories = await categoryRepository.find()
+
+      // Assert
+      expect(categories.length).toBe(4)
+      expect(categories[0].name = 'one')
+      expect(categories[1].name = 'two')
+      expect(categories[2].name = 'three')
+      expect(categories[3].name = 'four')
+    })
+  })
 })
