@@ -1,4 +1,4 @@
-export const transformQuery = (query: string, parameters: any[]): string => {
+const transformQuery = (query: string, parameters: any[]): string => {
   const quoteCharacters = ["'", '"']
   let newQueryString = ''
   let currentQuote = null
@@ -39,7 +39,7 @@ export const transformQuery = (query: string, parameters: any[]): string => {
   return newQueryString
 }
 
-export const transformParameters = (parameters: any[]) =>
+const transformParameters = (parameters: any[]) =>
   parameters.reduce(
     (params, parameter, index) => {
       params[`param_${index}`] = parameter
