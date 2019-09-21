@@ -2,7 +2,6 @@ import 'reflect-metadata'
 import { useCleanDatabase } from '../utils/create-connection'
 import { Category } from './entity/Category'
 import { Post } from './entity/Post'
-import DataApiDriver from '../../../src/typeorm-aurora-data-api-driver'
 
 describe('aurora data api > simple queries', () => {
   jest.setTimeout(240000)
