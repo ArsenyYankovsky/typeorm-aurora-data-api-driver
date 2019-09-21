@@ -3,7 +3,7 @@ const typeorm = require('typeorm')
 const wakeUpDb = async () => {
   try {
     const connection = await typeorm.createConnection({
-      type: 'aurora-data-api',
+      type: "aurora-data-api",
       database: process.env.database,
       secretArn: process.env.secretArn,
       resourceArn: process.env.resourceArn,
@@ -19,15 +19,11 @@ const wakeUpDb = async () => {
         },
       },
     })
-
-    const result = await connection.query('select 1')
-
+    await connection.query("select 1")
     await connection.close()
-  } catch (e) {
-    await new Promise((resolve) => {
-      setTimeout(resolve, 60000)
-    })
+  } catch {
+    await new Promise(resolve => setTimeout(resolve, 60000))
   }
-}
+};
 
 wakeUpDb()

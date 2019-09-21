@@ -1,23 +1,11 @@
 {
-  "extends": [
-    "tslint:recommended",
-    "tslint-config-airbnb"
-  ],
+  "extends": ["tslint:recommended", "tslint-config-airbnb"],
   "linterOptions": {
-    "exclude": [
-      "config//*.js",
-      "node_modules//*.ts"
-    ]
+    "exclude": ["config//*.js", "node_modules//*.ts"]
   },
   "rules": {
-    "semicolon": [
-      true,
-      "never"
-    ],
-    "interface-name": [
-      true,
-      "never-prefix"
-    ],
+    "semicolon": [true, "never"],
+    "interface-name": [true, "never-prefix"],
     "max-line-length": false,
     "no-console": false,
     "jsx-no-lambda": false,
