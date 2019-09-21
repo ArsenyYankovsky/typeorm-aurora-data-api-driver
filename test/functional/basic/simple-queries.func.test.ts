@@ -7,7 +7,7 @@ describe('aurora data api > simple queries', () => {
   jest.setTimeout(240000)
 
   it('should do a simple select', async () => {
-    await useCleanDatabase({}, async (connection) => {
+    await useCleanDatabase({ logger: 'simple-console' }, async (connection) => {
       const logSpy = jest.spyOn(global.console, 'log')
 
       const result = await connection.query('select 1')
@@ -117,13 +117,13 @@ describe('aurora data api > simple queries', () => {
       const postRepository = connection.getRepository(Post)
 
       const storedPost = await postRepository.save(
-        postRepository.create({
-          title: 'Post For Update',
-          text: 'Text',
-          likesCount: 6,
-          publishedAt: new Date(),
-        }),
-      )
+      postRepository.create({
+        title: 'Post For Update',
+        text: 'Text',
+        likesCount: 6,
+        publishedAt: new Date(),
+      }),
+    )
 
       // Retrieve the post and update the date
       const getPost = await postRepository.findOne(storedPost.id)
