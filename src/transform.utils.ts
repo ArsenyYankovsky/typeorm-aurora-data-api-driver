@@ -42,13 +42,11 @@ export const transformQuery = (query: string, parameters: any[]): string => {
 export const transformParameters = (
   parameters: any[],
 ) => {
-  if (parameters.length > 0) {
-    return parameters.reduce(
-      (params, parameter, index) => {
-        params[`param_${index}`] = parameter
-        return params
-      }, {})
-  }
+  return parameters.reduce(
+    (params, parameter, index) => {
+      params[`param_${index}`] = parameter
+      return params
+    }, {})
 }
 
 const expandArrayParameters = (parameters: any[]) => {

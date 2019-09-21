@@ -1,6 +1,22 @@
 import { transformQueryAndParameters } from '../src/transform.utils'
 
 describe('aurora data api > query transformation', () => {
+  it('should correctly transform a query with no parameters', async () => {
+    const query = 'select 1'
+    const result = transformQueryAndParameters(query)
+
+    expect(result.queryString).toEqual('select 1')
+    expect(result.parameters).toEqual([{}])
+  })
+
+  it('should correctly transform a query with empty parameters', async () => {
+    const query = 'select 1'
+    const result = transformQueryAndParameters(query, [])
+
+    expect(result.queryString).toEqual('select 1')
+    expect(result.parameters).toEqual([{}])
+  })
+
   it('should correctly transform a single parameter query', async () => {
     const query = 'select * from posts where id = ?'
     const parameters = [1]
