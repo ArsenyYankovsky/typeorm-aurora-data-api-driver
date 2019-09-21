@@ -1,12 +1,11 @@
-import { Column, Entity } from 'typeorm'
-import { PrimaryColumn } from 'typeorm'
-import { Generated } from 'typeorm'
+import { Column, Entity, Generated, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm'
+import { Category } from './Category'
 
-@Entity('aurora_data_api_test_post')
+@Entity()
 export class Post {
-  @PrimaryColumn('integer')
-  @Generated()
-  public id!: number
+  @PrimaryColumn()
+  @Generated('uuid')
+  public id!: string
 
   @Column()
   public title!: string
@@ -19,4 +18,11 @@ export class Post {
 
   @Column({ nullable: false, type: 'datetime', default: () => 'now()' })
   public publishedAt!: Date
+
+  @Column({ nullable: true, type: 'datetime' })
+  public updatedAt?: Date
+
+  @ManyToMany(type => Category)
+  @JoinTable()
+  public categories!: Category[]
 }
