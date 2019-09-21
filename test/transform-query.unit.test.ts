@@ -6,7 +6,7 @@ describe('aurora data api > query transformation', () => {
     const result = transformQueryAndParameters(query)
 
     expect(result.queryString).toEqual('select 1')
-    expect(result.parameters).toEqual([{}])
+    expect(result.parameters).toEqual([])
   })
 
   it('should correctly transform a query with empty parameters', async () => {
@@ -14,7 +14,7 @@ describe('aurora data api > query transformation', () => {
     const result = transformQueryAndParameters(query, [])
 
     expect(result.queryString).toEqual('select 1')
-    expect(result.parameters).toEqual([{}])
+    expect(result.parameters).toEqual([])
   })
 
   it('should correctly transform a single parameter query', async () => {
