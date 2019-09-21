@@ -2,6 +2,7 @@ import 'reflect-metadata'
 import { useCleanDatabase } from '../utils/create-connection'
 import { Category } from './entity/Category'
 import { Post } from './entity/Post'
+import DataApiDriver from '../../../src/typeorm-aurora-data-api-driver'
 
 describe('aurora data api > simple queries', () => {
   jest.setTimeout(240000)
@@ -108,6 +109,35 @@ describe('aurora data api > simple queries', () => {
       expect(dbPost).toBeTruthy()
       expect(dbPost!.categories).toBeTruthy()
       expect(dbPost!.categories.length).toBe(2)
+    })
+  })
+
+  it('should be able to update a date field by primary key', async () => {
+    await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
+      // Create a post and associate with created categories
+      const postRepository = connection.getRepository(Post)
+
+      const storedPost = await postRepository.save(
+        postRepository.create({
+          title: 'Post For Update',
+          text: 'Text',
+          likesCount: 6,
+          publishedAt: new Date(),
+        }),
+      )
+
+      // Retrieve the post and update the date
+      const getPost = await postRepository.findOne(storedPost.id)
+      expect(getPost).toBeTruthy()
+
+      const updatedAt = new Date()
+      getPost!.updatedAt = updatedAt
+      await postRepository.save(getPost!)
+
+      // Assert
+      const dbPost = await postRepository.findOne(storedPost.id)
+      expect(dbPost).toBeTruthy()
+      expect(dbPost!.updatedAt).toEqual(updatedAt)
     })
   })
 })
