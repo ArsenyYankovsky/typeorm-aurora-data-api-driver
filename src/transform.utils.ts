@@ -62,6 +62,10 @@ const expandArrayParameters = (parameters: any[]) => {
 }
 
 export const transformQueryAndParameters = (query: string, srcParameters: any[] = []): any => {
+  if (!srcParameters.length) {
+    return { queryString: query, parameters: [] }
+  }
+
   const queryString = transformQuery(query, srcParameters)
   const expandedParameters = expandArrayParameters(srcParameters)
   const parameters = [transformParameters(expandedParameters)]
