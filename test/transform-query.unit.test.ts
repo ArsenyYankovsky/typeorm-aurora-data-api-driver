@@ -62,6 +62,42 @@ describe('aurora data api > query transformation', () => {
       'select * from posts where id in (:param_0) and id in (:param_1, :param_2, :param_3, :param_4)',
     )
 
-    expect(result.parameters).toEqual([{ param_0: id, param_1: id, param_2: id2, param_3: id, param_4: id2 }])
+    expect(result.parameters).toEqual(
+      [{ param_0: id, param_1: id, param_2: id2, param_3: id, param_4: id2 }])
+  })
+
+  it('should correctly transform a query which contains two array parameters', async () => {
+    const query = 'select * from posts where id in (?) and test in (?);'
+
+    const id = 'dd32d900-3df6-45b9-a253-70a4516b88dc'
+    const id2 = 'some-guid'
+    const id3 = 'some-other-guid'
+    const result = transformQueryAndParameters(query, [[id, id2, id, id2], [id3, id2, id, id3]])
+
+    expect(result.queryString).toEqual(
+      'select * from posts where id in (:param_0, :param_1, :param_2, :param_3) and test in (:param_4, :param_5, :param_6, :param_7);',
+    )
+
+    expect(result.parameters).toEqual(
+      [{ param_0: id, param_1: id2, param_2: id, param_3: id2, param_4: id3, param_5: id2, param_6: id, param_7: id3 }])
+  })
+
+  // TODO: Ensure this is actually testing the right functionality!
+  it('should correctly transform a query which contains arrays and has two parameter sets', async () => {
+    const query = 'select * from posts where id in (?) and id in (?);'
+
+    const id = 'dd32d900-3df6-45b9-a253-70a4516b88dc'
+    const id2 = 'some-guid'
+    const result = transformQueryAndParameters(query, [id, [id, id2, id, id2], id, [id, id2, id, id2]])
+
+    expect(result.queryString).toEqual(
+      'select * from posts where id in (:param_0) and id in (:param_1, :param_2, :param_3, :param_4);',
+    )
+
+    expect(result.parameters).toEqual(
+      [
+        { param_0: id, param_1: id, param_2: id2, param_3: id, param_4: id2 },
+        { param_0: id, param_1: id, param_2: id2, param_3: id, param_4: id2 },
+      ])
   })
 })
