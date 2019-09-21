@@ -73,7 +73,7 @@ export const transformQueryAndParameters = (query: string, parameters: any[] = [
 
   const expandedParameters = expandArrayParameters(parameters)
 
-  if (expandedParameters.length % numberOfParameters !== 0) {
+  if (numberOfParameters && expandedParameters.length % numberOfParameters !== 0) {
     throw new Error(
       `Number of parameters mismatch, got ${numberOfParametersInQueryString} in query string \
       and ${parameters.length} in input`)
