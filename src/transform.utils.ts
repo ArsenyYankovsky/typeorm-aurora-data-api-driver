@@ -39,18 +39,15 @@ export const transformQuery = (query: string, parameters: any[]): string => {
   return newQueryString
 }
 
-export const transformParameters = (
-  parameters: any[],
-) => {
-  return parameters.reduce(
+export const transformParameters = (parameters: any[]) =>
+  parameters.reduce(
     (params, parameter, index) => {
       params[`param_${index}`] = parameter
       return params
     }, {})
-}
 
-const expandArrayParameters = (parameters: any[]) => {
-  return parameters.reduce(
+const expandArrayParameters = (parameters: any[]) =>
+  parameters.reduce(
     (expandedParameters, parameter) => {
       if (Array.isArray(parameter)) {
         expandedParameters.push(...parameter)
@@ -59,9 +56,8 @@ const expandArrayParameters = (parameters: any[]) => {
       }
       return expandedParameters
     }, [])
-}
 
-export const transformQueryAndParameters = (query: string, srcParameters: any[] = []): any => {
+export const transformQueryAndParameters = (query: string, srcParameters: any[] = []) => {
   if (!srcParameters.length) {
     return { queryString: query, parameters: [] }
   }
