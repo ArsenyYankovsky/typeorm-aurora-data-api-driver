@@ -141,16 +141,16 @@ describe('aurora data api > simple queries', () => {
   })
 
   it('should be able to correctly deal with parameter sets', async () => {
-    await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
-      const queryRunner = connection.createQueryRunner()
+    await useCleanDatabase({ entities: [Category] }, async (connection) => {
+      const categoryNames = ['one', 'two', 'three', 'four']
+      const newCategories = categoryNames.map(name => ({ name }))
 
-      // Run a parameterised query (batch)
-      const batchParameters = ['one', 'two', 'three', 'four']
-
-      await queryRunner.query(
-        'INSERT INTO category VALUES(name = ?)',
-        batchParameters,
-      )
+      await connection.createQueryBuilder()
+        .insert()
+        .into(Category)
+        .values(newCategories)
+        .orIgnore()
+        .execute()
 
       // Query back the inserted categories
       const categoryRepository = connection.getRepository(Category)
