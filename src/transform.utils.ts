@@ -1,29 +1,28 @@
-export const transformQuery = (query: string, parameters: any[]): [string, number, number] => {
+export const transformQuery = (query: string, parameters: any[]): string => {
   const quoteCharacters = ["'", '"']
   let newQueryString = ''
   let currentQuote = null
-  let numberOfQueryStringParameters = 0
-  let numberOfParameters = 0
+  let srcIndex = 0
+  let destIndex = 0
 
   for (let i = 0; i < query.length; i += 1) {
     const currentCharacter = query[i]
     const currentCharacterEscaped = i !== 0 && query[i - 1] === '\\'
 
     if (currentCharacter === '?' && !currentQuote) {
-      const parameter = parameters![numberOfQueryStringParameters]
+      const parameter = parameters![srcIndex]
 
       if (Array.isArray(parameter)) {
         const additionalParameters = parameter.map((_, index) =>
-          `:param_${numberOfParameters + index}`)
+          `:param_${destIndex + index}`)
 
         newQueryString += additionalParameters.join(', ')
-        numberOfParameters += additionalParameters.length
+        destIndex += additionalParameters.length
       } else {
-        newQueryString += `:param_${numberOfParameters}`
-        numberOfParameters += 1
+        newQueryString += `:param_${destIndex}`
+        destIndex += 1
       }
-
-      numberOfQueryStringParameters += 1
+      srcIndex += 1
     } else {
       newQueryString += currentCharacter
 
@@ -37,7 +36,7 @@ export const transformQuery = (query: string, parameters: any[]): [string, numbe
     }
   }
 
-  return [newQueryString, numberOfParameters, numberOfQueryStringParameters]
+  return newQueryString
 }
 
 export const transformParameters = (
@@ -64,33 +63,9 @@ const expandArrayParameters = (parameters: any[]) => {
     }, [])
 }
 
-export const transformQueryAndParameters = (query: string, parameters: any[] = []): any => {
-  const [
-    queryString,
-    numberOfParameters,
-    numberOfParametersInQueryString,
-  ] = transformQuery(query, parameters)
-
-  const expandedParameters = expandArrayParameters(parameters)
-
-  if (numberOfParameters > 0 && expandedParameters.length % numberOfParameters !== 0) {
-    throw new Error(
-      `Number of parameters mismatch, got ${numberOfParametersInQueryString} in query string \
-      and ${parameters.length} in input`)
-  }
-
-  const batch = chunk(expandedParameters, numberOfParameters)
-  const transformedParameters = batch.map(transformParameters)
-
-  return {
-    queryString,
-    parameters: transformedParameters,
-  }
-}
-
-const chunk = (array: any[], chunkSize: number) => {
-  return Array.from(
-    { length: Math.ceil(array.length / chunkSize) },
-    (_, index) => array.slice(index * chunkSize, (index + 1) * chunkSize),
-  )
+export const transformQueryAndParameters = (query: string, srcParameters: any[] = []): any => {
+  const queryString = transformQuery(query, srcParameters)
+  const expandedParameters = expandArrayParameters(srcParameters)
+  const parameters = [transformParameters(expandedParameters)]
+  return { queryString, parameters }
 }

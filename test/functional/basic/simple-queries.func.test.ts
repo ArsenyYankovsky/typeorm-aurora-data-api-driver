@@ -39,7 +39,7 @@ describe('aurora data api > simple queries', () => {
     })
   })
 
-  it('should batch insert with dates', async () => {
+  it('should be able to handle dates and multiple inserts', async () => {
     await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
       const postRepository = connection.getRepository(Post)
 
@@ -140,7 +140,7 @@ describe('aurora data api > simple queries', () => {
     })
   })
 
-  it('should be able to correctly deal with parameter sets', async () => {
+  it('should be able to correctly deal with bulk inserts', async () => {
     await useCleanDatabase({ entities: [Category] }, async (connection) => {
       const categoryNames = ['one', 'two', 'three', 'four']
       const newCategories = categoryNames.map(name => ({ name }))
