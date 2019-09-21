@@ -79,8 +79,8 @@ export const transformQueryAndParameters = (query: string, parameters: any[] = [
       and ${parameters.length} in input`)
   }
 
-  const objects = chunkArray(expandedParameters, numberOfParameters)
-  const transformedParameters = objects.map(transformParameters)
+  const batch = chunk(expandedParameters, numberOfParameters)
+  const transformedParameters = batch.map(transformParameters)
 
   return {
     queryString,
@@ -88,7 +88,7 @@ export const transformQueryAndParameters = (query: string, parameters: any[] = [
   }
 }
 
-const chunkArray = (array: any[], chunkSize: number) => {
+const chunk = (array: any[], chunkSize: number) => {
   return Array.from(
     { length: Math.ceil(array.length / chunkSize) },
     (_, index) => array.slice(index * chunkSize, (index + 1) * chunkSize),
