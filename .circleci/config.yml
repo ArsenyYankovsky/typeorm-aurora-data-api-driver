@@ -2,7 +2,7 @@ version: 2
 jobs:
   checks:
     docker:
-      - image: 'node:latest'
+      - image: "node:latest"
     steps:
       - checkout
       - run:
@@ -17,7 +17,7 @@ jobs:
 
   release:
     docker:
-      - image: 'node:latest'
+      - image: "node:latest"
     steps:
       - checkout
       - run:
@@ -32,7 +32,7 @@ jobs:
 
   functional-test-released:
     docker:
-      - image: 'node:latest'
+      - image: "node:latest"
     steps:
       - checkout
       - run:
@@ -50,7 +50,7 @@ jobs:
 
   functional-test:
     docker:
-      - image: 'node:latest'
+      - image: "node:latest"
     steps:
       - checkout
       - run:
