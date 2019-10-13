@@ -153,7 +153,7 @@ describe('aurora data api > simple queries', () => {
             title: 'Post For Update',
             text: 'Text',
             likesCount: 6,
-            publishedAt: new Date(),
+            publishedAt: null,
           }),
         )
 
