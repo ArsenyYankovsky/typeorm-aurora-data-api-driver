@@ -167,7 +167,7 @@ describe('aurora data api > simple queries', () => {
         // Assert
       const dbPost = await postRepository.findOne(storedPost.id)
       expect(dbPost).toBeTruthy()
-      expect(Math.round(dbPost!.updatedAt!.getTime() / 1000)).toEqual(Math.round(updatedAt.getTime() / 1000))
+      expect(Math.trunc(dbPost!.updatedAt!.getTime() / 1000)).toEqual(Math.trunc(updatedAt.getTime() / 1000))
     })
   })
 
