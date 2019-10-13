@@ -153,12 +153,14 @@ describe('aurora data api > simple queries', () => {
             title: 'Post For Update',
             text: 'Text',
             likesCount: 6,
+            publishedAt: new Date(),
           }),
         )
 
         // Retrieve the post and update the date
       const getPost = await postRepository.findOne(storedPost.id)
       expect(getPost).toBeTruthy()
+      expect(getPost.updatedAt).toBeFalsy()
 
       const updatedAt = new Date()
       getPost!.updatedAt = updatedAt
