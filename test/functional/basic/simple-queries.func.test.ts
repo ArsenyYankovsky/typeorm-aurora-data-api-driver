@@ -33,66 +33,38 @@ describe('aurora data api > simple queries', () => {
       const dbPost = await postRepository.findOne({ id: insertResult.id })
       expect(dbPost).toBeTruthy()
 
-    expect(dbPost!.title).toBe('My First Post')
-    expect(dbPost!.text).toBe('Post Text')
-    expect(dbPost!.likesCount).toBe(4)
-
-    await connection.query('DROP TABLE aurora_data_api_test_post;')
-
-    await connection.close()
+      expect(dbPost!.title).toBe('My First Post')
+      expect(dbPost!.text).toBe('Post Text')
+      expect(dbPost!.likesCount).toBe(4)
+    })
   })
 
   it('should be able to update a post', async () => {
-    const connection = await createConnection({
-      type: 'aurora-data-api',
-      database: process.env.database!,
-      secretArn: process.env.secretArn!,
-      resourceArn: process.env.resourceArn!,
-      region: process.env.region!,
-      entities: [Post],
-      synchronize: true,
-      logging: true,
-    })
+    await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
 
-    const postRepository = connection.getRepository(Post)
+      const postRepository = connection.getRepository(Post)
 
-    const post = new Post()
+      const post = new Post()
 
-    post.title = 'My First Post'
-    post.text = 'Post Text'
-    post.likesCount = 4
-    post.publishedAt = new Date(2017, 1, 1)
+      post.title = 'My First Post'
+      post.text = 'Post Text'
+      post.likesCount = 4
+      post.publishedAt = new Date(2017, 1, 1)
 
-    const insertResult = await postRepository.save(post)
+      const insertResult = await postRepository.save(post)
 
-    const postId = insertResult.id
+      const postId = insertResult.id
 
-    const dbPost = await postRepository.findOne({ id: postId })
+      const dbPost = await postRepository.findOne({ id: postId })
 
-    dbPost!.publishedAt = new Date()
+      dbPost!.publishedAt = new Date()
 
-    await postRepository.save(dbPost!)
+      await postRepository.save(dbPost!)
 
-    const updatedPost = await postRepository.findOne(postId)
+      const updatedPost = await postRepository.findOne(postId)
 
-    expect(updatedPost!.publishedAt > new Date(2017, 1, 1)).toBeTruthy()
+      expect(updatedPost!.publishedAt > new Date(2017, 1, 1)).toBeTruthy()
 
-    await connection.query('DROP TABLE aurora_data_api_test_post;')
-
-    await connection.close()
-  })
-
-  it('batch insert - with dates', async () => {
-    const connection = await createConnection({
-      type: 'aurora-data-api',
-      database: process.env.database!,
-      secretArn: process.env.secretArn!,
-      resourceArn: process.env.resourceArn!,
-      region: process.env.region!,
-      entities: [Post],
-      synchronize: true,
-      logging: true,
-    })
       expect(dbPost!.title).toBe('My First Post')
       expect(dbPost!.text).toBe('Post Text')
       expect(dbPost!.likesCount).toBe(4)
@@ -133,22 +105,22 @@ describe('aurora data api > simple queries', () => {
 
   it('should be able to create and query a many-to-many relationship', async () => {
     await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
-      // Create categories
+        // Create categories
       const categoryRepository = connection.getRepository(Category)
 
       const firstCategory = await categoryRepository.save(
-        categoryRepository.create({
-          name: 'first',
-        }),
-      )
+          categoryRepository.create({
+            name: 'first',
+          }),
+        )
 
       const secondCategory = await categoryRepository.save(
-        categoryRepository.create({
-          name: 'second',
-        }),
-      )
+          categoryRepository.create({
+            name: 'second',
+          }),
+        )
 
-      // Create a post and associate with created categories
+        // Create a post and associate with created categories
       const postRepository = connection.getRepository(Post)
 
       const post = postRepository.create({
@@ -161,9 +133,9 @@ describe('aurora data api > simple queries', () => {
 
       const storedPost = await postRepository.save(post)
 
-      // Assert
+        // Assert
       const dbPost = await postRepository.findOne(
-        storedPost.id, { relations: ['categories'] })
+          storedPost.id, { relations: ['categories'] })
 
       expect(dbPost).toBeTruthy()
       expect(dbPost!.categories).toBeTruthy()
@@ -173,19 +145,19 @@ describe('aurora data api > simple queries', () => {
 
   it('should be able to update a date field by primary key', async () => {
     await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
-      // Create a post and associate with created categories
+        // Create a post and associate with created categories
       const postRepository = connection.getRepository(Post)
 
       const storedPost = await postRepository.save(
-      postRepository.create({
-        title: 'Post For Update',
-        text: 'Text',
-        likesCount: 6,
-        publishedAt: new Date(),
-      }),
-    )
+          postRepository.create({
+            title: 'Post For Update',
+            text: 'Text',
+            likesCount: 6,
+            publishedAt: new Date(),
+          }),
+        )
 
-      // Retrieve the post and update the date
+        // Retrieve the post and update the date
       const getPost = await postRepository.findOne(storedPost.id)
       expect(getPost).toBeTruthy()
 
@@ -193,7 +165,7 @@ describe('aurora data api > simple queries', () => {
       getPost!.updatedAt = updatedAt
       await postRepository.save(getPost!)
 
-      // Assert
+        // Assert
       const dbPost = await postRepository.findOne(storedPost.id)
       expect(dbPost).toBeTruthy()
       expect(Math.round(dbPost!.updatedAt!.getTime() / 1000)).toEqual(Math.round(updatedAt.getTime() / 1000))
@@ -206,17 +178,17 @@ describe('aurora data api > simple queries', () => {
       const newCategories = categoryNames.map(name => ({ name }))
 
       await connection.createQueryBuilder()
-        .insert()
-        .into(Category)
-        .values(newCategories)
-        .orIgnore()
-        .execute()
+          .insert()
+          .into(Category)
+          .values(newCategories)
+          .orIgnore()
+          .execute()
 
-      // Query back the inserted categories
+        // Query back the inserted categories
       const categoryRepository = connection.getRepository(Category)
       const categories = await categoryRepository.find()
 
-      // Assert
+        // Assert
       expect(categories.length).toBe(4)
       expect(categories[0].name = 'one')
       expect(categories[1].name = 'two')
