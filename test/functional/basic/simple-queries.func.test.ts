@@ -160,7 +160,7 @@ describe('aurora data api > simple queries', () => {
         // Retrieve the post and update the date
       const getPost = await postRepository.findOne(storedPost.id)
       expect(getPost).toBeTruthy()
-      expect(getPost.updatedAt).toBeFalsy()
+      expect(getPost!.updatedAt).toBeFalsy()
 
       const updatedAt = new Date()
       getPost!.updatedAt = updatedAt
