@@ -7,11 +7,12 @@ import {
 export const createConnection = async (dbType: DbType, partialOptions: Partial<ConnectionOptions> = {}) => {
   return typeormCreateConnection({
     ...partialOptions,
+    name: dbType,
     type: dbType === 'mysql' ? 'aurora-data-api' : 'aurora-data-api-pg',
     database: process.env[`${dbType}Database`]!,
     secretArn: process.env[`${dbType}SecretArn`]!,
     resourceArn: process.env[`${dbType}ResourceArn`]!,
-    region: 'eu-west-1', // process.env.region!,
+    region: process.env.region!,
     logging: true,
     logger: 'simple-console',
     extra: {
