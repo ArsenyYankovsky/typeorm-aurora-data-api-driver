@@ -1,8 +1,8 @@
 // @ts-ignore
 import createDataApiClient from 'data-api-client'
-import { transformQueryAndParameters } from './transform.utils'
+import { MysqlQueryTransformer, PostgresQueryTransformer, QueryTransformer } from './query-transformer'
 
-export default class DataApiDriver {
+class DataApiDriver {
   private readonly client: any
   private transactionId?: string
 
@@ -12,6 +12,7 @@ export default class DataApiDriver {
     private readonly resourceArn: string,
     private readonly database: string,
     private readonly loggerFn: (query: string, parameters?: any[]) => void = () => undefined,
+    private readonly queryTransformer: QueryTransformer,
   ) {
     this.region = region
     this.secretArn = secretArn
@@ -26,10 +27,11 @@ export default class DataApiDriver {
         region,
       },
     })
+    this.queryTransformer = queryTransformer
   }
 
   public async query(query: string, parameters?: any[]): Promise<any> {
-    const transformedQueryData = transformQueryAndParameters(query, parameters)
+    const transformedQueryData = this.queryTransformer.transformQueryAndParameters(query, parameters)
 
     this.loggerFn(transformedQueryData.queryString, transformedQueryData.parameters)
 
@@ -56,4 +58,16 @@ export default class DataApiDriver {
     await this.client.rollbackTransaction({ transactionId: this.transactionId })
     this.transactionId = undefined
   }
+}
+
+const createMysqlDriver = (region: string, secretArn: string, resourceArn: string, database: string,
+                           loggerFn: (query: string, parameters?: any[]) => void = () => undefined) => {
+  return new DataApiDriver(region, secretArn, resourceArn, database, loggerFn, new MysqlQueryTransformer())
+}
+
+export default createMysqlDriver
+
+const createPostgresDriver = (region: string, secretArn: string, resourceArn: string, database: string,
+                           loggerFn: (query: string, parameters?: any[]) => void = () => undefined) => {
+  return new DataApiDriver(region, secretArn, resourceArn, database, loggerFn, new PostgresQueryTransformer())
 }
