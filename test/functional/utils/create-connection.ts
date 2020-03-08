@@ -32,7 +32,7 @@ export const createConnectionAndResetData = async (
   partialOptions: Partial<ConnectionOptions> = {},
 ) => {
   const connection = await createConnection(dbType, { ...partialOptions, synchronize: false })
-  if(dbType === 'mysql') {
+  if (dbType === 'mysql') {
     await connection.query(`DROP DATABASE IF EXISTS ${process.env.database};`)
     await connection.query(`CREATE DATABASE ${process.env.database};`)
     await connection.query(`USE ${process.env.database};`)
