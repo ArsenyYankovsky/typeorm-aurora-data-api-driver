@@ -71,3 +71,5 @@ const createPostgresDriver = (region: string, secretArn: string, resourceArn: st
                            loggerFn: (query: string, parameters?: any[]) => void = () => undefined) => {
   return new DataApiDriver(region, secretArn, resourceArn, database, loggerFn, new PostgresQueryTransformer())
 }
+
+export const pg = createPostgresDriver

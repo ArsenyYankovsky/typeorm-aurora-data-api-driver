@@ -7,12 +7,12 @@ describe('aurora data api > simple queries', () => {
   jest.setTimeout(240000)
 
   it('should do a simple select', async () => {
-    await useCleanDatabase({ logger: 'simple-console' }, async (connection) => {
+    await useCleanDatabase('mysql', { logger: 'simple-console' }, async (connection) => {
       const logSpy = jest.spyOn(global.console, 'log')
 
-      const result = await connection.query('select 1')
+      const result = await connection.query('select 1 as \"1\"')
 
-      expect(logSpy).toHaveBeenCalledWith('query: select 1')
+      expect(logSpy).toHaveBeenCalledWith('query: select 1 as \"1\"')
       expect(logSpy).toBeCalledTimes(1)
 
       expect(result[0][1]).toBe(1)
@@ -20,7 +20,7 @@ describe('aurora data api > simple queries', () => {
   })
 
   it('should create a table and be able to query it', async () => {
-    await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
+    await useCleanDatabase('mysql', { entities: [Post, Category] }, async (connection) => {
       const postRepository = connection.getRepository(Post)
 
       const post = new Post()
@@ -40,7 +40,7 @@ describe('aurora data api > simple queries', () => {
   })
 
   it('should be able to update a post', async () => {
-    await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
+    await useCleanDatabase('mysql', { entities: [Post, Category] }, async (connection) => {
 
       const postRepository = connection.getRepository(Post)
 
@@ -72,7 +72,7 @@ describe('aurora data api > simple queries', () => {
   })
 
   it('should be able to handle dates and multiple inserts', async () => {
-    await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
+    await useCleanDatabase('mysql', { entities: [Post, Category] }, async (connection) => {
       const postRepository = connection.getRepository(Post)
 
       const post = new Post()
@@ -104,7 +104,7 @@ describe('aurora data api > simple queries', () => {
   })
 
   it('should be able to create and query a many-to-many relationship', async () => {
-    await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
+    await useCleanDatabase('mysql', { entities: [Post, Category] }, async (connection) => {
         // Create categories
       const categoryRepository = connection.getRepository(Category)
 
@@ -144,7 +144,7 @@ describe('aurora data api > simple queries', () => {
   })
 
   it('should be able to update a date field by primary key', async () => {
-    await useCleanDatabase({ entities: [Post, Category] }, async (connection) => {
+    await useCleanDatabase('mysql', { entities: [Post, Category] }, async (connection) => {
         // Create a post and associate with created categories
       const postRepository = connection.getRepository(Post)
 
@@ -174,7 +174,7 @@ describe('aurora data api > simple queries', () => {
   })
 
   it('should be able to correctly deal with bulk inserts', async () => {
-    await useCleanDatabase({ entities: [Category] }, async (connection) => {
+    await useCleanDatabase('mysql', { entities: [Category] }, async (connection) => {
       const categoryNames = ['one', 'two', 'three', 'four']
       const newCategories = categoryNames.map(name => ({ name }))
 

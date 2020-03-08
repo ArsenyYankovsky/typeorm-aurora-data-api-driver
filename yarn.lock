@@ -710,9 +710,9 @@ atob@^2.1.1:
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
 aws-sdk@^2.492.0:
-  version "2.548.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.548.0.tgz#20a3c7a77e1c6fd694cdb5e0ecc0ccf0d0542674"
-  integrity sha512-dnG1MEc3uOonGDswHPiq7TYn6EOG3+IQhF2LSRambz9adaZxwRgFOII7UVPJjh33FtxKpMzOSmf62R+EX822Nw==
+  version "2.634.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.634.0.tgz#95077c191107b9cb696e922b06e79949dcd13434"
+  integrity sha512-cZfRD7bcKBHOLoHUJuqB9xaLs/z1/xsc9zfGLIzyuxKLJa7Z0pxy8Y/0GrhWO98yXLBvLLET7btj2iDI2oWWhQ==
   dependencies:
     buffer "4.9.1"
     events "1.1.1"
@@ -1703,9 +1703,9 @@ dashdash@^1.12.0:
   dependencies:
     assert-plus "^1.0.0"
 
-data-api-client@ArsenyYankovsky/data-api-client#support-date:
+data-api-client@ArsenyYankovsky/data-api-client#support-postgres:
   version "1.0.0-beta"
-  resolved "https://codeload.github.com/ArsenyYankovsky/data-api-client/tar.gz/2880f8f7456fc126d356b26fb2ddbac5903ed23f"
+  resolved "https://codeload.github.com/ArsenyYankovsky/data-api-client/tar.gz/2507e36fc0c593e821b1c221d9c56ac95fa0aa6f"
   dependencies:
     sqlstring "^2.3.1"
 
