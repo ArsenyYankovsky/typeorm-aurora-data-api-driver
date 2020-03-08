@@ -37,9 +37,9 @@ export const createConnectionAndResetData = async (
     await connection.query(`CREATE DATABASE ${process.env.database};`)
     await connection.query(`USE ${process.env.database};`)
   } else {
-    await connection.query(`DROP schema IF EXISTS ${process.env.database} CASCADE;`)
-    await connection.query(`CREATE schema ${process.env.database};`)
-    await connection.query(`SET search_path = ${process.env.database};`)
+    await connection.query('DROP schema IF EXISTS test1 CASCADE;')
+    await connection.query('CREATE schema test1;')
+    await connection.query('SET search_path = test1;')
   }
   await connection.synchronize(true)
   return connection
