@@ -12,19 +12,20 @@ export default class DataApiDriver {
     private readonly resourceArn: string,
     private readonly database: string,
     private readonly loggerFn: (query: string, parameters?: any[]) => void = () => undefined,
+    private readonly serviceConfigOptions?: ConfigurationOptions,
   ) {
     this.region = region
     this.secretArn = secretArn
     this.resourceArn = resourceArn
     this.database = database
     this.loggerFn = loggerFn
+    this.serviceConfigOptions = serviceConfigOptions || {}
+    this.serviceConfigOptions.region = region
     this.client = createDataApiClient({
       secretArn,
       resourceArn,
       database,
-      options: {
-        region,
-      },
+      options: serviceConfigOptions,
     })
   }
 
