@@ -12,14 +12,6 @@ export class PostgresQueryTransformer extends QueryTransformer {
 
       if (currentCharacter === '$' && !currentQuote) {
         newQueryString += ':param_'
-        i += 1
-
-        while (/^.*?[0-9]$/.test(query[i])) {
-          newQueryString += query[i]
-          i += 1
-        }
-        i -= 1
-        // TODO: think of a nicer fix for it
       } else {
         newQueryString += currentCharacter
 
