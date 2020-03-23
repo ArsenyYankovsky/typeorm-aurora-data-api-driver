@@ -25,7 +25,7 @@ export default class DataApiDriver {
       secretArn,
       resourceArn,
       database,
-      options: serviceConfigOptions,
+      options: this.serviceConfigOptions,
     })
   }
 
