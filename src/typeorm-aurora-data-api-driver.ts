@@ -12,7 +12,7 @@ export default class DataApiDriver {
     private readonly resourceArn: string,
     private readonly database: string,
     private readonly loggerFn: (query: string, parameters?: any[]) => void = () => undefined,
-    private readonly serviceConfigOptions?: ConfigurationOptions,
+    private readonly serviceConfigOptions?: any,
   ) {
     this.region = region
     this.secretArn = secretArn
