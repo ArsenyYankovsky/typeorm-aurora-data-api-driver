@@ -1705,7 +1705,7 @@ dashdash@^1.12.0:
 
 data-api-client@ArsenyYankovsky/data-api-client#support-postgres:
   version "1.0.0-beta"
-  resolved "https://codeload.github.com/ArsenyYankovsky/data-api-client/tar.gz/2507e36fc0c593e821b1c221d9c56ac95fa0aa6f"
+  resolved "https://codeload.github.com/ArsenyYankovsky/data-api-client/tar.gz/043f3320f8d665c21250d615101e7b3bc8f1d298"
   dependencies:
     sqlstring "^2.3.1"
 
@@ -6887,9 +6887,9 @@ sprintf-js@~1.0.2:
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
 sqlstring@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/sqlstring/-/sqlstring-2.3.1.tgz#475393ff9e91479aea62dcaf0ca3d14983a7fb40"
-  integrity sha1-R1OT/56RR5rqYtyvDKPRSYOn+0A=
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/sqlstring/-/sqlstring-2.3.2.tgz#cdae7169389a1375b18e885f2e60b3e460809514"
+  integrity sha512-vF4ZbYdKS8OnoJAWBmMxCQDkiEBkGQYU7UZPtL8flbDRSNkhaXvRJ279ZtI6M+zDaQovVU4tuRgzK5fVhvFAhg==
 
 sshpk@^1.7.0:
   version "1.16.1"
