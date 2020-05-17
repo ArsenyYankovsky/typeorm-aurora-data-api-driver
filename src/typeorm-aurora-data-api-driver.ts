@@ -12,6 +12,7 @@ class DataApiDriver {
     private readonly resourceArn: string,
     private readonly database: string,
     private readonly loggerFn: (query: string, parameters?: any[]) => void = () => undefined,
+    private readonly serviceConfigOptions?: any,
     private readonly queryTransformer: QueryTransformer,
   ) {
     this.region = region
@@ -19,13 +20,13 @@ class DataApiDriver {
     this.resourceArn = resourceArn
     this.database = database
     this.loggerFn = loggerFn
+    this.serviceConfigOptions = serviceConfigOptions || {}
+    this.serviceConfigOptions.region = region
     this.client = createDataApiClient({
       secretArn,
       resourceArn,
       database,
-      options: {
-        region,
-      },
+      options: this.serviceConfigOptions,
     })
     this.queryTransformer = queryTransformer
   }

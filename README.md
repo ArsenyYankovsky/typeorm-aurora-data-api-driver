@@ -25,6 +25,9 @@ npm i --save typeorm-aurora-data-api-driver
       secretArn: 'arn:aws:secretsmanager:eu-west-1:537011205135:secret:xxxxxx/xxxxxx/xxxxxx',
       resourceArn: 'arn:aws:rds:eu-west-1:xxxxx:xxxxxx:xxxxxx',
       region: 'eu-west-1',
+      serviceConfigOptions: {
+        // additional options to pass to aws-sdk RDS client
+      }
     })
 ```
 
