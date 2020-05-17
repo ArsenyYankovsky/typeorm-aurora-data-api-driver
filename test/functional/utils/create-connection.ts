@@ -4,7 +4,7 @@ import {
   createConnection as typeormCreateConnection,
 } from 'typeorm'
 
-export const createConnection = async (dbType: DbType, partialOptions: Partial<ConnectionOptions> = {}) => {
+export const createConnection = async (dbType: DbType, partialOptions: any = {}) => {
   return typeormCreateConnection({
     ...partialOptions,
     name: dbType,

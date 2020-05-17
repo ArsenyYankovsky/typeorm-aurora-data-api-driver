@@ -98,7 +98,7 @@
     "tslint-config-airbnb": "^5.11.1",
     "tslint-config-standard": "^8.0.1",
     "typedoc": "^0.12.0",
-    "typescript": "^3.0.3"
+    "typescript": "^3.9.2"
   },
   "dependencies": {
     "data-api-client": "ArsenyYankovsky/data-api-client#support-postgres"
