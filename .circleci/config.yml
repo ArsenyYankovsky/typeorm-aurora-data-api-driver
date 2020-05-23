@@ -73,12 +73,19 @@ jobs:
           root: .
           paths:
             - .
+      - save_cache:
+          paths:
+            - ~/usr/local/lib/node_modules
+          key: node-v1-{{ .Branch }}-{{ .Revision }}
 
   run-mysql-func-tests:
     docker:
       - image: "circleci/node:latest"
     steps:
       - setup_remote_docker
+      - restore_cache:
+          keys:
+            - node-v1-{{ .Branch }}-{{ .Revision }}
       - attach_workspace:
           at: .
       - run:
@@ -93,6 +100,9 @@ jobs:
       - image: "circleci/node:latest"
     steps:
       - setup_remote_docker
+      - restore_cache:
+          keys:
+            - node-v1-{{ .Branch }}-{{ .Revision }}
       - attach_workspace:
           at: .
       - run:
