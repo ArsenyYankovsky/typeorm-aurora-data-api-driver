@@ -78,9 +78,9 @@ jobs:
     docker:
       - image: "circleci/node:latest"
     steps:
+      - setup_remote_docker
       - attach_workspace:
           at: .
-      - setup_remote_docker
       - run:
         name: start local mysql
         command: docker-compose -f docker/mysql.yml up -d
@@ -92,9 +92,9 @@ jobs:
     docker:
       - image: "circleci/node:latest"
     steps:
+      - setup_remote_docker
       - attach_workspace:
           at: .
-      - setup_remote_docker
       - run:
           name: start local mysql
           command: docker-compose -f docker/pg.yml up -d
