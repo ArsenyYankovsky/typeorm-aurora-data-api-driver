@@ -2,7 +2,7 @@ version: 2
 jobs:
   checks:
     docker:
-      - image: "node:latest"
+      - image: "circleci/node:latest"
     steps:
       - checkout
       - run:
@@ -17,7 +17,7 @@ jobs:
 
   release:
     docker:
-      - image: "node:latest"
+      - image: "circleci/node:latest"
     steps:
       - checkout
       - run:
@@ -32,7 +32,7 @@ jobs:
 
   prepare-functional-test-released:
     docker:
-      - image: "node:latest"
+      - image: "circleci/node:latest"
     steps:
       - checkout
       - run:
@@ -48,7 +48,7 @@ jobs:
 
   prepare-functional-test:
     docker:
-      - image: "node:latest"
+      - image: "circleci/node:latest"
     steps:
       - checkout
       - run:
@@ -76,7 +76,7 @@ jobs:
 
   run-mysql-func-tests:
     docker:
-      - image: "node:latest"
+      - image: "circleci/node:latest"
     steps:
       - attach_workspace:
           at: .
@@ -89,7 +89,7 @@ jobs:
 
   run-pg-func-tests:
     docker:
-      - image: "node:latest"
+      - image: "circleci/node:latest"
     steps:
       - checkout
       - run:
