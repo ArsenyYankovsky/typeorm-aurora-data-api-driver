@@ -1,0 +1,24 @@
+version: '3.1'
+
+services:
+  local-data-api:
+    image: koxudaxi/local-data-api
+    restart: always
+    environment:
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: example
+      RESOURCE_ARN: 'arn:aws:rds:us-east-1:123456789012:cluster:dummy'
+      SECRET_ARN: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:dummy'
+    ports:
+      - "8080:80"
+  db:
+    image: mysql:5.6
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: test
+    ports:
+      - "3306:3306"

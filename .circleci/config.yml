@@ -30,7 +30,7 @@ jobs:
           name: release
           command: yarn semantic-release || true
 
-  functional-test-released:
+  prepare-functional-test-released:
     docker:
       - image: "node:latest"
     steps:
@@ -41,14 +41,12 @@ jobs:
       - run:
           name: install additional dependencies
           command: yarn add typeorm aws-sdk typeorm-aurora-data-api-driver
-      - run:
-          name: wake up test database
-          command: node test/functional/utils/wake-db-up.js
-      - run:
-          name: run functional test
-          command: yarn test:func
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
 
-  functional-test:
+  prepare-functional-test:
     docker:
       - image: "node:latest"
     steps:
@@ -71,12 +69,35 @@ jobs:
       - run:
           name: link built typeorm
           command: npm i aws-sdk && npm link typeorm
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  run-mysql-func-tests:
+    docker:
+      - image: "node:latest"
+    steps:
+      - attach_workspace:
+          at: .
       - run:
-          name: wake up test database
-          command: node test/functional/utils/wake-db-up.js
+          name: start local mysql
+          command: docker-compose -f docker/mysql.yml up -d
       - run:
-          name: run functional test
-          command: yarn test:func
+          name: run mysql functional test
+          command: yarn test:mysql-func
+
+  run-pg-func-tests:
+    docker:
+      - image: "node:latest"
+    steps:
+      - checkout
+      - run:
+          name: start local mysql
+          command: docker-compose -f docker/pg.yml up -d
+      - run:
+          name: run mysql functional test
+          command: yarn test:pg-func
 
 workflows:
   version: 2
@@ -87,20 +108,35 @@ workflows:
             branches:
               only:
                 - master
-      - functional-test:
+      - prepare-functional-test:
           filters:
             branches:
               only:
                 - master
           requires:
             - checks
+      - run-mysql-func-tests:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - prepare-functional-test
+      - run-pg-func-tests:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - prepare-functional-test
       - release:
           filters:
             branches:
               only:
                 - master
           requires:
-            - functional-test
+            - run-pg-func-tests
+            - run-mysql-func-tests
 
   nightly:
     triggers:
@@ -116,17 +152,37 @@ workflows:
             branches:
               only:
                 - master
-      - functional-test-released:
+      - prepare-functional-test-released:
           filters:
             branches:
               only:
                 - master
           requires:
             - checks
+      - run-mysql-func-tests:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - prepare-functional-test-released
+      - run-pg-func-tests:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - prepare-functional-test-released
 
   check-commit:
     jobs:
       - checks
-      - functional-test:
+      - prepare-functional-test:
           requires:
             - checks
+      - run-mysql-func-tests:
+          requires:
+            - prepare-functional-test
+      - run-pg-func-tests:
+          requires:
+            - prepare-functional-test
