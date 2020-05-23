@@ -2,7 +2,7 @@ version: 2
 jobs:
   checks:
     docker:
-      - image: "circleci/node:latest"
+      - image: "node:latest"
     steps:
       - checkout
       - run:
@@ -32,7 +32,7 @@ jobs:
 
   prepare-functional-test-released:
     docker:
-      - image: "circleci/node:latest"
+      - image: "node:latest"
     steps:
       - checkout
       - run:
@@ -48,7 +48,7 @@ jobs:
 
   prepare-functional-test:
     docker:
-      - image: "circleci/node:latest"
+      - image: "node:latest"
     steps:
       - checkout
       - run:
