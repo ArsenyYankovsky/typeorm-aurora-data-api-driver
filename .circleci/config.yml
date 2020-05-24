@@ -63,49 +63,37 @@ jobs:
       - run:
           name: checkout typeorm
           command: git clone --single-branch --branch master https://github.com/typeorm/typeorm.git
-      - run:
-          name: build typeorm with current package
-          command: cd typeorm/ && npm i && npm run package && cd build/package && sudo npm link && rm -rf node_modules/typeorm-aurora-data-api-driver && npm link typeorm-aurora-data-api-driver
-      - run:
+     - run:
           name: link built typeorm
-          command: npm i aws-sdk && npm link typeorm
+          command: npm i aws-sdk
       - persist_to_workspace:
           root: .
           paths:
             - .
-      - save_cache:
-          paths:
-            - /usr/local/lib/node_modules/typeorm
-            - /usr/local/lib/node_modules/typeorm
-          key: node-v1-{{ .Branch }}-{{ .Revision }}
 
   run-mysql-func-tests:
     docker:
       - image: "circleci/node:latest"
     steps:
       - setup_remote_docker
-      - restore_cache:
-          keys:
-            - node-v1-{{ .Branch }}-{{ .Revision }}
       - attach_workspace:
           at: .
+      - yarn link && cd typeorm && yarn link && yarn link && typeorm-aurora-data-api-driver && cd ../ && yarn link typeorm
       - run:
-          name: start local mysql
-          command: docker-compose -f docker/mysql.yml up -d
-      - run:
-          name: run mysql functional test
-          command: yarn test:mysql-func
+            name: start local mysql
+            command: docker-compose -f docker/mysql.yml up -d
+        - run:
+            name: run mysql functional test
+            command: yarn test:mysql-func
 
   run-pg-func-tests:
     docker:
       - image: "circleci/node:latest"
     steps:
       - setup_remote_docker
-      - restore_cache:
-          keys:
-            - node-v1-{{ .Branch }}-{{ .Revision }}
       - attach_workspace:
           at: .
+      - yarn link && cd typeorm && yarn link && yarn link && typeorm-aurora-data-api-driver && cd ../ && yarn link typeorm
       - run:
           name: start local mysql
           command: docker-compose -f docker/pg.yml up -d
