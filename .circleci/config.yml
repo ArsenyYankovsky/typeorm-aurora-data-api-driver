@@ -31,8 +31,8 @@ jobs:
           command: yarn semantic-release || true
 
   prepare-functional-test-released:
-    docker:
-      - image: "circleci/node:latest"
+    machine:
+      image: ubuntu-1604:201903-01
     steps:
       - checkout
       - run:
@@ -47,36 +47,10 @@ jobs:
             - .
 
   prepare-functional-test:
-    docker:
-      - image: "circleci/node:latest"
-    steps:
-      - checkout
-      - run:
-          name: yarn
-          command: yarn
-      - run:
-          name: build
-          command: yarn build
-      - run:
-          name: checkout typeorm
-          command: git clone --single-branch --branch master https://github.com/typeorm/typeorm.git
-      - run:
-          name: build typeorm
-          command: cd typeorm/ && npm i && npm run package
-      - run:
-          name: install aws-sdk
-          command: npm i aws-sdk
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
-
-  run-mysql-func-tests:
     machine:
       image: ubuntu-1604:201903-01
     steps:
-      - attach_workspace:
-          at: .
+      - checkout
       - run: |
           echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
           echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
@@ -91,8 +65,34 @@ jobs:
             sudo apt-get update || true
             sudo apt-get install yarn
       - run:
+          name: yarn
+          command: yarn
+      - run:
+          name: build
+          command: yarn build
+      - run:
+          name: checkout typeorm
+          command: git clone --single-branch --branch master https://github.com/typeorm/typeorm.git
+      - run:
+          name: build typeorm
+          command: cd typeorm/ && npm i && npm run package
+      - run:
           name: link modules
           command: yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
+      - run:
+          name: install aws-sdk
+          command: npm i aws-sdk
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  run-mysql-func-tests:
+    machine:
+      image: ubuntu-1604:201903-01
+    steps:
+      - attach_workspace:
+          at: .
       - run:
           name: start local mysql
           command: docker-compose -f docker/mysql.yml up -d
@@ -108,22 +108,6 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - run: |
-          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
-          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
-      - run:
-          name: upgrade node
-          command: nvm install 12
-      - run:
-          name: install yarn
-          command: |
-            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-            echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-            sudo apt-get update || true
-            sudo apt-get install yarn
-      - run:
-          name: link modules
-          command: yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
       - run:
           name: start local mysql
           command: docker-compose -f docker/pg.yml up -d
