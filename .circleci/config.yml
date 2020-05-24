@@ -78,7 +78,9 @@ jobs:
       - setup_remote_docker
       - attach_workspace:
           at: .
-      - yarn link && cd typeorm && yarn link && yarn link && typeorm-aurora-data-api-driver && cd ../ && yarn link typeorm
+      - run:
+          name: link modules
+          command: yarn link && cd typeorm && yarn link && yarn link && typeorm-aurora-data-api-driver && cd ../ && yarn link typeorm
       - run:
           name: start local mysql
           command: docker-compose -f docker/mysql.yml up -d
@@ -93,7 +95,9 @@ jobs:
       - setup_remote_docker
       - attach_workspace:
           at: .
-      - yarn link && cd typeorm && yarn link && yarn link && typeorm-aurora-data-api-driver && cd ../ && yarn link typeorm
+      - run:
+          name: link modules
+          command: yarn link && cd typeorm && yarn link && yarn link && typeorm-aurora-data-api-driver && cd ../ && yarn link typeorm
       - run:
           name: start local mysql
           command: docker-compose -f docker/pg.yml up -d
