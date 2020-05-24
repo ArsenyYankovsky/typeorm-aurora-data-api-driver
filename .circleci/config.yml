@@ -75,7 +75,6 @@ jobs:
     machine:
       image: "circleci/node:latest"
     steps:
-      - setup_remote_docker
       - attach_workspace:
           at: .
       - run:
@@ -92,7 +91,6 @@ jobs:
     machine:
       image: "circleci/node:latest"
     steps:
-      - setup_remote_docker
       - attach_workspace:
           at: .
       - run:
