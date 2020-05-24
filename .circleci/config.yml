@@ -63,7 +63,7 @@ jobs:
       - run:
           name: checkout typeorm
           command: git clone --single-branch --branch master https://github.com/typeorm/typeorm.git
-     - run:
+      - run:
           name: link built typeorm
           command: npm i aws-sdk
       - persist_to_workspace:
