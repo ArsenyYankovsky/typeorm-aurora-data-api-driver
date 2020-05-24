@@ -77,12 +77,12 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - run: |
+          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
       - run:
           name: upgrade node
-          command: |
-            export NVM_DIR="/opt/circleci/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            nvm install 12
+          command: nvm install 12
       - run:
           name: install yarn
           command: |
@@ -99,8 +99,6 @@ jobs:
       - run:
           name: run mysql functional test
           command: |
-            export NVM_DIR="/opt/circleci/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             nvm use 12
             yarn test:mysql-func
 
