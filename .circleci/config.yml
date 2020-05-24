@@ -65,23 +65,17 @@ jobs:
             sudo apt-get update || true
             sudo apt-get install yarn
       - run:
-          name: yarn
-          command: yarn
-      - run:
-          name: build
-          command: yarn build
-      - run:
           name: checkout typeorm
           command: git clone --single-branch --branch master https://github.com/typeorm/typeorm.git
       - run:
-          name: build typeorm
-          command: cd typeorm/ && npm i && npm run package
-      - run:
-          name: link modules
-          command: yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
-      - run:
-          name: install aws-sdk
-          command: npm i aws-sdk
+          name: prepare modules
+          command: |
+            nvm use 12
+            yarn
+            yarn build
+            cd typeorm/ && npm i && npm run package
+            yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
+            npm i aws-sdk
       - persist_to_workspace:
           root: .
           paths:
