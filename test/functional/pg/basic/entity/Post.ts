@@ -1,7 +1,7 @@
 import { Column, Entity, Generated, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm'
 import { Category } from './Category'
 
-@Entity('post', { schema: 'test1' })
+@Entity('post', { schema: 'test' })
 export class Post {
   @PrimaryColumn()
   @Generated()

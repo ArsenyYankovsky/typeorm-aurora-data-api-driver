@@ -31,15 +31,6 @@ export const createConnectionAndResetData = async (
   partialOptions: Partial<ConnectionOptions> = {},
 ) => {
   const connection = await createConnection(dbType, { ...partialOptions, synchronize: false })
-  if (dbType === 'mysql') {
-    // await connection.query(`DROP DATABASE IF EXISTS test;`)
-    // await connection.query(`CREATE DATABASE test;`)
-    // await connection.query(`USE test;`)
-  } else {
-    // await connection.query('DROP schema IF EXISTS test1 CASCADE;')
-    // await connection.query('CREATE schema test1;')
-    // await connection.query('SET search_path = test1;')
-  }
   await connection.synchronize(true)
   return connection
 }

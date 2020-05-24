@@ -1,6 +1,6 @@
 import { Column, Entity, Generated, PrimaryColumn } from 'typeorm'
 
-@Entity('category', { schema: 'test1' })
+@Entity('category', { schema: 'test' })
 export class Category {
   @PrimaryColumn()
   @Generated()
