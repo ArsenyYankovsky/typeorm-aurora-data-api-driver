@@ -98,7 +98,9 @@ jobs:
           command: sudo docker-compose -f docker/mysql.yml up -d && sleep 10
       - run:
           name: run mysql functional test
-          command: yarn test:mysql-func
+          command: |
+            nvm use 12
+            yarn test:mysql-func
 
   run-pg-func-tests:
     machine:
