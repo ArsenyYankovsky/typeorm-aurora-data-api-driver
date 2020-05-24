@@ -72,8 +72,8 @@ jobs:
             - .
 
   run-mysql-func-tests:
-    docker:
-      - image: "circleci/node:latest"
+    machine:
+      image: "circleci/node:latest"
     steps:
       - setup_remote_docker
       - attach_workspace:
@@ -89,8 +89,8 @@ jobs:
           command: yarn test:mysql-func
 
   run-pg-func-tests:
-    docker:
-      - image: "circleci/node:latest"
+    machine:
+      image: "circleci/node:latest"
     steps:
       - setup_remote_docker
       - attach_workspace:
