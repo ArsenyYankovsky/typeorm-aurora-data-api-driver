@@ -30,7 +30,7 @@ jobs:
           name: release
           command: yarn semantic-release || true
 
-  prepare-functional-test-released:
+  prepare-func-tests-released:
     docker:
       - image: "circleci/node:latest"
     steps:
@@ -46,7 +46,63 @@ jobs:
           paths:
             - .
 
-  prepare-functional-test:
+  run-mysql-func-tests-released:
+    machine:
+      image: ubuntu-1604:201903-01
+    steps:
+      - attach_workspace:
+          at: .
+      - run: |
+          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - run:
+          name: upgrade node
+          command: nvm install 12
+      - run:
+          name: install yarn
+          command: |
+            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+            echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+            sudo apt-get update || true
+            sudo apt-get install yarn
+      - run:
+          name: start local mysql
+          command: docker-compose -f docker/mysql.yml up -d
+      - run:
+          name: run mysql functional test
+          command: |
+            nvm use 12
+            yarn test:mysql-func
+
+  run-pg-func-tests-released:
+    machine:
+      image: ubuntu-1604:201903-01
+    steps:
+      - attach_workspace:
+          at: .
+      - run: |
+          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - run:
+          name: upgrade node
+          command: nvm install 12
+      - run:
+          name: install yarn
+          command: |
+            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+            echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+            sudo apt-get update || true
+            sudo apt-get install yarn
+      - run:
+          name: start local pg
+          command: docker-compose -f docker/pg.yml up -d
+      - run:
+          name: run pg functional test
+          command: |
+            nvm use 12
+            yarn test:pg-func
+
+  prepare-func-tests:
     docker:
       - image: "circleci/node:latest"
     steps:
@@ -142,7 +198,7 @@ workflows:
             branches:
               only:
                 - master
-      - prepare-functional-test:
+      - prepare-func-tests:
           filters:
             branches:
               only:
@@ -155,14 +211,14 @@ workflows:
               only:
                 - master
           requires:
-            - prepare-functional-test
+            - prepare-func-tests
       - run-pg-func-tests:
           filters:
             branches:
               only:
                 - master
           requires:
-            - prepare-functional-test
+            - prepare-func-tests
       - release:
           filters:
             branches:
@@ -171,6 +227,26 @@ workflows:
           requires:
             - run-pg-func-tests
             - run-mysql-func-tests
+
+  nightly-released:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - checks
+      - prepare-func-tests-released:
+          requires:
+            - checks
+      - run-mysql-func-tests-released:
+          requires:
+            - prepare-func-tests-released
+      - run-pg-func-tests-released:
+          requires:
+            - prepare-func-tests-released
 
   nightly:
     triggers:
@@ -181,42 +257,26 @@ workflows:
               only:
                 - master
     jobs:
-      - checks:
-          filters:
-            branches:
-              only:
-                - master
-      - prepare-functional-test-released:
-          filters:
-            branches:
-              only:
-                - master
+      - checks
+      - prepare-func-tests:
           requires:
             - checks
       - run-mysql-func-tests:
-          filters:
-            branches:
-              only:
-                - master
           requires:
-            - prepare-functional-test-released
+            - prepare-func-tests
       - run-pg-func-tests:
-          filters:
-            branches:
-              only:
-                - master
           requires:
-            - prepare-functional-test-released
+            - prepare-func-tests
 
   check-commit:
     jobs:
       - checks
-      - prepare-functional-test:
+      - prepare-func-tests:
           requires:
             - checks
       - run-mysql-func-tests:
           requires:
-            - prepare-functional-test
+            - prepare-func-tests
       - run-pg-func-tests:
           requires:
-            - prepare-functional-test
+            - prepare-func-tests
