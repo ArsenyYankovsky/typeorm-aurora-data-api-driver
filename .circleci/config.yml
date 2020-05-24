@@ -95,7 +95,7 @@ jobs:
           command: yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
       - run:
           name: start local mysql
-          command: sudo docker-compose -f docker/mysql.yml up -d && sleep 10
+          command: docker-compose -f docker/mysql.yml up -d
       - run:
           name: run mysql functional test
           command: |
@@ -108,6 +108,9 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - run: |
+          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
       - run:
           name: upgrade node
           command: nvm install 12
@@ -123,10 +126,12 @@ jobs:
           command: yarn link && cd typeorm && yarn link && yarn link && typeorm-aurora-data-api-driver && cd ../ && yarn link typeorm
       - run:
           name: start local mysql
-          command: sudo docker-compose -f docker/pg.yml up -d && sleep 10
+          command: docker-compose -f docker/pg.yml up -d
       - run:
           name: run mysql functional test
-          command: yarn test:pg-func
+          command: |
+            nvm use 12
+            yarn test:pg-func
 
 workflows:
   version: 2
