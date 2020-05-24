@@ -32,7 +32,7 @@ jobs:
 
   prepare-functional-test-released:
     docker:
-      - image: "node:latest"
+      - image: "circleci/node:latest"
     steps:
       - checkout
       - run:
@@ -48,7 +48,7 @@ jobs:
 
   prepare-functional-test:
     docker:
-      - image: "node:latest"
+      - image: "circleci/node:latest"
     steps:
       - checkout
       - run:
@@ -59,13 +59,13 @@ jobs:
           command: yarn build
       - run:
           name: create link
-          command: npm link
+          command: sudo npm link
       - run:
           name: checkout typeorm
           command: git clone --single-branch --branch master https://github.com/typeorm/typeorm.git
       - run:
           name: build typeorm with current package
-          command: cd typeorm/ && npm i && npm run package && cd build/package && npm link && rm -rf node_modules/typeorm-aurora-data-api-driver && npm link typeorm-aurora-data-api-driver
+          command: cd typeorm/ && npm i && npm run package && cd build/package && sudo npm link && rm -rf node_modules/typeorm-aurora-data-api-driver && npm link typeorm-aurora-data-api-driver
       - run:
           name: link built typeorm
           command: npm i aws-sdk && npm link typeorm
