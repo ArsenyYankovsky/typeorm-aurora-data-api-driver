@@ -1,0 +1,24 @@
+version: '3.1'
+
+services:
+  local-data-api:
+    image: koxudaxi/local-data-api
+    restart: always
+    environment:
+      ENGINE: PostgreSQLJDBC
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+      RESOURCE_ARN: 'arn:aws:rds:us-east-1:123456789012:cluster:dummy'
+      SECRET_ARN: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:dummy'
+    ports:
+      - "8080:80"
+  db:
+    image: postgres:10.7-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: test
+    ports:
+      - "5432:5432"

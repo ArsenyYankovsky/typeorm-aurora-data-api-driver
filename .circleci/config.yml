@@ -17,7 +17,7 @@ jobs:
 
   release:
     docker:
-      - image: "node:latest"
+      - image: "circleci/node:latest"
     steps:
       - checkout
       - run:
@@ -30,9 +30,9 @@ jobs:
           name: release
           command: yarn semantic-release || true
 
-  functional-test-released:
+  prepare-func-tests-released:
     docker:
-      - image: "node:latest"
+      - image: "circleci/node:latest"
     steps:
       - checkout
       - run:
@@ -41,16 +41,70 @@ jobs:
       - run:
           name: install additional dependencies
           command: yarn add typeorm aws-sdk typeorm-aurora-data-api-driver
-      - run:
-          name: wake up test database
-          command: node test/functional/utils/wake-db-up.js
-      - run:
-          name: run functional test
-          command: yarn test:func
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
 
-  functional-test:
+  run-mysql-func-tests-released:
+    machine:
+      image: ubuntu-1604:201903-01
+    steps:
+      - attach_workspace:
+          at: .
+      - run: |
+          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - run:
+          name: upgrade node
+          command: nvm install 12
+      - run:
+          name: install yarn
+          command: |
+            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+            echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+            sudo apt-get update || true
+            sudo apt-get install yarn
+      - run:
+          name: start local mysql
+          command: docker-compose -f docker/mysql.yml up -d
+      - run:
+          name: run mysql functional test
+          command: |
+            nvm use 12
+            yarn test:mysql-func
+
+  run-pg-func-tests-released:
+    machine:
+      image: ubuntu-1604:201903-01
+    steps:
+      - attach_workspace:
+          at: .
+      - run: |
+          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - run:
+          name: upgrade node
+          command: nvm install 12
+      - run:
+          name: install yarn
+          command: |
+            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+            echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+            sudo apt-get update || true
+            sudo apt-get install yarn
+      - run:
+          name: start local pg
+          command: docker-compose -f docker/pg.yml up -d
+      - run:
+          name: run pg functional test
+          command: |
+            nvm use 12
+            yarn test:pg-func
+
+  prepare-func-tests:
     docker:
-      - image: "node:latest"
+      - image: "circleci/node:latest"
     steps:
       - checkout
       - run:
@@ -60,23 +114,80 @@ jobs:
           name: build
           command: yarn build
       - run:
-          name: create link
-          command: npm link
-      - run:
           name: checkout typeorm
           command: git clone --single-branch --branch master https://github.com/typeorm/typeorm.git
       - run:
-          name: build typeorm with current package
-          command: cd typeorm/ && npm i && npm run package && cd build/package && npm link && rm -rf node_modules/typeorm-aurora-data-api-driver && npm link typeorm-aurora-data-api-driver
+          name: build typeorm
+          command: cd typeorm/ && npm i && npm run package
       - run:
-          name: link built typeorm
-          command: npm i aws-sdk && npm link typeorm
+          name: install aws-sdk
+          command: npm i aws-sdk
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  run-mysql-func-tests:
+    machine:
+      image: ubuntu-1604:201903-01
+    steps:
+      - attach_workspace:
+          at: .
+      - run: |
+          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
       - run:
-          name: wake up test database
-          command: node test/functional/utils/wake-db-up.js
+          name: upgrade node
+          command: nvm install 12
       - run:
-          name: run functional test
-          command: yarn test:func
+          name: install yarn
+          command: |
+            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+            echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+            sudo apt-get update || true
+            sudo apt-get install yarn
+      - run:
+          name: link modules
+          command: yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
+      - run:
+          name: start local mysql
+          command: docker-compose -f docker/mysql.yml up -d
+      - run:
+          name: run mysql functional test
+          command: |
+            nvm use 12
+            yarn test:mysql-func
+
+  run-pg-func-tests:
+    machine:
+      image: ubuntu-1604:201903-01
+    steps:
+      - attach_workspace:
+          at: .
+      - run: |
+          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - run:
+          name: upgrade node
+          command: nvm install 12
+      - run:
+          name: install yarn
+          command: |
+            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+            echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+            sudo apt-get update || true
+            sudo apt-get install yarn
+      - run:
+          name: link modules
+          command: yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
+      - run:
+          name: start local mysql
+          command: docker-compose -f docker/pg.yml up -d
+      - run:
+          name: run mysql functional test
+          command: |
+            nvm use 12
+            yarn test:pg-func
 
 workflows:
   version: 2
@@ -87,20 +198,55 @@ workflows:
             branches:
               only:
                 - master
-      - functional-test:
+      - prepare-func-tests:
           filters:
             branches:
               only:
                 - master
           requires:
             - checks
+      - run-mysql-func-tests:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - prepare-func-tests
+      - run-pg-func-tests:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - prepare-func-tests
       - release:
           filters:
             branches:
               only:
                 - master
           requires:
-            - functional-test
+            - run-pg-func-tests
+            - run-mysql-func-tests
+
+  nightly-released:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - checks
+      - prepare-func-tests-released:
+          requires:
+            - checks
+      - run-mysql-func-tests-released:
+          requires:
+            - prepare-func-tests-released
+      - run-pg-func-tests-released:
+          requires:
+            - prepare-func-tests-released
 
   nightly:
     triggers:
@@ -111,22 +257,26 @@ workflows:
               only:
                 - master
     jobs:
-      - checks:
-          filters:
-            branches:
-              only:
-                - master
-      - functional-test-released:
-          filters:
-            branches:
-              only:
-                - master
+      - checks
+      - prepare-func-tests:
           requires:
             - checks
+      - run-mysql-func-tests:
+          requires:
+            - prepare-func-tests
+      - run-pg-func-tests:
+          requires:
+            - prepare-func-tests
 
   check-commit:
     jobs:
       - checks
-      - functional-test:
+      - prepare-func-tests:
           requires:
             - checks
+      - run-mysql-func-tests:
+          requires:
+            - prepare-func-tests
+      - run-pg-func-tests:
+          requires:
+            - prepare-func-tests
