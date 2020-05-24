@@ -99,6 +99,8 @@ jobs:
       - run:
           name: run mysql functional test
           command: |
+            export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             nvm use 12
             yarn test:mysql-func
 
