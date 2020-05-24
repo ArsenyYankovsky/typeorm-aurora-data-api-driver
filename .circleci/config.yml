@@ -80,11 +80,11 @@ jobs:
           at: .
       - yarn link && cd typeorm && yarn link && yarn link && typeorm-aurora-data-api-driver && cd ../ && yarn link typeorm
       - run:
-            name: start local mysql
-            command: docker-compose -f docker/mysql.yml up -d
-        - run:
-            name: run mysql functional test
-            command: yarn test:mysql-func
+          name: start local mysql
+          command: docker-compose -f docker/mysql.yml up -d
+      - run:
+          name: run mysql functional test
+          command: yarn test:mysql-func
 
   run-pg-func-tests:
     docker:
