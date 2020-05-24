@@ -194,48 +194,48 @@ workflows:
   release:
     jobs:
       - checks:
-          filters:
-            branches:
-              only:
-                - master
+#          filters:
+#            branches:
+#              only:
+#                - master
       - prepare-func-tests:
-          filters:
-            branches:
-              only:
-                - master
+#          filters:
+#            branches:
+#              only:
+#                - master
           requires:
             - checks
       - run-mysql-func-tests:
-          filters:
-            branches:
-              only:
-                - master
+#          filters:
+#            branches:
+#              only:
+#                - master
           requires:
             - prepare-func-tests
       - run-pg-func-tests:
-          filters:
-            branches:
-              only:
-                - master
+#          filters:
+#            branches:
+#              only:
+#                - master
           requires:
             - prepare-func-tests
       - release:
-          filters:
-            branches:
-              only:
-                - master
+#          filters:
+#            branches:
+#              only:
+#                - master
           requires:
             - run-pg-func-tests
             - run-mysql-func-tests
 
   nightly-released:
-    triggers:
-      - schedule:
-          cron: "0 0 * * *"
-          filters:
-            branches:
-              only:
-                - master
+#    triggers:
+#      - schedule:
+#          cron: "0 0 * * *"
+#          filters:
+#            branches:
+#              only:
+#                - master
     jobs:
       - checks
       - prepare-func-tests-released:
@@ -249,13 +249,13 @@ workflows:
             - prepare-func-tests-released
 
   nightly:
-    triggers:
-      - schedule:
-          cron: "0 0 * * *"
-          filters:
-            branches:
-              only:
-                - master
+#    triggers:
+#      - schedule:
+#          cron: "0 0 * * *"
+#          filters:
+#            branches:
+#              only:
+#                - master
     jobs:
       - checks
       - prepare-func-tests:
