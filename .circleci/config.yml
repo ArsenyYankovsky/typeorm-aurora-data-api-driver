@@ -193,7 +193,7 @@ workflows:
   version: 2
   release:
     jobs:
-      - checks:
+      - checks
 #          filters:
 #            branches:
 #              only:
