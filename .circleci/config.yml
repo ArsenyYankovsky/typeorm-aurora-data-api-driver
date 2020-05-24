@@ -82,8 +82,11 @@ jobs:
           name: link modules
           command: yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
       - run:
-          name: start local mysql and run mysql functional test
-          command: docker-compose -f docker/mysql.yml up -d && yarn test:mysql-func
+          name: start local mysql
+          command: docker-compose -f docker/mysql.yml up -d && sleep 10
+      - run:
+          name: run mysql functional test
+          command: yarn test:mysql-func
 
   run-pg-func-tests:
     docker:
@@ -96,8 +99,11 @@ jobs:
           name: link modules
           command: yarn link && cd typeorm && yarn link && yarn link && typeorm-aurora-data-api-driver && cd ../ && yarn link typeorm
       - run:
-          name: start local pg and run pg functional test
-          command: docker-compose -f docker/pg.yml up -d && yarn test:pg-func
+          name: start local mysql
+          command: docker-compose -f docker/pg.yml up -d && sleep 10
+      - run:
+          name: run mysql functional test
+          command: yarn test:pg-func
 
 workflows:
   version: 2
