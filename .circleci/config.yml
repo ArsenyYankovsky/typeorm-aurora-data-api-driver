@@ -58,13 +58,13 @@ jobs:
           name: build
           command: yarn build
       - run:
-          name: create link
-          command: sudo npm link
-      - run:
           name: checkout typeorm
           command: git clone --single-branch --branch master https://github.com/typeorm/typeorm.git
       - run:
-          name: link built typeorm
+          name: build typeorm
+          command: cd typeorm/ && npm i && npm run package
+      - run:
+          name: install aws-sdk
           command: npm i aws-sdk
       - persist_to_workspace:
           root: .
@@ -80,7 +80,7 @@ jobs:
           at: .
       - run:
           name: link modules
-          command: yarn link && cd typeorm && yarn link && yarn link && typeorm-aurora-data-api-driver && cd ../ && yarn link typeorm
+          command: yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
       - run:
           name: start local mysql
           command: docker-compose -f docker/mysql.yml up -d
