@@ -73,7 +73,7 @@ jobs:
 
   run-mysql-func-tests:
     machine:
-      image: "circleci/node:latest"
+      image: ubuntu-1604:201903-01
     steps:
       - attach_workspace:
           at: .
@@ -89,7 +89,7 @@ jobs:
 
   run-pg-func-tests:
     machine:
-      image: "circleci/node:latest"
+      image: ubuntu-1604:201903-01
     steps:
       - attach_workspace:
           at: .
