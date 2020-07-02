@@ -12,7 +12,7 @@
   "author": "Arseny Yankovsky <contact@arseny.dev>",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/ArsenyYankovsky/typeorm-aurora-data-api-driver"
   },
   "license": "MIT",
   "engines": {
