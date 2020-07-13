@@ -1732,9 +1732,10 @@ dashdash@^1.12.0:
   dependencies:
     assert-plus "^1.0.0"
 
-data-api-client@ArsenyYankovsky/data-api-client#support-postgres:
-  version "1.0.0-beta"
-  resolved "https://codeload.github.com/ArsenyYankovsky/data-api-client/tar.gz/fa84833f92387c217a7965a2456a94719e4d173f"
+data-api-client@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/data-api-client/-/data-api-client-1.1.0.tgz#7a7fef1a7655ddb0dfbb17fb08a0f1b76d3acf72"
+  integrity sha512-ZO6i4g55afRYbDwpVuF3pa6KI0pNee5VcAGAIQRHhCFAJytFCwazzSQ3iwZU8ONcRumXoHDKTp/dyIQOub1ysg==
   dependencies:
     sqlstring "^2.3.1"
 
