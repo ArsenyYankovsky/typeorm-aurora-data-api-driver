@@ -64,3 +64,8 @@ After you done that you can use the connection just as you did with any other co
 
   const insertResult = await postRepository.save(post)
 ```
+
+
+### Additional configuration options
+
+This dirver uses the [Data API Client](https://github.com/jeremydaly/data-api-client). To pass additional options to it, use `serviceConfigOptions` property.
