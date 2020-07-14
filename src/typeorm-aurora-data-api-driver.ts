@@ -14,6 +14,7 @@ class DataApiDriver {
     private readonly loggerFn: (query: string, parameters?: any[]) => void = () => undefined,
     private readonly queryTransformer: QueryTransformer,
     private readonly serviceConfigOptions?: any,
+    private readonly formatOptions?: any,
   ) {
     this.region = region
     this.secretArn = secretArn
@@ -27,6 +28,7 @@ class DataApiDriver {
       resourceArn,
       database,
       options: this.serviceConfigOptions,
+      formatOptions,
     })
     this.queryTransformer = queryTransformer
   }
@@ -63,7 +65,7 @@ class DataApiDriver {
 
 const createMysqlDriver = (region: string, secretArn: string, resourceArn: string, database: string,
                            loggerFn: (query: string, parameters?: any[]) => void = () => undefined,
-                           serviceConfigOptions?: any) => {
+                           serviceConfigOptions?: any, formatOptions?: any) => {
 
   return new DataApiDriver(
     region,
@@ -73,6 +75,7 @@ const createMysqlDriver = (region: string, secretArn: string, resourceArn: strin
     loggerFn,
     new MysqlQueryTransformer(),
     serviceConfigOptions,
+    formatOptions,
   )
 }
 
@@ -80,7 +83,7 @@ export default createMysqlDriver
 
 const createPostgresDriver = (region: string, secretArn: string, resourceArn: string, database: string,
                               loggerFn: (query: string, parameters?: any[]) => void = () => undefined,
-                              serviceConfigOptions?: any) => {
+                              serviceConfigOptions?: any, formatOptions?: any) => {
   return new DataApiDriver(
     region,
     secretArn,
@@ -89,6 +92,7 @@ const createPostgresDriver = (region: string, secretArn: string, resourceArn: st
     loggerFn,
     new PostgresQueryTransformer(),
     serviceConfigOptions,
+    formatOptions,
   )
 }
 

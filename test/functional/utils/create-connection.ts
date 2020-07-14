@@ -23,6 +23,9 @@ export const createConnection = async (dbType: DbType, partialOptions: any = {})
         agent: new http.Agent(),
       },
     },
+    formatOptions: {
+      treatAsLocalDate: true,
+    },
   })
 }
 

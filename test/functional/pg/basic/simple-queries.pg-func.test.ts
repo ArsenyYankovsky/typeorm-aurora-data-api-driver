@@ -2,6 +2,7 @@ import 'reflect-metadata'
 import { useCleanDatabase } from '../../utils/create-connection'
 import { Category } from './entity/Category'
 import { Post } from './entity/Post'
+import { UuidPost } from './entity/UuidPost'
 
 describe('aurora data api pg > simple queries', () => {
   jest.setTimeout(240000)
@@ -24,6 +25,26 @@ describe('aurora data api pg > simple queries', () => {
       const postRepository = connection.getRepository(Post)
 
       const post = new Post()
+      post.title = 'My First Post'
+      post.text = 'Post Text'
+      post.likesCount = 4
+
+      const insertResult = await postRepository.save(post)
+
+      const dbPost = await postRepository.findOne({ id: insertResult.id })
+      expect(dbPost).toBeTruthy()
+
+      expect(dbPost!.title).toBe('My First Post')
+      expect(dbPost!.text).toBe('Post Text')
+      expect(dbPost!.likesCount).toBe(4)
+    })
+  })
+
+  it('should create a table with uuid primary key and be able to query it', async () => {
+    await useCleanDatabase('postgres', { entities: [UuidPost, Category] }, async (connection) => {
+      const postRepository = connection.getRepository(UuidPost)
+
+      const post = new UuidPost()
       post.title = 'My First Post'
       post.text = 'Post Text'
       post.likesCount = 4
