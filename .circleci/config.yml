@@ -115,7 +115,7 @@ jobs:
           command: yarn build
       - run:
           name: checkout typeorm
-          command: git clone --single-branch --branch master https://github.com/ArsenyYankovsky/typeorm.git # TODO: switch back to typeorm repo
+          command: git clone --single-branch --branch test-refactor https://github.com/ArsenyYankovsky/typeorm.git # TODO: switch back to typeorm repo
       - run:
           name: build typeorm
           command: cd typeorm/ && npm i && npm run package
