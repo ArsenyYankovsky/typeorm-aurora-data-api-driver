@@ -42,6 +42,7 @@ class DataApiDriver {
       sql: transformedQueryData.queryString,
       parameters: transformedQueryData.parameters,
       transactionId: this.transactionId,
+      continueAfterTimeout: true,
     })
 
     return result.records || result
