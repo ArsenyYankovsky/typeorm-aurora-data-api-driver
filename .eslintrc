@@ -1,0 +1,61 @@
+{
+  "extends": ["airbnb-base"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["jest", "@typescript-eslint"],
+  "env": {
+    "node": true,
+    "jest/globals": true
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    },
+    "import/core-modules": ["aws-sdk", "aws-lambda", "typeorm", "typeorm/metadata/ColumnMetadata", "reflect-metadata"]
+  },
+  "rules": {
+    "@typescript-eslint/semi": ["error", "never"],
+    "@typescript-eslint/member-delimiter-style": ["error", {
+      "multiline": {
+        "delimiter": "none",
+        "requireLast": false
+      },
+      "singleline": {
+        "delimiter": "semi",
+        "requireLast": false
+      }
+    }],
+    "semi": "off",
+    "prefer-template": "off",
+    "max-len": ["warn", { "code": 120 }],
+    "no-console": "off",
+    "no-param-reassign": "off",
+    "no-restricted-syntax": "off",
+    "import/prefer-default-export": "off",
+    "object-curly-newline": ["error", { "consistent": true }],
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": ["**/*.test.ts", "**/*.spec.ts"] }],
+    "no-await-in-loop": "off",
+    "prefer-destructuring": "off",
+    "arrow-body-style": "warn",
+    "@typescript-eslint/no-unused-vars": ["error", {
+      "varsIgnorePattern": "^_",
+      "argsIgnorePattern": "^_"
+    }],
+    "no-unused-vars": ["error", {
+      "varsIgnorePattern": "^_",
+      "argsIgnorePattern": "^_"
+    }],
+    "class-methods-use-this": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ]
+  }
+}

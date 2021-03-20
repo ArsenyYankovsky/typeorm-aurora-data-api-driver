@@ -26,7 +26,7 @@ describe('aurora data api > query transformation', () => {
     const result = transformer.transformQueryAndParameters(query, parameters)
 
     expect(result.queryString).toEqual('select * from posts where id = :param_0')
-    expect(result.parameters).toEqual([{ param_0: 1 }])
+    expect(result.parameters).toEqual([{ name: 'param_0', value: 1 }])
   })
 
   it('should correctly transform a query with escaped quotation marks', async () => {
@@ -38,12 +38,11 @@ describe('aurora data api > query transformation', () => {
     expect(result.queryString).toEqual(
       'select * from posts where id = :param_0 and text = "?" and title = "\\"?\\""',
     )
-    expect(result.parameters).toEqual([{ param_0: 1 }])
+    expect(result.parameters).toEqual([{ name: 'param_0', value: 1 }])
   })
 
   it('should correctly transform a query with escaped apostrophes', async () => {
-    const query =
-      "select * from posts where id = ? and text = '?' and title = '\\'?\\'' and description = \"'?'\""
+    const query = "select * from posts where id = ? and text = '?' and title = '\\'?\\'' and description = \"'?'\""
     const parameters = [1]
 
     const result = transformer.transformQueryAndParameters(query, parameters)
@@ -51,7 +50,7 @@ describe('aurora data api > query transformation', () => {
     expect(result.queryString).toEqual(
       "select * from posts where id = :param_0 and text = '?' and title = '\\'?\\'' and description = \"'?'\"",
     )
-    expect(result.parameters).toEqual([{ param_0: 1 }])
+    expect(result.parameters).toEqual([{ name: 'param_0', value: 1 }])
   })
 
   it('should correctly transform a query that has closed apostrophes outside parameters', async () => {
@@ -66,7 +65,7 @@ describe('aurora data api > query transformation', () => {
 
     const result = transformer.transformQueryAndParameters(query, [1, 2, 3])
 
-    expect(result.parameters).toEqual([{ param_0: 1, param_1: 2, param_2: 3 }])
+    expect(result.parameters).toEqual([{ name: 'param_0', value: 1 }, { name: 'param_1', value: 2 }, { name: 'param_2', value: 3 }])
   })
 
   it('should correctly transform a query which contains an array as a parameter', async () => {
@@ -81,7 +80,23 @@ describe('aurora data api > query transformation', () => {
     )
 
     expect(result.parameters).toEqual(
-      [{ param_0: id, param_1: id, param_2: id2, param_3: id, param_4: id2 }])
+      [{
+        name: 'param_0',
+        value: 'dd32d900-3df6-45b9-a253-70a4516b88dc',
+      }, {
+        name: 'param_1',
+        value: 'dd32d900-3df6-45b9-a253-70a4516b88dc',
+      }, {
+        name: 'param_2',
+        value: 'some-guid',
+      }, {
+        name: 'param_3',
+        value: 'dd32d900-3df6-45b9-a253-70a4516b88dc',
+      }, {
+        name: 'param_4',
+        value: 'some-guid',
+      }],
+    )
   })
 
   it('should correctly transform a query which contains two array parameters', async () => {
@@ -97,6 +112,31 @@ describe('aurora data api > query transformation', () => {
     )
 
     expect(result.parameters).toEqual(
-      [{ param_0: id, param_1: id2, param_2: id, param_3: id2, param_4: id3, param_5: id2, param_6: id, param_7: id3 }])
+      [{
+        name: 'param_0',
+        value: 'dd32d900-3df6-45b9-a253-70a4516b88dc',
+      }, {
+        name: 'param_1',
+        value: 'some-guid',
+      }, {
+        name: 'param_2',
+        value: 'dd32d900-3df6-45b9-a253-70a4516b88dc',
+      }, {
+        name: 'param_3',
+        value: 'some-guid',
+      }, {
+        name: 'param_4',
+        value: 'some-other-guid',
+      }, {
+        name: 'param_5',
+        value: 'some-guid',
+      }, {
+        name: 'param_6',
+        value: 'dd32d900-3df6-45b9-a253-70a4516b88dc',
+      }, {
+        name: 'param_7',
+        value: 'some-other-guid',
+      }],
+    )
   })
 })

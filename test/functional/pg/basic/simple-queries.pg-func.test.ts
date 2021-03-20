@@ -1,7 +1,15 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import 'reflect-metadata'
 import { useCleanDatabase } from '../../utils/create-connection'
 import { Category } from './entity/Category'
 import { Post } from './entity/Post'
+import {
+  HeterogeneousEnum,
+  NumericEnum,
+  SimpleEnumEntity,
+  StringEnum,
+  StringNumericEnum,
+} from './entity/SimpleEnumEntity'
 import { UuidPost } from './entity/UuidPost'
 
 describe('aurora data api pg > simple queries', () => {
@@ -11,9 +19,9 @@ describe('aurora data api pg > simple queries', () => {
     await useCleanDatabase('postgres', { logger: 'simple-console' }, async (connection) => {
       const logSpy = jest.spyOn(global.console, 'log')
 
-      const result = await connection.query('select 1 as \"1\"')
+      const result = await connection.query('select 1 as "1"')
 
-      expect(logSpy).toHaveBeenCalledWith('query: select 1 as \"1\"')
+      expect(logSpy).toHaveBeenCalledWith('query: select 1 as "1"')
       expect(logSpy).toBeCalledTimes(1)
 
       expect(result[0][1]).toBe(1)
@@ -60,9 +68,58 @@ describe('aurora data api pg > simple queries', () => {
     })
   })
 
+  it('should be able to insert in parallel', async () => {
+    await useCleanDatabase('postgres', { entities: [UuidPost, Category] }, async (connection) => {
+      const postRepository = connection.getRepository(UuidPost)
+
+      const post = new UuidPost()
+      post.title = 'My First Post'
+      post.text = 'Post Text'
+      post.likesCount = 4
+
+      const [post1, post2] = await Promise.all([postRepository.save(post), postRepository.save(post)])
+
+      expect(post1).toBeTruthy()
+
+      expect(post1.title).toBe('My First Post')
+      expect(post1.text).toBe('Post Text')
+      expect(post1.likesCount).toBe(4)
+
+      expect(post2).toBeTruthy()
+
+      expect(post2.title).toBe('My First Post')
+      expect(post2.text).toBe('Post Text')
+      expect(post2.likesCount).toBe(4)
+    })
+  })
+
+  it('should correctly save and retrieve enums', async () => {
+    await useCleanDatabase('postgres', { entities: [UuidPost, Category, SimpleEnumEntity] }, async (connection) => {
+      const enumEntityRepository = connection.getRepository(SimpleEnumEntity)
+
+      const enumEntity = new SimpleEnumEntity()
+      enumEntity.id = 1
+      enumEntity.numericEnum = NumericEnum.EDITOR
+      enumEntity.stringEnum = StringEnum.ADMIN
+      enumEntity.stringNumericEnum = StringNumericEnum.TWO
+      enumEntity.heterogeneousEnum = HeterogeneousEnum.YES
+      enumEntity.arrayDefinedStringEnum = 'editor'
+      enumEntity.arrayDefinedNumericEnum = 13
+      enumEntity.enumWithoutdefault = StringEnum.ADMIN
+      await enumEntityRepository.save(enumEntity)
+
+      const loadedEnumEntity = await enumEntityRepository.findOne(1)
+      expect(loadedEnumEntity!.numericEnum).toBe(NumericEnum.EDITOR)
+      expect(loadedEnumEntity!.stringEnum).toBe(StringEnum.ADMIN)
+      expect(loadedEnumEntity!.stringNumericEnum).toBe(StringNumericEnum.TWO)
+      expect(loadedEnumEntity!.heterogeneousEnum).toBe(HeterogeneousEnum.YES)
+      expect(loadedEnumEntity!.arrayDefinedStringEnum).toBe('editor')
+      expect(loadedEnumEntity!.arrayDefinedNumericEnum).toBe(13)
+    })
+  })
+
   it('should be able to update a post', async () => {
     await useCleanDatabase('postgres', { entities: [Post, Category] }, async (connection) => {
-
       const postRepository = connection.getRepository(Post)
 
       const post = new Post()
@@ -126,22 +183,22 @@ describe('aurora data api pg > simple queries', () => {
 
   it('should be able to create and query a many-to-many relationship', async () => {
     await useCleanDatabase('postgres', { entities: [Post, Category] }, async (connection) => {
-        // Create categories
+      // Create categories
       const categoryRepository = connection.getRepository(Category)
 
       const firstCategory = await categoryRepository.save(
-          categoryRepository.create({
-            name: 'first',
-          }),
-        )
+        categoryRepository.create({
+          name: 'first',
+        }),
+      )
 
       const secondCategory = await categoryRepository.save(
-          categoryRepository.create({
-            name: 'second',
-          }),
-        )
+        categoryRepository.create({
+          name: 'second',
+        }),
+      )
 
-        // Create a post and associate with created categories
+      // Create a post and associate with created categories
       const postRepository = connection.getRepository(Post)
 
       const post = postRepository.create({
@@ -154,9 +211,10 @@ describe('aurora data api pg > simple queries', () => {
 
       const storedPost = await postRepository.save(post)
 
-        // Assert
+      // Assert
       const dbPost = await postRepository.findOne(
-          storedPost.id, { relations: ['categories'] })
+        storedPost.id, { relations: ['categories'] },
+      )
 
       expect(dbPost).toBeTruthy()
       expect(dbPost!.categories).toBeTruthy()
@@ -166,19 +224,19 @@ describe('aurora data api pg > simple queries', () => {
 
   it('should be able to update a date field by primary key', async () => {
     await useCleanDatabase('postgres', { entities: [Post, Category] }, async (connection) => {
-        // Create a post and associate with created categories
+      // Create a post and associate with created categories
       const postRepository = connection.getRepository(Post)
 
       const storedPost = await postRepository.save(
-          postRepository.create({
-            title: 'Post For Update',
-            text: 'Text',
-            likesCount: 6,
-            publishedAt: new Date(),
-          }),
-        )
+        postRepository.create({
+          title: 'Post For Update',
+          text: 'Text',
+          likesCount: 6,
+          publishedAt: new Date(),
+        }),
+      )
 
-        // Retrieve the post and update the date
+      // Retrieve the post and update the date
       const getPost = await postRepository.findOne(storedPost.id)
       expect(getPost).toBeTruthy()
       expect(getPost!.updatedAt).toBeFalsy()
@@ -187,7 +245,7 @@ describe('aurora data api pg > simple queries', () => {
       getPost!.updatedAt = updatedAt
       await postRepository.save(getPost!)
 
-        // Assert
+      // Assert
       const dbPost = await postRepository.findOne(storedPost.id)
       expect(dbPost).toBeTruthy()
       expect(Math.trunc(dbPost!.updatedAt!.getTime() / 1000)).toEqual(Math.trunc(updatedAt.getTime() / 1000))
@@ -197,20 +255,20 @@ describe('aurora data api pg > simple queries', () => {
   it('should be able to correctly deal with bulk inserts', async () => {
     await useCleanDatabase('postgres', { entities: [Category] }, async (connection) => {
       const categoryNames = ['one', 'two', 'three', 'four']
-      const newCategories = categoryNames.map(name => ({ name }))
+      const newCategories = categoryNames.map((name) => ({ name }))
 
       await connection.createQueryBuilder()
-          .insert()
-          .into(Category)
-          .values(newCategories)
-          .orIgnore()
-          .execute()
+        .insert()
+        .into(Category)
+        .values(newCategories)
+        .orIgnore()
+        .execute()
 
-        // Query back the inserted categories
+      // Query back the inserted categories
       const categoryRepository = connection.getRepository(Category)
       const categories = await categoryRepository.find()
 
-        // Assert
+      // Assert
       expect(categories.length).toBe(4)
       expect(categories[0].name = 'one')
       expect(categories[1].name = 'two')

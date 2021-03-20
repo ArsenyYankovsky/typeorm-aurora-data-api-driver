@@ -7,7 +7,7 @@ jobs:
       - checkout
       - run:
           name: yarn
-          command: yarn
+          command: yarn install && yarn add typeorm
       - run:
           name: lint
           command: yarn lint
@@ -48,7 +48,7 @@ jobs:
 
   run-mysql-func-tests-released:
     machine:
-      image: ubuntu-1604:201903-01
+      image: ubuntu-2004:202101-01
     steps:
       - attach_workspace:
           at: .
@@ -76,7 +76,7 @@ jobs:
 
   run-pg-func-tests-released:
     machine:
-      image: ubuntu-1604:201903-01
+      image: ubuntu-2004:202101-01
     steps:
       - attach_workspace:
           at: .
@@ -108,17 +108,17 @@ jobs:
     steps:
       - checkout
       - run:
+          name: checkout typeorm
+          command: git clone --single-branch --branch  data-api-prepare-hydrate https://github.com/ArsenyYankovsky/typeorm.git # TODO: Switch to master typeorm when it's released
+      - run:
+          name: build typeorm
+          command: cd typeorm/ && npm i && npm run package
+      - run:
           name: yarn
           command: yarn
       - run:
           name: build
           command: yarn build
-      - run:
-          name: checkout typeorm
-          command: git clone --single-branch --branch master https://github.com/typeorm/typeorm.git
-      - run:
-          name: build typeorm
-          command: cd typeorm/ && npm i && npm run compile
       - run:
           name: install aws-sdk
           command: npm i aws-sdk
@@ -138,7 +138,7 @@ jobs:
           echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
       - run:
           name: upgrade node
-          command: nvm install 12
+          command: nvm install 14
       - run:
           name: install yarn
           command: |
@@ -155,7 +155,9 @@ jobs:
       - run:
           name: run mysql functional test
           command: |
-            nvm use 12
+            nvm use 14
+            unset MYSQL_SECRET_ARN
+            unset MYSQL_RESOURCE_ARN
             yarn test:mysql-func
 
   run-pg-func-tests:
@@ -169,7 +171,7 @@ jobs:
           echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
       - run:
           name: upgrade node
-          command: nvm install 12
+          command: nvm install 14
       - run:
           name: install yarn
           command: |
@@ -181,13 +183,45 @@ jobs:
           name: link modules
           command: yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
       - run:
-          name: start local mysql
+          name: start local postgres
           command: docker-compose -f docker/pg.yml up -d
       - run:
           name: run mysql functional test
           command: |
-            nvm use 12
+            nvm use 14
+            unset PG_SECRET_ARN
+            unset PG_RESOURCE_ARN
             yarn test:pg-func
+
+  run-mysql-func-tests-server:
+    docker:
+      - image: "circleci/node:latest"
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: link modules
+          command: yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
+      - run:
+          name: run mysql functional test
+          command: |
+            node test/functional/utils/wake-db-up.js mysql
+            [[ -v MYSQL_SECRET_ARN ]] && [[ -v MYSQL_RESOURCE_ARN ]] && yarn test:mysql-func
+
+  run-pg-func-tests-server:
+    docker:
+      - image: "circleci/node:latest"
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: link modules
+          command: yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
+      - run:
+          name: run pg functional test
+          command: |
+            node test/functional/utils/wake-db-up.js postgres
+            [[ -v PG_SECRET_ARN ]] && [[ -v PG_RESOURCE_ARN ]] && yarn test:pg-func
 
 workflows:
   version: 2
@@ -219,6 +253,20 @@ workflows:
                 - master
           requires:
             - prepare-func-tests
+      - run-mysql-func-tests-server:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - prepare-func-tests
+      - run-pg-func-tests-server:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - prepare-func-tests
       - release:
           filters:
             branches:
@@ -227,6 +275,8 @@ workflows:
           requires:
             - run-pg-func-tests
             - run-mysql-func-tests
+            - run-pg-func-tests-server
+            - run-mysql-func-tests-server
 
   nightly-released:
     triggers:
@@ -278,5 +328,11 @@ workflows:
           requires:
             - prepare-func-tests
       - run-pg-func-tests:
+          requires:
+            - prepare-func-tests
+      - run-mysql-func-tests-server:
+          requires:
+            - prepare-func-tests
+      - run-pg-func-tests-server:
           requires:
             - prepare-func-tests

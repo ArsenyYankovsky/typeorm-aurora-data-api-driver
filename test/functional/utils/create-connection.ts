@@ -6,28 +6,39 @@ import {
   createConnection as typeormCreateConnection,
 } from 'typeorm'
 
-export const createConnection = async (dbType: DbType, partialOptions: any = {}) => {
-  return typeormCreateConnection({
-    ...partialOptions,
-    name: dbType,
-    type: dbType === 'mysql' ? 'aurora-data-api' : 'aurora-data-api-pg',
+// eslint-disable-next-line import/no-extraneous-dependencies
+require('dotenv').config()
+
+const credentials = {
+  mysql: {
     database: 'test',
-    secretArn: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:dummy',
-    resourceArn: 'arn:aws:rds:us-east-1:123456789012:cluster:dummy',
-    region: 'eu-west-1',
-    logging: true,
-    logger: 'simple-console',
-    serviceConfigOptions: {
-      endpoint: new AWS.Endpoint('http://127.0.0.1:8080'),
-      httpOptions: {
-        agent: new http.Agent(),
-      },
-    },
-    formatOptions: {
-      treatAsLocalDate: true,
-    },
-  })
+    secretArn: process.env.MYSQL_SECRET_ARN,
+    resourceArn: process.env.MYSQL_RESOURCE_ARN,
+  },
+  postgres: {
+    database: 'postgres',
+    secretArn: process.env.PG_SECRET_ARN,
+    resourceArn: process.env.PG_RESOURCE_ARN,
+  },
 }
+
+export const createConnection = async (dbType: DbType, partialOptions: any = {}) => typeormCreateConnection({
+  ...partialOptions,
+  name: dbType,
+  type: dbType === 'mysql' ? 'aurora-data-api' : 'aurora-data-api-pg',
+  database: credentials[dbType].database,
+  secretArn: credentials[dbType]?.secretArn || 'arn:aws:secretsmanager:us-east-1:123456789012:secret:dummy',
+  resourceArn: credentials[dbType]?.resourceArn || 'arn:aws:rds:us-east-1:123456789012:cluster:dummy',
+  region: 'eu-west-1',
+  logging: true,
+  logger: 'simple-console',
+  serviceConfigOptions: !credentials[dbType]?.secretArn && {
+    endpoint: new AWS.Endpoint('http://127.0.0.1:8080'),
+    httpOptions: {
+      agent: new http.Agent(),
+    },
+  },
+})
 
 export const createConnectionAndResetData = async (
   dbType: DbType,

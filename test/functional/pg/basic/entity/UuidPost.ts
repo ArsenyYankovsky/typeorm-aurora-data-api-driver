@@ -21,7 +21,7 @@ export class UuidPost {
   @Column({ nullable: true, type: 'timestamp' })
   public updatedAt?: Date
 
-  @ManyToMany(type => Category)
+  @ManyToMany(() => Category)
   @JoinTable()
   public categories!: Category[]
 }

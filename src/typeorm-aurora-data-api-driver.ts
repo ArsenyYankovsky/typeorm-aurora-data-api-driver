@@ -1,9 +1,11 @@
 // @ts-ignore
 import createDataApiClient from 'data-api-client'
+import { ColumnMetadata } from 'typeorm/metadata/ColumnMetadata'
 import { MysqlQueryTransformer, PostgresQueryTransformer, QueryTransformer } from './query-transformer'
 
 class DataApiDriver {
   private readonly client: any
+
   private transactionId?: string
 
   constructor(
@@ -47,6 +49,14 @@ class DataApiDriver {
     return result.records || result
   }
 
+  public preparePersistentValue(value: any, columnMetadata: ColumnMetadata): any {
+    return this.queryTransformer.preparePersistentValue(value, columnMetadata)
+  }
+
+  public prepareHydratedValue(value: any, columnMetadata: ColumnMetadata): any {
+    return this.queryTransformer.prepareHydratedValue(value, columnMetadata)
+  }
+
   public async startTransaction(): Promise<void> {
     const { transactionId } = await this.client.beginTransaction()
     this.transactionId = transactionId
@@ -64,36 +74,31 @@ class DataApiDriver {
 }
 
 const createMysqlDriver = (region: string, secretArn: string, resourceArn: string, database: string,
-                           loggerFn: (query: string, parameters?: any[]) => void = () => undefined,
-                           serviceConfigOptions?: any, formatOptions?: any) => {
-
-  return new DataApiDriver(
-    region,
-    secretArn,
-    resourceArn,
-    database,
-    loggerFn,
-    new MysqlQueryTransformer(),
-    serviceConfigOptions,
-    formatOptions,
-  )
-}
+  loggerFn: (query: string, parameters?: any[]) => void = () => undefined,
+  serviceConfigOptions?: any, formatOptions?: any) => new DataApiDriver(
+  region,
+  secretArn,
+  resourceArn,
+  database,
+  loggerFn,
+  new MysqlQueryTransformer(),
+  serviceConfigOptions,
+  formatOptions,
+)
 
 export default createMysqlDriver
 
 const createPostgresDriver = (region: string, secretArn: string, resourceArn: string, database: string,
-                              loggerFn: (query: string, parameters?: any[]) => void = () => undefined,
-                              serviceConfigOptions?: any, formatOptions?: any) => {
-  return new DataApiDriver(
-    region,
-    secretArn,
-    resourceArn,
-    database,
-    loggerFn,
-    new PostgresQueryTransformer(),
-    serviceConfigOptions,
-    formatOptions,
-  )
-}
+  loggerFn: (query: string, parameters?: any[]) => void = () => undefined,
+  serviceConfigOptions?: any, formatOptions?: any) => new DataApiDriver(
+  region,
+  secretArn,
+  resourceArn,
+  database,
+  loggerFn,
+  new PostgresQueryTransformer(),
+  serviceConfigOptions,
+  formatOptions,
+)
 
 export const pg = createPostgresDriver

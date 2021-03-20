@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   local-data-api:
-    image: koxudaxi/local-data-api
+    image: koxudaxi/local-data-api:0.6.3
     restart: always
     environment:
       ENGINE: PostgreSQLJDBC
@@ -12,8 +12,9 @@ services:
       POSTGRES_PASSWORD: example
       RESOURCE_ARN: 'arn:aws:rds:us-east-1:123456789012:cluster:dummy'
       SECRET_ARN: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:dummy'
+    command: ["java", "-server", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseContainerSupport", "-XX:+UseG1GC", "-XX:MaxGCPauseMillis=100", "-XX:+UseStringDeduplication", "-jar", "local-data-api.jar", "-port=8080"]
     ports:
-      - "8080:80"
+      - "8080:8080"
   db:
     image: postgres:10.7-alpine
     restart: always

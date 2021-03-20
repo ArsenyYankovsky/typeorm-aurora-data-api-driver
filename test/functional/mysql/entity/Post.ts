@@ -19,10 +19,10 @@ export class Post {
   @Column({ nullable: false, type: 'datetime', default: () => 'now()' })
   public publishedAt!: Date
 
-  @Column({ nullable: true, type: 'datetime' })
+  @Column({ nullable: true, type: 'timestamp' })
   public updatedAt?: Date
 
-  @ManyToMany(type => Category)
+  @ManyToMany(() => Category)
   @JoinTable()
   public categories!: Category[]
 }
