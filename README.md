@@ -13,6 +13,8 @@ This project is a bridge between [TypeORM](https://typeorm.io/#/) and [Aurora Da
 
 ✔ Supports both Postgres and MySQL.
 
+✔ Supports casting (allows using UUID, enums, properly formats date and time columns).
+
 ### How to use
 
 - [Enable the Data API on your database](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/data-api.html)
@@ -27,7 +29,7 @@ npm i --save typeorm-aurora-data-api-driver
 
 - Modify your connection configuration to look similar to this:
 
-```
+```js
     const connection = await createConnection({
       type: 'aurora-data-api',
       database: 'test-db',
@@ -35,7 +37,10 @@ npm i --save typeorm-aurora-data-api-driver
       resourceArn: 'arn:aws:rds:eu-west-1:xxxxx:xxxxxx:xxxxxx',
       region: 'eu-west-1',
       serviceConfigOptions: {
-        // additional options to pass to aws-sdk RDS client
+        // additional options to pass to the aws-sdk RDS client
+      },
+      formatOptions: {
+        // additional format options to pass to the Data API client
       }
     })
 ```
@@ -43,7 +48,7 @@ npm i --save typeorm-aurora-data-api-driver
 Or if you're using Postgres:
 
 
-```
+```js
     const connection = await createConnection({
       type: 'aurora-data-api-pg',
       database: 'test-db',
@@ -51,14 +56,17 @@ Or if you're using Postgres:
       resourceArn: 'arn:aws:rds:eu-west-1:xxxxx:xxxxxx:xxxxxx',
       region: 'eu-west-1',
       serviceConfigOptions: {
-        // additional options to pass to aws-sdk RDS client
+        // additional options to pass to the aws-sdk RDS client
+      },
+      formatOptions: {
+        // additional format options to pass to the Data API client
       }
     })
 ```
 
 After you done that you can use the connection just as you did with any other connection:
 
-```
+```js
   const postRepository = connection.getRepository(Post)
 
   const post = new Post()
@@ -73,4 +81,9 @@ After you done that you can use the connection just as you did with any other co
 
 ### Additional configuration options
 
-This dirver uses the [Data API Client](https://github.com/jeremydaly/data-api-client). To pass additional options to it, use `serviceConfigOptions` property.
+This driver uses the [Data API Client](https://github.com/jeremydaly/data-api-client). To pass additional options to it, use `serviceConfigOptions` and `formatOptions` properties.
+
+#### Automatic Casting
+
+By default, this driver will try to cast parameters using [Data API client's type casting](https://github.com/jeremydaly/data-api-client#type-casting).
+This allows using UUID, enum columns which wouldn't be possible before. To disable this behavior, set the `formatOptions.castParameters` to false.
