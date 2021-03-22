@@ -299,10 +299,10 @@ workflows:
             - prepare-func-tests-released
       - run-mysql-func-tests-server:
           requires:
-            - prepare-func-tests
+            - prepare-func-tests-released
       - run-pg-func-tests-server:
           requires:
-            - prepare-func-tests
+            - prepare-func-tests-released
 
   nightly:
     triggers:
