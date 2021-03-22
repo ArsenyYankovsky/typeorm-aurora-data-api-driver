@@ -298,17 +298,9 @@ workflows:
           requires:
             - prepare-func-tests-released
       - run-mysql-func-tests-server:
-          filters:
-            branches:
-              only:
-                - master
           requires:
             - prepare-func-tests
       - run-pg-func-tests-server:
-          filters:
-            branches:
-              only:
-                - master
           requires:
             - prepare-func-tests
 
@@ -332,17 +324,9 @@ workflows:
           requires:
             - prepare-func-tests
       - run-mysql-func-tests-server:
-          filters:
-            branches:
-              only:
-                - master
           requires:
             - prepare-func-tests
       - run-pg-func-tests-server:
-          filters:
-            branches:
-              only:
-                - master
           requires:
             - prepare-func-tests
 
