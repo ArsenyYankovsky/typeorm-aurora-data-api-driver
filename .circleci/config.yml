@@ -297,11 +297,25 @@ workflows:
       - run-pg-func-tests-released:
           requires:
             - prepare-func-tests-released
+      - run-mysql-func-tests-server:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - prepare-func-tests
+      - run-pg-func-tests-server:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - prepare-func-tests
 
   nightly:
     triggers:
       - schedule:
-          cron: "0 0 * * *"
+          cron: "0 1 * * *"
           filters:
             branches:
               only:
@@ -315,6 +329,20 @@ workflows:
           requires:
             - prepare-func-tests
       - run-pg-func-tests:
+          requires:
+            - prepare-func-tests
+      - run-mysql-func-tests-server:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - prepare-func-tests
+      - run-pg-func-tests-server:
+          filters:
+            branches:
+              only:
+                - master
           requires:
             - prepare-func-tests
 
