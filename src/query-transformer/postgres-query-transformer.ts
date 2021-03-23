@@ -71,7 +71,7 @@ export class PostgresQueryTransformer extends QueryTransformer {
       case 'timestamp with time zone':
       case 'timestamp without time zone':
       case 'timestamptz':
-        return typeof value === 'string' ? new Date(value) : value
+        return typeof value === 'string' ? new Date(value + ' GMT+0') : value
       case 'date':
         return typeof value === 'string' ? new Date(value) : value
       case 'time':
