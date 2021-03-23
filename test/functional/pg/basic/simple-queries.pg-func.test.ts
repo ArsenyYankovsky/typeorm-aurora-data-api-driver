@@ -11,6 +11,7 @@ import {
   StringNumericEnum,
 } from './entity/SimpleEnumEntity'
 import { UuidPost } from './entity/UuidPost'
+import User from './entity/User'
 
 describe('aurora data api pg > simple queries', () => {
   jest.setTimeout(240000)
@@ -274,6 +275,17 @@ describe('aurora data api pg > simple queries', () => {
       expect(categories[1].name = 'two')
       expect(categories[2].name = 'three')
       expect(categories[3].name = 'four')
+    })
+  })
+
+  it('timestamptz issue', async () => {
+    await useCleanDatabase('postgres', { entities: [User] }, async (connection) => {
+      const user = await connection.getRepository(User).save({ name: 'John' })
+
+      // Assert
+      expect(user).toBeTruthy()
+      expect(user.createdAt instanceof Date).toBeTruthy()
+      expect(user.updatedAt instanceof Date).toBeTruthy()
     })
   })
 })
