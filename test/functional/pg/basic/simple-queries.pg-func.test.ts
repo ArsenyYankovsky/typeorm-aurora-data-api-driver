@@ -280,16 +280,12 @@ describe('aurora data api pg > simple queries', () => {
 
   it('timestamptz issue', async () => {
     await useCleanDatabase('postgres', { entities: [User] }, async (connection) => {
-      try {
-        const user = await connection.getRepository(User).save({ name: 'John' })
+      const user = await connection.getRepository(User).save({ name: 'John' })
 
-        // Assert
-        expect(user).toBeTruthy()
-        expect(user.createdAt instanceof Date).toBeTruthy()
-        expect(user.updatedAt instanceof Date).toBeTruthy()
-      } catch (e) {
-        console.log(e)
-      }
+      // Assert
+      expect(user).toBeTruthy()
+      expect(user.createdAt instanceof Date).toBeTruthy()
+      expect(user.updatedAt instanceof Date).toBeTruthy()
     })
   })
 })
