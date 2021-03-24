@@ -21,7 +21,7 @@
   "scripts": {
     "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\"",
     "prebuild": "rimraf dist",
-    "build": "tsc --p tsconfig.build.json --module commonjs && rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src",
+    "build": "tsc --p tsconfig.build.json --module commonjs && rollup -c rollup.config.ts && typedoc --out docs --theme minimal src",
     "start": "rollup -c rollup.config.ts -w",
     "test:unit": "jest unit",
     "test:mysql-func": "jest mysql-func  --runInBand --detectOpenHandles",
