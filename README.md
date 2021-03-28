@@ -15,6 +15,8 @@ This project is a bridge between [TypeORM](https://typeorm.io/#/) and [Aurora Da
 
 ✔ Supports casting (allows using UUID, enums, properly formats date and time columns).
 
+⚠ Data API currently destroys any timezone information returning everything in UTC. Be aware of that when using Postgres 'timestamp with time zone', 'time with time zone' and similar types.
+
 ### How to use
 
 - [Enable the Data API on your database](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/data-api.html)

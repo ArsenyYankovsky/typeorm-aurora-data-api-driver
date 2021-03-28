@@ -66,7 +66,9 @@ export class MysqlQueryTransformer extends QueryTransformer {
       case 'timestamp without time zone':
         return typeof value === 'string' ? new Date(value + ' GMT+0') : value
       case 'date':
-        return typeof value === 'string' ? new Date(value) : value
+        return dateToDateString(value)
+      case 'year':
+        return typeof value === 'string' ? new Date(value).getUTCFullYear() : value.getUTCFullYear()
       case 'time':
         return value
       case 'json':

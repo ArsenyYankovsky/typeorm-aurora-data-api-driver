@@ -19,6 +19,21 @@ export class PostgresQueryTransformer extends QueryTransformer {
           value: dateToTimeString(value),
           cast: 'TIME',
         }
+      case 'time with time zone':
+        return {
+          value: dateToTimeString(value),
+          cast: 'time with time zone',
+        }
+      case 'timetz':
+        return {
+          value: dateToTimeString(value),
+          cast: 'timetz',
+        }
+      case 'interval':
+        return {
+          value,
+          cast: 'interval',
+        }
       case 'timestamp':
       case 'datetime':
       case 'timestamp with time zone':
@@ -71,9 +86,9 @@ export class PostgresQueryTransformer extends QueryTransformer {
       case 'timestamp with time zone':
       case 'timestamp without time zone':
       case 'timestamptz':
-        return typeof value === 'string' ? new Date(value) : value
+        return typeof value === 'string' ? new Date(value + ' GMT+0') : value
       case 'date':
-        return typeof value === 'string' ? new Date(value) : value
+        return value
       case 'time':
         return value
       case 'hstore':
