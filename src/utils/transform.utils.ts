@@ -15,7 +15,11 @@ export const dateToDateTimeString = (date: Date) => {
   return `${year}-${pad(month)}-${pad(day)} ${pad(hours)}:${pad(minutes)}:${pad(seconds)}${fraction}`
 }
 
-export const dateToDateString = (date: Date) => {
+export const dateToDateString = (date: Date | string) => {
+  if (typeof date === 'string') {
+    return date
+  }
+
   const year = date.getUTCFullYear()
   const month = date.getUTCMonth() + 1 // Convert to human month
   const day = date.getUTCDate()

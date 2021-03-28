@@ -3,6 +3,7 @@ import 'reflect-metadata'
 import { useCleanDatabase } from '../../utils/create-connection'
 import { Category } from './entity/Category'
 import { Post } from './entity/Post'
+import { DateEntity } from './entity/DateEntity'
 import {
   HeterogeneousEnum,
   NumericEnum,
@@ -286,6 +287,49 @@ describe('aurora data api pg > simple queries', () => {
       expect(user).toBeTruthy()
       expect(user.createdAt instanceof Date).toBeTruthy()
       expect(user.updatedAt instanceof Date).toBeTruthy()
+    })
+  })
+
+  it('should handle date and time types', async () => {
+    await useCleanDatabase('postgres', { entities: [DateEntity] }, async (connection) => {
+      const dateEntity = new DateEntity()
+
+      dateEntity.date = '2017-06-21'
+      dateEntity.interval = '1 year 2 months 3 days 4 hours 5 minutes 6 seconds'
+      dateEntity.time = '15:30:00'
+      dateEntity.timeWithTimeZone = '15:30:00 PST'
+      dateEntity.timetz = '15:30:00 PST'
+      dateEntity.timestamp = new Date()
+      dateEntity.timestamp.setMilliseconds(0)
+      dateEntity.timestampWithTimeZone = new Date()
+      dateEntity.timestampWithTimeZone.setMilliseconds(0)
+      dateEntity.timestamptz = new Date()
+      dateEntity.timestamptz.setMilliseconds(0)
+
+      const newDateEntity = await connection.getRepository(DateEntity).save(dateEntity)
+
+      const loadedDateEntity = (await connection.getRepository(DateEntity).findOne(newDateEntity.id))!
+
+      // Assert
+      expect(loadedDateEntity).toBeTruthy()
+      expect(loadedDateEntity.date).toEqual(dateEntity.date)
+      expect(loadedDateEntity.time).toEqual(dateEntity.time)
+
+      // Data API destroys the timezone information
+      // TODO: Uncomment these lines when https://github.com/koxudaxi/local-data-api/issues/112 is fixed
+      // expect(loadedDateEntity.timeWithTimeZone).toEqual('23:30:00')
+      // expect(loadedDateEntity.timetz).toEqual('23:30:00')
+      expect(loadedDateEntity.timestamp.valueOf()).toEqual(dateEntity.timestamp.valueOf())
+      expect(loadedDateEntity.timestampWithTimeZone.getTime()).toEqual(dateEntity.timestampWithTimeZone.getTime())
+      expect(loadedDateEntity.timestamptz.valueOf()).toEqual(dateEntity.timestamptz.valueOf())
+
+      expect(loadedDateEntity).toBeTruthy()
+      expect(loadedDateEntity.date).toEqual(dateEntity.date)
+      expect(loadedDateEntity.time).toEqual(dateEntity.time)
+      // expect(loadedDateEntity.timeWithTimeZone).toEqual('23:30:00')
+      // expect(loadedDateEntity.timetz).toEqual('23:30:00')
+      expect(loadedDateEntity.timestamp.valueOf()).toEqual(dateEntity.timestamp.valueOf())
+      expect(loadedDateEntity.timestampWithTimeZone.getTime()).toEqual(dateEntity.timestampWithTimeZone.getTime())
     })
   })
 })

@@ -2,6 +2,7 @@
 import 'reflect-metadata'
 import { useCleanDatabase } from '../utils/create-connection'
 import { Category } from './entity/Category'
+import { DateEntity } from './entity/DateEntity'
 import { Post } from './entity/Post'
 
 describe('aurora data api > simple queries', () => {
@@ -222,6 +223,39 @@ describe('aurora data api > simple queries', () => {
       expect(categories[1].name = 'two')
       expect(categories[2].name = 'three')
       expect(categories[3].name = 'four')
+    })
+  })
+
+  it('should handle date/time types', async () => {
+    await useCleanDatabase('mysql', { entities: [DateEntity] }, async (connection) => {
+      const dateEntity = new DateEntity()
+
+      dateEntity.date = '2017-06-21'
+      dateEntity.datetime = new Date()
+      dateEntity.datetime.setMilliseconds(0) // set milliseconds to zero, because if datetime type specified without precision, milliseconds won't save in database
+      dateEntity.timestamp = new Date()
+      dateEntity.timestamp.setMilliseconds(0) // set milliseconds to zero, because if datetime type specified without precision, milliseconds won't save in database
+      dateEntity.time = '15:30:00'
+      dateEntity.year = 2017
+
+      const newDateEntity = await connection.getRepository(DateEntity).save(dateEntity)
+
+      const loadedDateEntity = (await connection.getRepository(DateEntity).findOne(newDateEntity.id))!
+
+      // Assert
+      expect(newDateEntity).toBeTruthy()
+      expect(newDateEntity.date).toEqual(dateEntity.date)
+      expect(newDateEntity.datetime.getTime()).toEqual(dateEntity.datetime.getTime())
+      expect(newDateEntity.timestamp.getTime()).toEqual(dateEntity.timestamp.getTime())
+      expect(newDateEntity.time).toEqual(dateEntity.time)
+      expect(newDateEntity.year).toEqual(dateEntity.year)
+
+      expect(loadedDateEntity).toBeTruthy()
+      expect(loadedDateEntity.date).toEqual(dateEntity.date)
+      expect(loadedDateEntity.datetime.getTime()).toEqual(dateEntity.datetime.getTime())
+      expect(loadedDateEntity.timestamp.getTime()).toEqual(dateEntity.timestamp.getTime())
+      expect(loadedDateEntity.time).toEqual(dateEntity.time)
+      expect(loadedDateEntity.year).toEqual(dateEntity.year)
     })
   })
 })
