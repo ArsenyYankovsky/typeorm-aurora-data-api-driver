@@ -316,9 +316,8 @@ describe('aurora data api pg > simple queries', () => {
       expect(loadedDateEntity.time).toEqual(dateEntity.time)
 
       // Data API destroys the timezone information
-      // TODO: Uncomment these lines when https://github.com/koxudaxi/local-data-api/issues/112 is fixed
-      // expect(loadedDateEntity.timeWithTimeZone).toEqual('23:30:00')
-      // expect(loadedDateEntity.timetz).toEqual('23:30:00')
+      expect(loadedDateEntity.timeWithTimeZone).toEqual('23:30:00')
+      expect(loadedDateEntity.timetz).toEqual('23:30:00')
       expect(loadedDateEntity.timestamp.valueOf()).toEqual(dateEntity.timestamp.valueOf())
       expect(loadedDateEntity.timestampWithTimeZone.getTime()).toEqual(dateEntity.timestampWithTimeZone.getTime())
       expect(loadedDateEntity.timestamptz.valueOf()).toEqual(dateEntity.timestamptz.valueOf())
@@ -326,8 +325,8 @@ describe('aurora data api pg > simple queries', () => {
       expect(loadedDateEntity).toBeTruthy()
       expect(loadedDateEntity.date).toEqual(dateEntity.date)
       expect(loadedDateEntity.time).toEqual(dateEntity.time)
-      // expect(loadedDateEntity.timeWithTimeZone).toEqual('23:30:00')
-      // expect(loadedDateEntity.timetz).toEqual('23:30:00')
+      expect(loadedDateEntity.timeWithTimeZone).toEqual('23:30:00')
+      expect(loadedDateEntity.timetz).toEqual('23:30:00')
       expect(loadedDateEntity.timestamp.valueOf()).toEqual(dateEntity.timestamp.valueOf())
       expect(loadedDateEntity.timestampWithTimeZone.getTime()).toEqual(dateEntity.timestampWithTimeZone.getTime())
     })
