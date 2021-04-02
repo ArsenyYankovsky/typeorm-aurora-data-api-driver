@@ -37,11 +37,18 @@ export class SimpleEnumEntity {
   public id!: number
 
   @Column({
-    type: 'simple-enum',
+    type: 'enum',
     enum: NumericEnum,
     default: NumericEnum.MODERATOR,
   })
   public numericEnum!: NumericEnum
+
+  @Column({
+    type: 'simple-enum',
+    enum: NumericEnum,
+    default: NumericEnum.MODERATOR,
+  })
+  public numericSimpleEnum!: NumericEnum
 
   @Column({
     type: 'simple-enum',
