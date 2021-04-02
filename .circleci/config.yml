@@ -109,7 +109,7 @@ jobs:
       - checkout
       - run:
           name: checkout typeorm
-          command: git clone --single-branch --branch  data-api-prepare-hydrate https://github.com/ArsenyYankovsky/typeorm.git # TODO: Switch to master typeorm when it's released
+          command: git clone --single-branch https://github.com/typeorm/typeorm.git
       - run:
           name: build typeorm
           command: cd typeorm/ && npm i && npm run package
