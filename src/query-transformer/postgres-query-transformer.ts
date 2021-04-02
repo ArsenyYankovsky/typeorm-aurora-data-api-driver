@@ -61,6 +61,7 @@ export class PostgresQueryTransformer extends QueryTransformer {
           cast: 'UUID',
         }
       case 'simple-enum':
+      case 'enum':
         return {
           value: '' + value,
           cast: metadata.enumName || `${metadata.entityMetadata.tableName}_${metadata.databaseName.toLowerCase()}_enum`,

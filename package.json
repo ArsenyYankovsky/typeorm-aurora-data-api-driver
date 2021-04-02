@@ -104,7 +104,7 @@
     "ts-node": "^7.0.1",
     "typedoc": "^0.20.33",
     "typescript": "^3.9.2",
-    "typeorm": "^0.2.31"
+    "typeorm": "^0.2.32"
   },
   "dependencies": {
     "data-api-client": "^1.2.0"

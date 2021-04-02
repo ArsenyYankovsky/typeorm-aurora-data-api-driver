@@ -102,6 +102,7 @@ describe('aurora data api pg > simple queries', () => {
       const enumEntity = new SimpleEnumEntity()
       enumEntity.id = 1
       enumEntity.numericEnum = NumericEnum.EDITOR
+      enumEntity.numericSimpleEnum = NumericEnum.EDITOR
       enumEntity.stringEnum = StringEnum.ADMIN
       enumEntity.stringNumericEnum = StringNumericEnum.TWO
       enumEntity.heterogeneousEnum = HeterogeneousEnum.YES
@@ -112,6 +113,7 @@ describe('aurora data api pg > simple queries', () => {
 
       const loadedEnumEntity = await enumEntityRepository.findOne(1)
       expect(loadedEnumEntity!.numericEnum).toBe(NumericEnum.EDITOR)
+      expect(loadedEnumEntity!.numericSimpleEnum).toBe(NumericEnum.EDITOR)
       expect(loadedEnumEntity!.stringEnum).toBe(StringEnum.ADMIN)
       expect(loadedEnumEntity!.stringNumericEnum).toBe(StringNumericEnum.TWO)
       expect(loadedEnumEntity!.heterogeneousEnum).toBe(HeterogeneousEnum.YES)
