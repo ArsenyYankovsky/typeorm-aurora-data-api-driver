@@ -57,7 +57,7 @@ jobs:
           echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
       - run:
           name: upgrade node
-          command: nvm install 12
+          command: nvm install 14
       - run:
           name: install yarn
           command: |
@@ -71,7 +71,9 @@ jobs:
       - run:
           name: run mysql functional test
           command: |
-            nvm use 12
+            nvm use 14
+            unset MYSQL_SECRET_ARN
+            unset MYSQL_RESOURCE_ARN
             yarn test:mysql-func
 
   run-pg-func-tests-released:
@@ -85,7 +87,7 @@ jobs:
           echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
       - run:
           name: upgrade node
-          command: nvm install 12
+          command: nvm install 14
       - run:
           name: install yarn
           command: |
@@ -97,9 +99,11 @@ jobs:
           name: start local pg
           command: docker-compose -f docker/pg.yml up -d
       - run:
-          name: run pg functional test
+          name: run mysql functional test
           command: |
-            nvm use 12
+            nvm use 14
+            unset PG_SECRET_ARN
+            unset PG_RESOURCE_ARN
             yarn test:pg-func
 
   prepare-func-tests:
@@ -208,6 +212,18 @@ jobs:
             node test/functional/utils/wake-db-up.js mysql
             [[ -v MYSQL_SECRET_ARN ]] && [[ -v MYSQL_RESOURCE_ARN ]] && yarn test:mysql-func
 
+  run-mysql-func-tests-server-released:
+    docker:
+      - image: "circleci/node:latest"
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: run mysql functional test
+          command: |
+            node test/functional/utils/wake-db-up.js mysql
+            [[ -v MYSQL_SECRET_ARN ]] && [[ -v MYSQL_RESOURCE_ARN ]] && yarn test:mysql-func
+
   run-pg-func-tests-server:
     docker:
       - image: "circleci/node:latest"
@@ -217,6 +233,18 @@ jobs:
       - run:
           name: link modules
           command: yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
+      - run:
+          name: run pg functional test
+          command: |
+            node test/functional/utils/wake-db-up.js postgres
+            [[ -v PG_SECRET_ARN ]] && [[ -v PG_RESOURCE_ARN ]] && yarn test:pg-func
+
+  run-pg-func-tests-server-released:
+    docker:
+      - image: "circleci/node:latest"
+    steps:
+      - attach_workspace:
+          at: .
       - run:
           name: run pg functional test
           command: |
@@ -297,10 +325,10 @@ workflows:
       - run-pg-func-tests-released:
           requires:
             - prepare-func-tests-released
-      - run-mysql-func-tests-server:
+      - run-mysql-func-tests-server-released:
           requires:
             - prepare-func-tests-released
-      - run-pg-func-tests-server:
+      - run-pg-func-tests-server-released:
           requires:
             - prepare-func-tests-released
 
