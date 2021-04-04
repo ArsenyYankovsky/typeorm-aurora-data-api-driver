@@ -1,5 +1,6 @@
 # typeorm-aurora-data-api-driver
 
+[![typeorm-aurora-data-api-driver](https://circleci.com/gh/ArsenyYankovsky/typeorm-aurora-data-api-driver.svg?style=shield)](https://app.circleci.com/pipelines/github/ArsenyYankovsky/typeorm-aurora-data-api-driver)
 [![npm downloads](https://img.shields.io/npm/dw/typeorm-aurora-data-api-driver)](https://www.npmjs.com/package/typeorm-aurora-data-api-driver) 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ArsenyYankovsky/typeorm-aurora-data-api-driver/blob/master/LICENSE)
 [![npm downloads](https://img.shields.io/bundlephobia/minzip/typeorm-aurora-data-api-driver)](https://www.npmjs.com/package/typeorm-aurora-data-api-driver)
