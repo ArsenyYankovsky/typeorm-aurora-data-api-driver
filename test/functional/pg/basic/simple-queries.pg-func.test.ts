@@ -2,6 +2,7 @@
 import 'reflect-metadata'
 import { useCleanDatabase } from '../../utils/create-connection'
 import { Category } from './entity/Category'
+import { JsonEntity } from './entity/JsonEntity'
 import { Post } from './entity/Post'
 import { DateEntity } from './entity/DateEntity'
 import {
@@ -331,6 +332,28 @@ describe('aurora data api pg > simple queries', () => {
       expect(loadedDateEntity.timetz).toEqual('23:30:00')
       expect(loadedDateEntity.timestamp.valueOf()).toEqual(dateEntity.timestamp.valueOf())
       expect(loadedDateEntity.timestampWithTimeZone.getTime()).toEqual(dateEntity.timestampWithTimeZone.getTime())
+    })
+  })
+
+  it('should handle json types', async () => {
+    await useCleanDatabase('postgres', { entities: [JsonEntity] }, async (connection) => {
+      const jsonEntity = new JsonEntity()
+
+      jsonEntity.json = { id: 1, name: 'Post' }
+      jsonEntity.jsonb = { id: 1, name: 'Post' }
+
+      const newJsonEntity = await connection.getRepository(JsonEntity).save(jsonEntity)
+
+      const loadedJsonEntity = (await connection.getRepository(JsonEntity).findOne(newJsonEntity.id))!
+
+      // Assert
+      expect(newJsonEntity).toBeTruthy()
+      expect(newJsonEntity.json).toEqual(jsonEntity.json)
+      expect(newJsonEntity.jsonb).toEqual(jsonEntity.jsonb)
+
+      expect(loadedJsonEntity).toBeTruthy()
+      expect(loadedJsonEntity.json).toEqual(jsonEntity.json)
+      expect(loadedJsonEntity.jsonb).toEqual(jsonEntity.jsonb)
     })
   })
 })
