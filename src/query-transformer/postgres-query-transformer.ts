@@ -106,6 +106,7 @@ export class PostgresQueryTransformer extends QueryTransformer {
         return value
       case 'json':
       case 'simple-json':
+      case 'jsonb':
         return typeof value === 'string' ? JSON.parse(value) : value
       case 'enum':
       case 'simple-enum':
