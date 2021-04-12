@@ -71,6 +71,33 @@ describe('aurora data api pg > simple queries', () => {
     })
   })
 
+  it('should allow casting override', async () => {
+    await useCleanDatabase('postgres', { entities: [UuidPost, Category] }, async (connection) => {
+      const postRepository = connection.getRepository(UuidPost)
+
+      const post = new UuidPost()
+      post.title = 'f01bdc12-ed72-4260-86aa-b7123f08cab9'
+      post.text = 'Post Text'
+      post.likesCount = 4
+
+      await postRepository.save(post)
+
+      // @ts-ignore
+      const dbPost = await postRepository.findOne({
+        title: {
+          value: 'f01bdc12-ed72-4260-86aa-b7123f08cab9',
+          cast: 'varchar',
+        },
+      })
+
+      expect(dbPost).toBeTruthy()
+
+      expect(dbPost!.title).toBe('f01bdc12-ed72-4260-86aa-b7123f08cab9')
+      expect(dbPost!.text).toBe('Post Text')
+      expect(dbPost!.likesCount).toBe(4)
+    })
+  })
+
   it('should be able to insert in parallel', async () => {
     await useCleanDatabase('postgres', { entities: [UuidPost, Category] }, async (connection) => {
       const postRepository = connection.getRepository(UuidPost)
