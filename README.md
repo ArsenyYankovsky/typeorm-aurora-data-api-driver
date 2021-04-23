@@ -88,11 +88,8 @@ This driver uses the [Data API Client](https://github.com/jeremydaly/data-api-cl
 
 #### Automatic Casting
 
-By default, this driver will try to cast parameters using [Data API client's type casting](https://github.com/jeremydaly/data-api-client#type-casting).
+By default, this driver will try to cast entity fields on insert and update queries using entity metadata and [Data API client's type casting](https://github.com/jeremydaly/data-api-client#type-casting).
 This allows using UUID and enum columns which wouldn't be possible before. To disable this behavior, set the `formatOptions.castParameters` to false.
-
-There is a special hack that will automatically add casting to UUID if a query of the parameter looks like a UUID (`/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/`).
-You can specify the parameter casting type to work around this.
 
 #### Parameter Casting
 
@@ -102,7 +99,7 @@ You can specify casting for query parameters as well. To do that pass an object 
 const dbPost = await postRepository.findOne({
   title: {
     value: 'f01bdc12-ed72-4260-86aa-b7123f08cab9',
-    cast: 'varchar',
+    cast: 'uuid',
   },
 })
 ```

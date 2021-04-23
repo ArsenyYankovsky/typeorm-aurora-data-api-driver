@@ -2,9 +2,9 @@
 import 'reflect-metadata'
 import { useCleanDatabase } from '../../utils/create-connection'
 import { Category } from './entity/Category'
+import { DateEntity } from './entity/DateEntity'
 import { JsonEntity } from './entity/JsonEntity'
 import { Post } from './entity/Post'
-import { DateEntity } from './entity/DateEntity'
 import {
   HeterogeneousEnum,
   NumericEnum,
@@ -12,8 +12,8 @@ import {
   StringEnum,
   StringNumericEnum,
 } from './entity/SimpleEnumEntity'
-import { UuidPost } from './entity/UuidPost'
 import User from './entity/User'
+import { UuidPost } from './entity/UuidPost'
 
 describe('aurora data api pg > simple queries', () => {
   jest.setTimeout(240000)
@@ -62,7 +62,13 @@ describe('aurora data api pg > simple queries', () => {
 
       const insertResult = await postRepository.save(post)
 
-      const dbPost = await postRepository.findOne({ id: insertResult.id })
+      // @ts-ignore
+      const dbPost = await postRepository.findOne({
+        id: {
+          value: insertResult.id,
+          cast: 'uuid',
+        },
+      })
       expect(dbPost).toBeTruthy()
 
       expect(dbPost!.title).toBe('My First Post')
