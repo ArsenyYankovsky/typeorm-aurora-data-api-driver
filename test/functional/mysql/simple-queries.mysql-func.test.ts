@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'reflect-metadata'
+import { JsonEntity } from './entity/JsonEntity'
 import { useCleanDatabase } from '../utils/create-connection'
 import { Category } from './entity/Category'
 import { DateEntity } from './entity/DateEntity'
@@ -256,6 +257,25 @@ describe('aurora data api > simple queries', () => {
       expect(loadedDateEntity.timestamp.getTime()).toEqual(dateEntity.timestamp.getTime())
       expect(loadedDateEntity.time).toEqual(dateEntity.time)
       expect(loadedDateEntity.year).toEqual(dateEntity.year)
+    })
+  })
+
+  it('should handle json types', async () => {
+    await useCleanDatabase('mysql', { entities: [JsonEntity] }, async (connection) => {
+      const jsonEntity = new JsonEntity()
+
+      jsonEntity.simpleJson = { id: 1, name: 'Post' }
+
+      const newJsonEntity = await connection.getRepository(JsonEntity).save(jsonEntity)
+
+      const loadedJsonEntity = (await connection.getRepository(JsonEntity).findOne(newJsonEntity.id))!
+
+      // Assert
+      expect(newJsonEntity).toBeTruthy()
+      expect(newJsonEntity.simpleJson).toEqual(jsonEntity.simpleJson)
+
+      expect(loadedJsonEntity).toBeTruthy()
+      expect(loadedJsonEntity.simpleJson).toEqual(jsonEntity.simpleJson)
     })
   })
 })
