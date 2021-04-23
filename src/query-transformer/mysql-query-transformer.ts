@@ -33,10 +33,8 @@ export class MysqlQueryTransformer extends QueryTransformer {
           cast: 'DECIMAL',
         }
       case 'simple-json':
-      case 'json':
         return {
           value: JSON.stringify(value),
-          cast: 'JSON',
         }
       case 'enum':
       case 'simple-enum':
