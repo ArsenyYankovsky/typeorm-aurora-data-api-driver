@@ -18,6 +18,8 @@ This project is a bridge between [TypeORM](https://typeorm.io/#/) and [Aurora Da
 
 ⚠ Data API currently destroys any timezone information returning everything in UTC. Be aware of that when using Postgres 'timestamp with time zone', 'time with time zone' and similar types.
 
+⚠ Data API currently does not support some field types. Partial list of those field types: json, set
+
 ### How to use
 
 - [Enable the Data API on your database](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/data-api.html)
