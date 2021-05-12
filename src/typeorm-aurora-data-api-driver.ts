@@ -1,7 +1,11 @@
 // @ts-ignore
 import createDataApiClient from 'data-api-client'
-import { ColumnMetadata } from 'typeorm/metadata/ColumnMetadata'
-import { MysqlQueryTransformer, PostgresQueryTransformer, QueryTransformer } from './query-transformer'
+import {ColumnMetadata} from 'typeorm/metadata/ColumnMetadata'
+import {
+  MysqlQueryTransformer,
+  PostgresQueryTransformer,
+  QueryTransformer
+} from './query-transformer'
 
 class DataApiDriver {
   private readonly client: any
@@ -35,7 +39,7 @@ class DataApiDriver {
     this.queryTransformer = queryTransformer
   }
 
-  public async query(query: string, parameters?: any[]): Promise<any> {
+  public async query(query: string, continueAfterTimeout: boolean = false, parameters?: any[]): Promise<any> {
     const transformedQueryData = this.queryTransformer.transformQueryAndParameters(query, parameters)
 
     this.loggerFn(transformedQueryData.queryString, transformedQueryData.parameters)
@@ -44,6 +48,8 @@ class DataApiDriver {
       sql: transformedQueryData.queryString,
       parameters: transformedQueryData.parameters,
       transactionId: this.transactionId,
+      continueAfterTimeout: continueAfterTimeout
+
     })
 
     return result.records || result
@@ -58,24 +64,24 @@ class DataApiDriver {
   }
 
   public async startTransaction(): Promise<void> {
-    const { transactionId } = await this.client.beginTransaction()
+    const {transactionId} = await this.client.beginTransaction()
     this.transactionId = transactionId
   }
 
   public async commitTransaction(): Promise<void> {
-    await this.client.commitTransaction({ transactionId: this.transactionId })
+    await this.client.commitTransaction({transactionId: this.transactionId})
     this.transactionId = undefined
   }
 
   public async rollbackTransaction(): Promise<void> {
-    await this.client.rollbackTransaction({ transactionId: this.transactionId })
+    await this.client.rollbackTransaction({transactionId: this.transactionId})
     this.transactionId = undefined
   }
 }
 
 const createMysqlDriver = (region: string, secretArn: string, resourceArn: string, database: string,
-  loggerFn: (query: string, parameters?: any[]) => void = () => undefined,
-  serviceConfigOptions?: any, formatOptions?: any) => new DataApiDriver(
+                           loggerFn: (query: string, parameters?: any[]) => void = () => undefined,
+                           serviceConfigOptions?: any, formatOptions?: any) => new DataApiDriver(
   region,
   secretArn,
   resourceArn,
@@ -89,8 +95,8 @@ const createMysqlDriver = (region: string, secretArn: string, resourceArn: strin
 export default createMysqlDriver
 
 const createPostgresDriver = (region: string, secretArn: string, resourceArn: string, database: string,
-  loggerFn: (query: string, parameters?: any[]) => void = () => undefined,
-  serviceConfigOptions?: any, formatOptions?: any) => new DataApiDriver(
+                              loggerFn: (query: string, parameters?: any[]) => void = () => undefined,
+                              serviceConfigOptions?: any, formatOptions?: any) => new DataApiDriver(
   region,
   secretArn,
   resourceArn,
