@@ -389,4 +389,27 @@ describe('aurora data api pg > simple queries', () => {
       expect(loadedJsonEntity.jsonb).toEqual(jsonEntity.jsonb)
     })
   })
+
+
+  it('should handle null values', async () => {
+    await useCleanDatabase('postgres', { entities: [JsonEntity] }, async (connection) => {
+      const jsonEntity = new JsonEntity()
+
+      jsonEntity.json = null
+      jsonEntity.jsonb = { id: 1, name: 'Post' }
+
+      const newJsonEntity = await connection.getRepository(JsonEntity).save(jsonEntity)
+
+      const loadedJsonEntity = (await connection.getRepository(JsonEntity).findOne(newJsonEntity.id))!
+
+      // Assert
+      expect(newJsonEntity).toBeTruthy()
+      expect(newJsonEntity.json).toEqual(null)
+      expect(newJsonEntity.jsonb).toEqual(jsonEntity.jsonb)
+
+      expect(loadedJsonEntity).toBeTruthy()
+      expect(loadedJsonEntity.json).toEqual(null)
+      expect(loadedJsonEntity.jsonb).toEqual(jsonEntity.jsonb)
+    })
+  })
 })

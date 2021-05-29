@@ -10,6 +10,6 @@ export class JsonEntity {
   // JSON Type
   // -------------------------------------------------------------------------
 
-  @Column('simple-json')
-  simpleJson!: Object
+  @Column('simple-json', { nullable: true })
+  simpleJson!: Object | null
 }

@@ -51,3 +51,14 @@ export const simpleArrayToString = (value: any[]|any): string[]|any => {
 
   return value
 }
+
+export const stringToSimpleArray = (value: string|any): any[] => {
+  if (value instanceof String || typeof value === 'string') {
+    if (value.length > 0) {
+      return value.split(',')
+    }
+    return []
+  }
+
+  return value
+}
