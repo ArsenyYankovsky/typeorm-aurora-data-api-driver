@@ -10,8 +10,8 @@ export class JsonEntity {
   // JSON Type
   // -------------------------------------------------------------------------
 
-  @Column('json')
-  json!: Object
+  @Column('json', { nullable: true })
+  json!: Object | null
 
   @Column('jsonb')
   jsonb!: Object

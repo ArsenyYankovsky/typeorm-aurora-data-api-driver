@@ -278,4 +278,23 @@ describe('aurora data api > simple queries', () => {
       expect(loadedJsonEntity.simpleJson).toEqual(jsonEntity.simpleJson)
     })
   })
+
+  it('should handle null values', async () => {
+    await useCleanDatabase('mysql', { entities: [JsonEntity] }, async (connection) => {
+      const jsonEntity = new JsonEntity()
+
+      jsonEntity.simpleJson = null
+
+      const newJsonEntity = await connection.getRepository(JsonEntity).save(jsonEntity)
+
+      const loadedJsonEntity = (await connection.getRepository(JsonEntity).findOne(newJsonEntity.id))!
+
+      // Assert
+      expect(newJsonEntity).toBeTruthy()
+      expect(newJsonEntity.simpleJson).toEqual(null)
+
+      expect(loadedJsonEntity).toBeTruthy()
+      expect(loadedJsonEntity.simpleJson).toEqual(null)
+    })
+  })
 })

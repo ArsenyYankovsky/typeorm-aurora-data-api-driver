@@ -1,5 +1,11 @@
 import { ColumnMetadata } from 'typeorm/metadata/ColumnMetadata'
-import { dateToDateString, dateToDateTimeString, dateToTimeString } from '../utils/transform.utils'
+import {
+  dateToDateString,
+  dateToDateTimeString,
+  dateToTimeString,
+  simpleArrayToString,
+  stringToSimpleArray,
+} from '../utils/transform.utils'
 import { QueryTransformer } from './query-transformer'
 
 export class MysqlQueryTransformer extends QueryTransformer {
@@ -32,6 +38,12 @@ export class MysqlQueryTransformer extends QueryTransformer {
           value: '' + value,
           cast: 'DECIMAL',
         }
+      case 'set':
+      case 'simple-array':
+        return {
+          value: simpleArrayToString(value),
+        }
+      case 'json':
       case 'simple-json':
         return {
           value: JSON.stringify(value),
@@ -69,6 +81,9 @@ export class MysqlQueryTransformer extends QueryTransformer {
         return typeof value === 'string' ? new Date(value).getUTCFullYear() : value.getUTCFullYear()
       case 'time':
         return value
+      case 'set':
+      case 'simple-array':
+        return typeof value === 'string' ? stringToSimpleArray(value) : value
       case 'json':
       case 'simple-json':
         return typeof value === 'string' ? JSON.parse(value) : value
@@ -132,11 +147,11 @@ export class MysqlQueryTransformer extends QueryTransformer {
     const expandedParameters = this.expandArrayParameters(parameters)
 
     return expandedParameters.map((parameter, index) => {
-      if (parameter === null || parameter === undefined) {
+      if (parameter === undefined) {
         return parameter
       }
 
-      if (typeof parameter === 'object' && parameter.value) {
+      if (typeof parameter === 'object' && parameter?.value) {
         return ({
           name: `param_${index}`,
           ...parameter,

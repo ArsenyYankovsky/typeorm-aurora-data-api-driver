@@ -102,3 +102,5 @@ const createPostgresDriver = (region: string, secretArn: string, resourceArn: st
 )
 
 export const pg = createPostgresDriver
+
+export { MysqlQueryTransformer, PostgresQueryTransformer }
