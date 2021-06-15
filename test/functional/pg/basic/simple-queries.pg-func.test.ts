@@ -4,6 +4,7 @@ import { useCleanDatabase } from '../../utils/create-connection'
 import { Category } from './entity/Category'
 import { DateEntity } from './entity/DateEntity'
 import { JsonEntity } from './entity/JsonEntity'
+import { SimpleArrayEntity } from './entity/SimpleArrayEntity'
 import { Post } from './entity/Post'
 import {
   HeterogeneousEnum,
@@ -387,6 +388,25 @@ describe('aurora data api pg > simple queries', () => {
       expect(loadedJsonEntity).toBeTruthy()
       expect(loadedJsonEntity.json).toEqual(jsonEntity.json)
       expect(loadedJsonEntity.jsonb).toEqual(jsonEntity.jsonb)
+    })
+  })
+
+  it('should handle simple-array types', async () => {
+    await useCleanDatabase('postgres', { entities: [SimpleArrayEntity] }, async (connection) => {
+      const simpleArrayEntity = new SimpleArrayEntity()
+
+      simpleArrayEntity.array = ['foo', 'bar']
+
+      const newSimpleArrayEntity = await connection.getRepository(SimpleArrayEntity).save(simpleArrayEntity)
+
+      const loadedSimpleArrayEntity = (await connection.getRepository(SimpleArrayEntity).findOne(newSimpleArrayEntity.id))!
+
+      // Assert
+      expect(newSimpleArrayEntity).toBeTruthy()
+      expect(newSimpleArrayEntity.array).toEqual(simpleArrayEntity.array)
+
+      expect(loadedSimpleArrayEntity).toBeTruthy()
+      expect(loadedSimpleArrayEntity.array).toEqual(simpleArrayEntity.array)
     })
   })
 
