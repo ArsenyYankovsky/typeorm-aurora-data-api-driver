@@ -1,5 +1,5 @@
 import { ColumnMetadata } from 'typeorm/metadata/ColumnMetadata'
-import { dateToDateString, dateToTimeString, dateToDateTimeString } from '../utils/transform.utils'
+import { dateToDateString, dateToTimeString, dateToDateTimeString, simpleArrayToString, stringToSimpleArray } from '../utils/transform.utils'
 import { QueryTransformer } from './query-transformer'
 
 export class PostgresQueryTransformer extends QueryTransformer {
@@ -47,6 +47,10 @@ export class PostgresQueryTransformer extends QueryTransformer {
         return {
           value: '' + value,
           cast: 'DECIMAL',
+        }
+      case 'simple-array':
+        return {
+          value: simpleArrayToString(value),
         }
       case 'simple-json':
       case 'json':
@@ -104,6 +108,8 @@ export class PostgresQueryTransformer extends QueryTransformer {
           return object
         }
         return value
+      case 'simple-array':
+        return typeof value === 'string' ? stringToSimpleArray(value) : value
       case 'json':
       case 'simple-json':
       case 'jsonb':
