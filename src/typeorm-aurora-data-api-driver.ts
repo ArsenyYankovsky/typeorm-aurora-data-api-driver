@@ -1,7 +1,11 @@
 // @ts-ignore
 import createDataApiClient from 'data-api-client'
 import { ColumnMetadata } from 'typeorm/metadata/ColumnMetadata'
-import { MysqlQueryTransformer, PostgresQueryTransformer, QueryTransformer } from './query-transformer'
+import {
+  MysqlQueryTransformer,
+  PostgresQueryTransformer,
+  QueryTransformer,
+} from './query-transformer'
 
 class DataApiDriver {
   private readonly client: any
@@ -35,7 +39,7 @@ class DataApiDriver {
     this.queryTransformer = queryTransformer
   }
 
-  public async query(query: string, parameters?: any[]): Promise<any> {
+  public async query(query: string, continueAfterTimeout: boolean = false, parameters?: any[]): Promise<any> {
     const transformedQueryData = this.queryTransformer.transformQueryAndParameters(query, parameters)
 
     this.loggerFn(transformedQueryData.queryString, transformedQueryData.parameters)
@@ -44,6 +48,8 @@ class DataApiDriver {
       sql: transformedQueryData.queryString,
       parameters: transformedQueryData.parameters,
       transactionId: this.transactionId,
+      continueAfterTimeout,
+
     })
 
     return result.records || result
