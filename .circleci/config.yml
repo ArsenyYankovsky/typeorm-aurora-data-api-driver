@@ -57,7 +57,7 @@ jobs:
           echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
       - run:
           name: upgrade node
-          command: nvm install 'lts/*'
+          command: nvm install 14
       - run:
           name: install yarn
           command: |
@@ -71,7 +71,7 @@ jobs:
       - run:
           name: run mysql functional test
           command: |
-            nvm use 'lts/*'
+            nvm use 14
             unset MYSQL_SECRET_ARN
             unset MYSQL_RESOURCE_ARN
             yarn test:mysql-func
@@ -87,7 +87,7 @@ jobs:
           echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
       - run:
           name: upgrade node
-          command: nvm install 'lts/*'
+          command: nvm install 14
       - run:
           name: install yarn
           command: |
@@ -101,7 +101,7 @@ jobs:
       - run:
           name: run mysql functional test
           command: |
-            nvm use 'lts/*'
+            nvm use 14
             unset PG_SECRET_ARN
             unset PG_RESOURCE_ARN
             yarn test:pg-func
@@ -142,7 +142,7 @@ jobs:
           echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
       - run:
           name: upgrade node
-          command: nvm install 'lts/*'
+          command: nvm install 14
       - run:
           name: install yarn
           command: |
@@ -159,7 +159,7 @@ jobs:
       - run:
           name: run mysql functional test
           command: |
-            nvm use 'lts/*'
+            nvm use 14
             unset MYSQL_SECRET_ARN
             unset MYSQL_RESOURCE_ARN
             yarn test:mysql-func
@@ -175,7 +175,7 @@ jobs:
           echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
       - run:
           name: upgrade node
-          command: nvm install 'lts/*'
+          command: nvm install 14
       - run:
           name: install yarn
           command: |
@@ -192,7 +192,7 @@ jobs:
       - run:
           name: run mysql functional test
           command: |
-            nvm use 'lts/*'
+            nvm use 14
             unset PG_SECRET_ARN
             unset PG_RESOURCE_ARN
             yarn test:pg-func
