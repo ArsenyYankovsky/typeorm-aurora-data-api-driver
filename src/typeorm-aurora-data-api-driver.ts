@@ -87,7 +87,7 @@ const createMysqlDriver = (region: string, secretArn: string, resourceArn: strin
   resourceArn,
   database,
   loggerFn,
-  new MysqlQueryTransformer({ enableUuidHack: formatOptions.enableUuidHack }),
+  new MysqlQueryTransformer({ enableUuidHack: formatOptions?.enableUuidHack }),
   serviceConfigOptions,
   formatOptions,
 )
