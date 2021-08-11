@@ -175,6 +175,15 @@ export class PostgresQueryTransformer extends QueryTransformer {
         })
       }
 
+      // Hack for UUID
+      if (this.transformOptions?.enableUuidHack && /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test('' + parameter)) {
+        return {
+          name: `param_${index + 1}`,
+          value: '' + parameter,
+          cast: 'uuid',
+        }
+      }
+
       return {
         name: `param_${index + 1}`,
         value: parameter,

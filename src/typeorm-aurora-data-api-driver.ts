@@ -87,7 +87,7 @@ const createMysqlDriver = (region: string, secretArn: string, resourceArn: strin
   resourceArn,
   database,
   loggerFn,
-  new MysqlQueryTransformer(),
+  new MysqlQueryTransformer({ enableUuidHack: formatOptions?.enableUuidHack }),
   serviceConfigOptions,
   formatOptions,
 )
@@ -102,7 +102,7 @@ const createPostgresDriver = (region: string, secretArn: string, resourceArn: st
   resourceArn,
   database,
   loggerFn,
-  new PostgresQueryTransformer(),
+  new PostgresQueryTransformer({ enableUuidHack: formatOptions?.enableUuidHack }),
   serviceConfigOptions,
   formatOptions,
 )

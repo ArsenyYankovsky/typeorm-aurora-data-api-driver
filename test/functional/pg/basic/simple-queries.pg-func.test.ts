@@ -78,6 +78,33 @@ describe('aurora data api pg > simple queries', () => {
     })
   })
 
+
+  it('should create a table with uuid primary key and be able to query it -- with UUID hack', async () => {
+    await useCleanDatabase('postgres', { entities: [UuidPost, Category], formatOptions: { enableUuidHack: true, castParameters: true } }, async (connection) => {
+      const postRepository = connection.getRepository(UuidPost)
+
+      const post = new UuidPost()
+      post.title = 'My First Post'
+      post.text = 'Post Text'
+      post.likesCount = 4
+
+      const insertResult = await postRepository.save(post)
+
+      // @ts-ignore
+      const dbPost = await postRepository.findOne({
+        id: {
+          value: insertResult.id,
+          cast: 'uuid',
+        },
+      })
+      expect(dbPost).toBeTruthy()
+
+      expect(dbPost!.title).toBe('My First Post')
+      expect(dbPost!.text).toBe('Post Text')
+      expect(dbPost!.likesCount).toBe(4)
+    })
+  })
+
   it('should allow casting override', async () => {
     await useCleanDatabase('postgres', { entities: [UuidPost, Category] }, async (connection) => {
       const postRepository = connection.getRepository(UuidPost)
