@@ -40,13 +40,19 @@ class DataApiDriver {
 
     this.loggerFn(transformedQueryData.queryString, transformedQueryData.parameters)
 
-    const result = await this.client.query({
+    let result = await this.client.query({
       sql: transformedQueryData.queryString,
       parameters: transformedQueryData.parameters,
       transactionId: this.transactionId,
     })
 
-    return result.records || result
+    // TODO: Remove this hack when all Postgres calls in TypeORM use structured result
+    if (result.records) {
+      result = result.records
+      result.records = result
+    }
+
+    return result
   }
 
   public preparePersistentValue(value: any, columnMetadata: ColumnMetadata): any {
