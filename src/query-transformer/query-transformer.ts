@@ -6,6 +6,12 @@ export interface QueryTransformationResult {
 }
 
 export abstract class QueryTransformer {
+  protected transformOptions?: any
+
+  public constructor(transformOptions?: any) {
+    this.transformOptions = transformOptions
+  }
+
   public transformQueryAndParameters(query: string, srcParameters: any[] = []) {
     if (!srcParameters.length) {
       return { queryString: query, parameters: [] }
