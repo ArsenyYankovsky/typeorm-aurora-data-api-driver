@@ -1,3 +1,5 @@
+import { ColumnMetadata } from 'typeorm/metadata/ColumnMetadata'
+
 const pad = (val: string | number, num = 2) => '0'.repeat(num - (val.toString()).length) + val
 
 export const dateToDateTimeString = (date: Date) => {
@@ -61,4 +63,13 @@ export const stringToSimpleArray = (value: string|any): any[] => {
   }
 
   return value
+}
+
+
+export const getDecimalCast = ({ precision, scale }: Pick<ColumnMetadata, 'scale' | 'precision'>): string => {
+  if (!precision) return 'DECIMAL'
+
+  if (!scale) return `DECIMAL(${precision})`
+
+  return `DECIMAL(${precision},${scale})`
 }

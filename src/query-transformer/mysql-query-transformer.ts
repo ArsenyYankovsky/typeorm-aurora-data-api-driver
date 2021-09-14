@@ -3,6 +3,7 @@ import {
   dateToDateString,
   dateToDateTimeString,
   dateToTimeString,
+  getDecimalCast,
   simpleArrayToString,
   stringToSimpleArray,
 } from '../utils/transform.utils'
@@ -36,7 +37,7 @@ export class MysqlQueryTransformer extends QueryTransformer {
       case 'numeric':
         return {
           value: '' + value,
-          cast: 'DECIMAL',
+          cast: getDecimalCast(metadata),
         }
       case 'set':
       case 'simple-array':
