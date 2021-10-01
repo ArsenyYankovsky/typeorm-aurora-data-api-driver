@@ -104,4 +104,4 @@ const dbPost = await postRepository.findOne({
 })
 ```
 
-Alternative way of automatically cast your UUID ids is to enable automatic casting of UUID (based on regex) by passing `enabledUuidHack: true` to `formatOptions`.
+Alternative way of automatically cast your UUID ids is to enable automatic casting of UUID (based on regex) by passing `enableUuidHack: true` to `formatOptions`.
