@@ -162,9 +162,9 @@ jobs:
             nvm use 14
             unset MYSQL_SECRET_ARN
             unset MYSQL_RESOURCE_ARN
-            AWS_ACCESS_KEY_ID="dummy"
-            AWS_SECRET_ACCESS_KEY="dummy"
-            AWS_SECRET_ACCESS_KEY="eu-west-1"
+            export AWS_ACCESS_KEY_ID="dummy"
+            export AWS_SECRET_ACCESS_KEY="dummy"
+            export AWS_REGION="eu-west-1"
             yarn test:mysql-func
 
   run-pg-func-tests:
@@ -198,9 +198,9 @@ jobs:
             nvm use 14
             unset PG_SECRET_ARN
             unset PG_RESOURCE_ARN
-            AWS_ACCESS_KEY_ID="dummy"
-            AWS_SECRET_ACCESS_KEY="dummy"
-            AWS_SECRET_ACCESS_KEY="eu-west-1"
+            export AWS_ACCESS_KEY_ID="dummy"
+            export AWS_SECRET_ACCESS_KEY="dummy"
+            export AWS_REGION="eu-west-1"
             yarn test:pg-func
 
   run-mysql-func-tests-server:
