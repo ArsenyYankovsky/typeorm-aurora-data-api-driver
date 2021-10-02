@@ -366,7 +366,11 @@ workflows:
 
   check-commit:
     jobs:
-      - checks
+      - checks:
+          filters:
+            branches:
+              ignore:
+                - master
       - prepare-func-tests:
           requires:
             - checks
