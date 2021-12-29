@@ -168,7 +168,7 @@ export class PostgresQueryTransformer extends QueryTransformer {
         return parameter
       }
 
-      if (typeof parameter === 'object' && parameter?.value) {
+      if (typeof parameter === 'object' && parameter?.value !== undefined) {
         return ({
           name: `param_${index + 1}`,
           ...parameter,
