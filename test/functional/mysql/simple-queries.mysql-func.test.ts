@@ -5,6 +5,7 @@ import { useCleanDatabase } from '../utils/create-connection'
 import { Category } from './entity/Category'
 import { DateEntity } from './entity/DateEntity'
 import { Post } from './entity/Post'
+import { SimpleArrayEntity } from './entity/SimpleArrayEntity'
 
 describe('aurora data api > simple queries', () => {
   jest.setTimeout(240000)
@@ -295,6 +296,25 @@ describe('aurora data api > simple queries', () => {
 
       expect(loadedJsonEntity).toBeTruthy()
       expect(loadedJsonEntity.simpleJson).toEqual(null)
+    })
+  })
+
+  it('should handle empty simple-array', async () => {
+    await useCleanDatabase('mysql', { entities: [JsonEntity] }, async (connection) => {
+      const simpleArray = new SimpleArrayEntity()
+
+      simpleArray.array = []
+
+      const newSimpleArray = await connection.getRepository(JsonEntity).save(simpleArray)
+
+      const loadedSimpleArray = (await connection.getRepository(JsonEntity).findOne(newSimpleArray.id))!
+
+      // Assert
+      expect(newSimpleArray).toBeTruthy()
+      expect(newSimpleArray.simpleJson).toEqual(null)
+
+      expect(loadedSimpleArray).toBeTruthy()
+      expect(loadedSimpleArray.simpleJson).toEqual(null)
     })
   })
 })
