@@ -23,7 +23,5 @@ These steps will guide you through contributing to this project:
 - Make sure to lint before committing
   - `yarn lint`
 
-- You can also lint and test everything before pushing by running
-	- `yarn test:prod`
-
-Finally send a [GitHub Pull Request](https://github.com/ArsenyYankovsky/typeorm-aurora-data-api-driver/compare?expand=1) with a clear list of what you've done (read more [about pull requests](https://help.github.com/articles/about-pull-requests/)). Make sure all of your commits are atomic (one feature per commit).
+Finally, send a [GitHub Pull Request](https://github.com/ArsenyYankovsky/typeorm-aurora-data-api-driver/compare?expand=1) with a clear list of what you've done (read more [about pull requests](https://help.github.com/articles/about-pull-requests/)). 
+Make sure all of your commits are atomic (one feature per commit) and conventional (https://www.conventionalcommits.org/en/v1.0.0/).
