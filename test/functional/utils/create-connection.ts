@@ -1,8 +1,8 @@
 import * as AWS from 'aws-sdk'
 import * as http from 'http'
 import {
-  Connection,
-  ConnectionOptions,
+  DataSource,
+  DataSourceOptions,
   createConnection as typeormCreateConnection,
 } from 'typeorm'
 
@@ -25,7 +25,7 @@ const credentials = {
 export const createConnection = async (dbType: DbType, partialOptions: any = {}) => typeormCreateConnection({
   ...partialOptions,
   name: dbType,
-  type: dbType === 'mysql' ? 'aurora-data-api' : 'aurora-data-api-pg',
+  type: dbType === 'mysql' ? 'aurora-mysql' : 'aurora-postgres',
   database: credentials[dbType].database,
   secretArn: credentials[dbType]?.secretArn || 'arn:aws:secretsmanager:us-east-1:123456789012:secret:dummy',
   resourceArn: credentials[dbType]?.resourceArn || 'arn:aws:rds:us-east-1:123456789012:cluster:dummy',
@@ -42,7 +42,7 @@ export const createConnection = async (dbType: DbType, partialOptions: any = {})
 
 export const createConnectionAndResetData = async (
   dbType: DbType,
-  partialOptions: Partial<ConnectionOptions> = {},
+  partialOptions: Partial<DataSourceOptions> = {},
 ) => {
   const connection = await createConnection(dbType, { ...partialOptions, synchronize: false })
   await connection.synchronize(true)
@@ -53,8 +53,8 @@ export type DbType = 'mysql' | 'postgres'
 
 export const useCleanDatabase = async (
   dbType: DbType,
-  partialOptions: Partial<ConnectionOptions> = {},
-  invoke: (connection: Connection) => Promise<void>,
+  partialOptions: Partial<DataSourceOptions> = {},
+  invoke: (connection: DataSource) => Promise<void>,
 ) => {
   const connection = await createConnectionAndResetData(dbType, partialOptions)
   try {

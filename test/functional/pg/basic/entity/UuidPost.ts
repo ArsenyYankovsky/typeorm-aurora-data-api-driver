@@ -1,9 +1,17 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  Column,
+  Entity,
+  Generated,
+  JoinTable,
+  ManyToMany,
+  PrimaryColumn,
+} from 'typeorm'
 import { Category } from './Category'
 
 @Entity('uuid_post')
 export class UuidPost {
-  @PrimaryGeneratedColumn('uuid')
+  @Generated('uuid')
+  @PrimaryColumn('uuid')
   public id!: string
 
   @Column()
