@@ -119,7 +119,7 @@ Let's start with a simple case where you don't need to touch any code in the Typ
 
 ### Developing Against a Released TypeORM version
 
-##### Initial Setup
+#### Initial Setup
 
 1. Fork this repository on GitHub and check out your fork 
 2. Run `yarn` to install dependencies
