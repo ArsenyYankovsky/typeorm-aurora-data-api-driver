@@ -7,7 +7,7 @@ jobs:
       - checkout
       - run:
           name: yarn
-          command: yarn install && yarn add typeorm@0.2
+          command: yarn install && npm i --no-save typeorm@0.2
       - run:
           name: lint
           command: yarn lint
@@ -116,7 +116,7 @@ jobs:
           command: yarn
       - run:
           name: install typeorm
-          command: npm i typeorm@0.2
+          command: npm i typeorm@0.2 --no-save
       - run:
           name: build
           command: yarn build
