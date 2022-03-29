@@ -9241,10 +9241,10 @@ typedoc@^0.20.33:
     shiki "^0.9.3"
     typedoc-default-themes "^0.12.9"
 
-typeorm@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.3.1.tgz#94c5600bb1ad8e63dbf48b2a6fc77c2e9c429b04"
-  integrity sha512-uuZzjiPfmRMQkzB3/Gw09vr8ytm3p0NY1+mBQzxwKbNRAi44ePORFM9oCIWUwZB3GzfU7or/pZL7zvWy2xegWg==
+typeorm@0.3.4:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.3.4.tgz#6608f7efb15c40f3fa2863cefb45ff78a208c40c"
+  integrity sha512-6v3HH12viDhIQwQDod/B0Plt1o7IYIVDxP7zwatD6fzN+IDdqTTinW/sWNw84Edpbhh2t7XILTaQEqj0NXFP/Q==
   dependencies:
     "@sqltools/formatter" "^1.2.2"
     app-root-path "^3.0.0"
