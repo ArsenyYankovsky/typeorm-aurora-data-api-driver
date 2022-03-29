@@ -149,7 +149,7 @@ jobs:
             sudo apt-get install yarn
       - run:
           name: link modules
-          command: yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
+          command: yarn link && cd node_modules/typeorm && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
       - run:
           name: start local mysql
           command: docker-compose -f docker/mysql.yml up -d
@@ -185,7 +185,7 @@ jobs:
             sudo apt-get install yarn
       - run:
           name: link modules
-          command: yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
+          command: yarn link && cd node_modules/typeorm && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
       - run:
           name: start local postgres
           command: docker-compose -f docker/pg.yml up -d
@@ -208,7 +208,7 @@ jobs:
           at: .
       - run:
           name: link modules
-          command: yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
+          command: yarn link && cd node_modules/typeorm && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
       - run:
           name: run mysql functional test
           command: |
@@ -235,7 +235,7 @@ jobs:
           at: .
       - run:
           name: link modules
-          command: yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
+          command: yarn link && cd node_modules/typeorm && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
       - run:
           name: run pg functional test
           command: |
