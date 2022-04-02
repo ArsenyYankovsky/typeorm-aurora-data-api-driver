@@ -22,13 +22,13 @@ This project is a bridge between [TypeORM](https://typeorm.io/#/) and [Aurora Da
 
 - [Enable the Data API on your database](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/data-api.html)
 - Install the driver by running either
-`
+```bash
 yarn add typeorm-aurora-data-api-driver
-`
+```
 or
-`
+```bash
 npm i --save typeorm-aurora-data-api-driver
-`
+````
 
 - Modify your connection configuration to look similar to this:
 
