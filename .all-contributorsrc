@@ -1,0 +1,25 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "dpecos",
+      "name": "Daniel Pecos Martinez",
+      "avatar_url": "https://avatars.githubusercontent.com/u/584298?v=4",
+      "profile": "https://danielpecos.com",
+      "contributions": [
+        "code",
+        "bug"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "typeorm-aurora-data-api-driver",
+  "projectOwner": "ArsenyYankovsky",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
