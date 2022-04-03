@@ -1,4 +1,7 @@
 # typeorm-aurora-data-api-driver
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![typeorm-aurora-data-api-driver](https://circleci.com/gh/ArsenyYankovsky/typeorm-aurora-data-api-driver.svg?style=shield)](https://app.circleci.com/pipelines/github/ArsenyYankovsky/typeorm-aurora-data-api-driver)
 [![npm downloads](https://img.shields.io/npm/dw/typeorm-aurora-data-api-driver)](https://www.npmjs.com/package/typeorm-aurora-data-api-driver) 
@@ -188,3 +191,23 @@ What this will do is create symlinks where the driver will use a locally built T
 
 Unfortunately, every time you need to make a change in the TypeORM directory you'll need to rerun steps 
 4-7 which is very slow. Please submit a PR updating this readme if you find a nicer way of doing it.
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://danielpecos.com"><img src="https://avatars.githubusercontent.com/u/584298?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Daniel Pecos Martinez</b></sub></a><br /><a href="https://github.com/ArsenyYankovsky/typeorm-aurora-data-api-driver/commits?author=dpecos" title="Code">💻</a> <a href="https://github.com/ArsenyYankovsky/typeorm-aurora-data-api-driver/issues?q=author%3Adpecos" title="Bug reports">🐛</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
