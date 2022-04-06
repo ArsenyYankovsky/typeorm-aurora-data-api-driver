@@ -7,7 +7,7 @@ jobs:
       - checkout
       - run:
           name: yarn
-          command: yarn install && yarn add typeorm@0.3
+          command: yarn install && npm i --no-save typeorm@0.3
       - run:
           name: lint
           command: yarn lint
@@ -112,14 +112,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: checkout typeorm
-          command: git clone --single-branch https://github.com/typeorm/typeorm.git
-      - run:
-          name: build typeorm
-          command: cd typeorm/ && npm i && npm run package
-      - run:
           name: yarn
           command: yarn
+      - run:
+          name: install typeorm
+          command: npm i typeorm@0.3 --no-save
       - run:
           name: build
           command: yarn build
@@ -152,7 +149,7 @@ jobs:
             sudo apt-get install yarn
       - run:
           name: link modules
-          command: yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
+          command: yarn link && cd node_modules/typeorm && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
       - run:
           name: start local mysql
           command: docker-compose -f docker/mysql.yml up -d
@@ -188,7 +185,7 @@ jobs:
             sudo apt-get install yarn
       - run:
           name: link modules
-          command: yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
+          command: yarn link && cd node_modules/typeorm && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
       - run:
           name: start local postgres
           command: docker-compose -f docker/pg.yml up -d
@@ -211,7 +208,7 @@ jobs:
           at: .
       - run:
           name: link modules
-          command: yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
+          command: yarn link && cd node_modules/typeorm && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
       - run:
           name: run mysql functional test
           command: |
@@ -238,7 +235,7 @@ jobs:
           at: .
       - run:
           name: link modules
-          command: yarn link && cd typeorm/build/package && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
+          command: yarn link && cd node_modules/typeorm && yarn link && yarn link typeorm-aurora-data-api-driver && cd ../../../ && yarn link typeorm
       - run:
           name: run pg functional test
           command: |

@@ -440,6 +440,25 @@ describe('aurora data api pg > simple queries', () => {
     })
   })
 
+  it('should handle empty simple-array', async () => {
+    await useCleanDatabase('postgres', { entities: [SimpleArrayEntity] }, async (connection) => {
+      const simpleArrayEntity = new SimpleArrayEntity()
+
+      simpleArrayEntity.array = []
+
+      const newSimpleArrayEntity = await connection.getRepository(SimpleArrayEntity).save(simpleArrayEntity)
+
+      const loadedSimpleArrayEntity = (await connection.getRepository(SimpleArrayEntity).findOne(newSimpleArrayEntity.id))!
+
+      // Assert
+      expect(newSimpleArrayEntity).toBeTruthy()
+      expect(newSimpleArrayEntity.array).toEqual([])
+
+      expect(loadedSimpleArrayEntity).toBeTruthy()
+      expect(loadedSimpleArrayEntity.array).toEqual([])
+    })
+  })
+
 
   it('should handle null values', async () => {
     await useCleanDatabase('postgres', { entities: [JsonEntity] }, async (connection) => {
