@@ -37,7 +37,7 @@ npm i --save typeorm-aurora-data-api-driver
 
 ```js
     const connection = await createConnection({
-      type: 'aurora-data-api',
+      type: 'aurora-mysql',
       database: 'test-db',
       secretArn: 'arn:aws:secretsmanager:eu-west-1:537011205135:secret:xxxxxx/xxxxxx/xxxxxx',
       resourceArn: 'arn:aws:rds:eu-west-1:xxxxx:xxxxxx:xxxxxx',
@@ -56,7 +56,7 @@ Or if you're using Postgres:
 
 ```js
     const connection = await createConnection({
-      type: 'aurora-data-api-pg',
+      type: 'aurora-postgres',
       database: 'test-db',
       secretArn: 'arn:aws:secretsmanager:eu-west-1:537011205135:secret:xxxxxx/xxxxxx/xxxxxx',
       resourceArn: 'arn:aws:rds:eu-west-1:xxxxx:xxxxxx:xxxxxx',

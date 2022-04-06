@@ -43,7 +43,7 @@ describe('aurora data api pg > simple queries', () => {
 
       const insertResult = await postRepository.save(post)
 
-      const dbPost = await postRepository.findOne({ id: insertResult.id })
+      const dbPost = await postRepository.findOneBy({ id: insertResult.id })
       expect(dbPost).toBeTruthy()
 
       expect(dbPost!.title).toBe('My First Post')
@@ -63,8 +63,7 @@ describe('aurora data api pg > simple queries', () => {
 
       const insertResult = await postRepository.save(post)
 
-      // @ts-ignore
-      const dbPost = await postRepository.findOne({
+      const dbPost = await postRepository.findOneBy({
         id: {
           value: insertResult.id,
           cast: 'uuid',
@@ -91,7 +90,7 @@ describe('aurora data api pg > simple queries', () => {
       const insertResult = await postRepository.save(post)
 
       // @ts-ignore
-      const dbPost = await postRepository.findOne({
+      const dbPost = await postRepository.findOneBy({
         id: {
           value: insertResult.id,
           cast: 'uuid',
@@ -117,7 +116,7 @@ describe('aurora data api pg > simple queries', () => {
       await postRepository.save(post)
 
       // @ts-ignore
-      const dbPost = await postRepository.findOne({
+      const dbPost = await postRepository.findOneBy({
         title: {
           value: 'f01bdc12-ed72-4260-86aa-b7123f08cab9',
           cast: 'varchar',
@@ -173,7 +172,7 @@ describe('aurora data api pg > simple queries', () => {
       enumEntity.enumWithoutdefault = StringEnum.ADMIN
       await enumEntityRepository.save(enumEntity)
 
-      const loadedEnumEntity = await enumEntityRepository.findOne(1)
+      const loadedEnumEntity = await enumEntityRepository.findOneBy({ id: 1 })
       expect(loadedEnumEntity!.numericEnum).toBe(NumericEnum.EDITOR)
       expect(loadedEnumEntity!.numericSimpleEnum).toBe(NumericEnum.EDITOR)
       expect(loadedEnumEntity!.stringEnum).toBe(StringEnum.ADMIN)
@@ -199,13 +198,13 @@ describe('aurora data api pg > simple queries', () => {
 
       const postId = insertResult.id
 
-      const dbPost = await postRepository.findOne({ id: postId })
+      const dbPost = await postRepository.findOneBy({ id: postId })
 
       dbPost!.publishedAt = new Date()
 
       await postRepository.save(dbPost!)
 
-      const updatedPost = await postRepository.findOne(postId)
+      const updatedPost = await postRepository.findOneBy({ id: postId })
 
       expect(updatedPost!.publishedAt > new Date(2017, 1, 1)).toBeTruthy()
 
@@ -279,7 +278,10 @@ describe('aurora data api pg > simple queries', () => {
 
       // Assert
       const dbPost = await postRepository.findOne(
-        storedPost.id, { relations: ['categories'] },
+        {
+          where: { id: storedPost.id },
+          relations: ['categories'],
+        },
       )
 
       expect(dbPost).toBeTruthy()
@@ -303,7 +305,7 @@ describe('aurora data api pg > simple queries', () => {
       )
 
       // Retrieve the post and update the date
-      const getPost = await postRepository.findOne(storedPost.id)
+      const getPost = await postRepository.findOneBy({ id: storedPost.id })
       expect(getPost).toBeTruthy()
       expect(getPost!.updatedAt).toBeFalsy()
 
@@ -312,7 +314,7 @@ describe('aurora data api pg > simple queries', () => {
       await postRepository.save(getPost!)
 
       // Assert
-      const dbPost = await postRepository.findOne(storedPost.id)
+      const dbPost = await postRepository.findOneBy({ id: storedPost.id })
       expect(dbPost).toBeTruthy()
       expect(Math.trunc(dbPost!.updatedAt!.getTime() / 1000)).toEqual(Math.trunc(updatedAt.getTime() / 1000))
     })
@@ -345,12 +347,13 @@ describe('aurora data api pg > simple queries', () => {
 
   it('timestamptz issue', async () => {
     await useCleanDatabase('postgres', { entities: [User] }, async (connection) => {
-      const user = await connection.getRepository(User).save({ name: 'John' })
+      await connection.getRepository(User).save({ name: 'John' })
+      const user = await connection.getRepository(User).findOneBy({ name: 'John' })
 
       // Assert
       expect(user).toBeTruthy()
-      expect(user.createdAt instanceof Date).toBeTruthy()
-      expect(user.updatedAt instanceof Date).toBeTruthy()
+      expect(user!.createdAt instanceof Date).toBeTruthy()
+      expect(user!.updatedAt instanceof Date).toBeTruthy()
     })
   })
 
@@ -372,7 +375,7 @@ describe('aurora data api pg > simple queries', () => {
 
       const newDateEntity = await connection.getRepository(DateEntity).save(dateEntity)
 
-      const loadedDateEntity = (await connection.getRepository(DateEntity).findOne(newDateEntity.id))!
+      const loadedDateEntity = (await connection.getRepository(DateEntity).findOneBy({ id: newDateEntity.id }))!
 
       // Assert
       expect(loadedDateEntity).toBeTruthy()
@@ -405,7 +408,7 @@ describe('aurora data api pg > simple queries', () => {
 
       const newJsonEntity = await connection.getRepository(JsonEntity).save(jsonEntity)
 
-      const loadedJsonEntity = (await connection.getRepository(JsonEntity).findOne(newJsonEntity.id))!
+      const loadedJsonEntity = (await connection.getRepository(JsonEntity).findOneBy({ id: newJsonEntity.id }))!
 
       // Assert
       expect(newJsonEntity).toBeTruthy()
@@ -426,7 +429,7 @@ describe('aurora data api pg > simple queries', () => {
 
       const newSimpleArrayEntity = await connection.getRepository(SimpleArrayEntity).save(simpleArrayEntity)
 
-      const loadedSimpleArrayEntity = (await connection.getRepository(SimpleArrayEntity).findOne(newSimpleArrayEntity.id))!
+      const loadedSimpleArrayEntity = (await connection.getRepository(SimpleArrayEntity).findOneBy({ id: newSimpleArrayEntity.id }))!
 
       // Assert
       expect(newSimpleArrayEntity).toBeTruthy()
@@ -445,7 +448,7 @@ describe('aurora data api pg > simple queries', () => {
 
       const newSimpleArrayEntity = await connection.getRepository(SimpleArrayEntity).save(simpleArrayEntity)
 
-      const loadedSimpleArrayEntity = (await connection.getRepository(SimpleArrayEntity).findOne(newSimpleArrayEntity.id))!
+      const loadedSimpleArrayEntity = (await connection.getRepository(SimpleArrayEntity).findOneBy({ id: newSimpleArrayEntity.id }))!
 
       // Assert
       expect(newSimpleArrayEntity).toBeTruthy()
@@ -466,7 +469,7 @@ describe('aurora data api pg > simple queries', () => {
 
       const newJsonEntity = await connection.getRepository(JsonEntity).save(jsonEntity)
 
-      const loadedJsonEntity = (await connection.getRepository(JsonEntity).findOne(newJsonEntity.id))!
+      const loadedJsonEntity = (await connection.getRepository(JsonEntity).findOneBy({ id: newJsonEntity.id }))!
 
       // Assert
       expect(newJsonEntity).toBeTruthy()

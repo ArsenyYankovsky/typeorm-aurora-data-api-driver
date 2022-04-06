@@ -7,7 +7,7 @@ jobs:
       - checkout
       - run:
           name: yarn
-          command: yarn install && npm i --no-save typeorm@0.2
+          command: yarn install && npm i --no-save typeorm@0.3
       - run:
           name: lint
           command: yarn lint
@@ -40,7 +40,7 @@ jobs:
           command: yarn
       - run:
           name: install additional dependencies
-          command: yarn add typeorm aws-sdk typeorm-aurora-data-api-driver
+          command: yarn add typeorm@0.3 aws-sdk typeorm-aurora-data-api-driver
       - persist_to_workspace:
           root: .
           paths:
@@ -116,7 +116,7 @@ jobs:
           command: yarn
       - run:
           name: install typeorm
-          command: npm i typeorm@0.2 --no-save
+          command: npm i typeorm@0.3 --no-save
       - run:
           name: build
           command: yarn build
