@@ -448,7 +448,7 @@ describe('aurora data api pg > simple queries', () => {
 
       const newSimpleArrayEntity = await connection.getRepository(SimpleArrayEntity).save(simpleArrayEntity)
 
-      const loadedSimpleArrayEntity = (await connection.getRepository(SimpleArrayEntity).findOne(newSimpleArrayEntity.id))!
+      const loadedSimpleArrayEntity = (await connection.getRepository(SimpleArrayEntity).findOneBy({ id: newSimpleArrayEntity.id }))!
 
       // Assert
       expect(newSimpleArrayEntity).toBeTruthy()
