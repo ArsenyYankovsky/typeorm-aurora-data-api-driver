@@ -90,7 +90,7 @@
     "ts-jest": "^27.0.4",
     "ts-node": "^7.0.1",
     "typedoc": "^0.20.33",
-    "typeorm": "0.3.5-dev.6774605",
+    "typeorm": "^0.3.5",
     "typescript": "^3.9.2"
   },
   "dependencies": {
