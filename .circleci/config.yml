@@ -382,7 +382,6 @@ workflows:
             branches:
               only:
                 - master
-                - fix-ci-wakeup-db
           requires:
             - prepare-func-tests
       - run-pg-func-tests-server:
