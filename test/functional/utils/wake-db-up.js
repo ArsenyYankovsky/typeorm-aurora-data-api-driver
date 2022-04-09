@@ -18,7 +18,7 @@ const credentials = {
 const wakeUpDb = async () => {
   try {
     const connection = await typeorm.createConnection({
-      type: dbType === 'mysql' ? 'aurora-data-api' : 'aurora-data-api-pg',
+      type: dbType === 'mysql' ? 'aurora-mysql' : 'aurora-postgres',
       database: credentials[dbType].database,
       secretArn: credentials[dbType].secretArn,
       resourceArn: credentials[dbType].resourceArn,
