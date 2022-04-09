@@ -17,7 +17,7 @@
     }
   ],
   "contributorsPerLine": 7,
-  "badgeTemplate": "[badge-all-contributors]: https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg?style=flat-square",
+  "badgeTemplate": "[badge-all-contributors]: https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg",
   "projectName": "typeorm-aurora-data-api-driver",
   "projectOwner": "ArsenyYankovsky",
   "repoType": "github",

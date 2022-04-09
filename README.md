@@ -1,6 +1,6 @@
 # typeorm-aurora-data-api-driver
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[badge-all-contributors]: https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square
+[badge-all-contributors]: https://img.shields.io/badge/all_contributors-1-orange.svg
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![typeorm-aurora-data-api-driver](https://circleci.com/gh/ArsenyYankovsky/typeorm-aurora-data-api-driver.svg?style=shield)](https://app.circleci.com/pipelines/github/ArsenyYankovsky/typeorm-aurora-data-api-driver)
 [![npm downloads](https://img.shields.io/npm/dw/typeorm-aurora-data-api-driver)](https://www.npmjs.com/package/typeorm-aurora-data-api-driver)
