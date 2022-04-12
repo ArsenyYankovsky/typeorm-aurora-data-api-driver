@@ -93,7 +93,7 @@ export class PostgresQueryTransformer extends QueryTransformer {
       case 'timestamptz':
         return typeof value === 'string' ? new Date(value + ' GMT+0') : value
       case 'date':
-        return value
+        return dateToDateString(value)
       case 'time':
         return value
       case 'hstore':
