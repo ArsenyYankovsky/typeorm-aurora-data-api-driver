@@ -2779,10 +2779,10 @@ dashdash@^1.12.0:
   dependencies:
     assert-plus "^1.0.0"
 
-data-api-client@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.npmjs.org/data-api-client/-/data-api-client-1.2.0.tgz"
-  integrity sha512-AGv4lWOF4RyoqUOLrYWbZeIP7eyFCM2UxGJ92XG9Q0xHofrT/67plprl0mAsxpAYdWQ8u0hLZFxC+iQSASsjgQ==
+data-api-client@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/data-api-client/-/data-api-client-1.3.0.tgz#57eba20e3fd6a51b70702ed01a8c30d58a3aaa4c"
+  integrity sha512-+Q+lChhl5PBogsB7nO/VZFF3X0WJe8y93dyft50HIg2Bg+c765wM/sXkfBz5pjmGoRESkB/GLesQJLTMBbK4dQ==
   dependencies:
     sqlstring "^2.3.2"
 
