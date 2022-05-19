@@ -48,7 +48,7 @@ jobs:
 
   run-mysql-func-tests-released:
     machine:
-      image: ubuntu-2004:202101-01
+      image: ubuntu-2004:202201-02
     steps:
       - attach_workspace:
           at: .
@@ -78,7 +78,7 @@ jobs:
 
   run-pg-func-tests-released:
     machine:
-      image: ubuntu-2004:202101-01
+      image: ubuntu-2004:202201-02
     steps:
       - attach_workspace:
           at: .
@@ -130,7 +130,7 @@ jobs:
 
   run-mysql-func-tests:
     machine:
-      image: ubuntu-1604:201903-01
+      image: ubuntu-2004:202201-02
     steps:
       - attach_workspace:
           at: .
@@ -166,7 +166,7 @@ jobs:
 
   run-pg-func-tests:
     machine:
-      image: ubuntu-1604:201903-01
+      image: ubuntu-2004:202201-02
     steps:
       - attach_workspace:
           at: .
