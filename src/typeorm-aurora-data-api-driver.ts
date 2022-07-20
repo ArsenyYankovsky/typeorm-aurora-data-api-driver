@@ -34,7 +34,7 @@ class DataApiDriver {
       formatOptions,
     })
     this.queryTransformer = queryTransformer
-    this.queryConfigOptions = serviceConfigOptions.queryConfigOptions
+    this.queryConfigOptions = serviceConfigOptions?.queryConfigOptions
   }
 
   public async query(query: string, parameters?: any[]): Promise<any> {
