@@ -481,4 +481,30 @@ describe('aurora data api pg > simple queries', () => {
       expect(loadedJsonEntity.jsonb).toEqual(jsonEntity.jsonb)
     })
   })
+
+  describe('long queries', () => {
+    it('should not be able to run a long query when continueAfterTimeout is false', async () => {
+      await useCleanDatabase('postgres', { serviceConfigOptions: { queryConfigOptions: { continueAfterTimeout: false } } }, async (connection) => {
+        const logSpy = jest.spyOn(global.console, 'log')
+
+        await expect(connection.query('select pg_sleep(60)')).rejects.toThrow()
+
+        expect(logSpy).toHaveBeenCalledWith('query: select pg_sleep(60)')
+        expect(logSpy).toBeCalledTimes(1)
+      })
+    })
+
+    it('should be able to run a long query when continueAfterTimeout is true', async () => {
+      await useCleanDatabase('postgres', { serviceConfigOptions: { queryConfigOptions: { continueAfterTimeout: true } } }, async (connection) => {
+        const logSpy = jest.spyOn(global.console, 'log')
+
+        const result = await connection.query('select pg_sleep(60)')
+
+        expect(logSpy).toHaveBeenCalledWith('query: select pg_sleep(60)')
+        expect(logSpy).toBeCalledTimes(1)
+
+        expect(result[0][1]).toBeUndefined()
+      })
+    })
+  })
 })

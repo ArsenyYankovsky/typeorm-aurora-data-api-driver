@@ -13,11 +13,11 @@ These steps will guide you through contributing to this project:
 	  - `yarn build`
 		- `yarn link`
 		- `yarn link typeorm-aurora-data-api-driver`
-	- To run functional tests for Postgres `docker-compose -f docker/pg.yml -d`
-		- `docker-compose -f docker/pg.yml -d`
+	- To run functional tests for Postgres `docker-compose -f docker/pg.yml up -d`
+		- `docker-compose -f docker/pg.yml up -d`
 		- `yarn test:pg-func`
 	- To run functional tests for MySQL run the following commands:
-		- `docker-compose -f docker/mysql.yml -d`
+		- `docker-compose -f docker/mysql.yml up -d`
 		- `yarn test:mysql-func`
 
 - Make sure to lint before committing
