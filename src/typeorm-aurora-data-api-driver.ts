@@ -17,6 +17,7 @@ class DataApiDriver {
     private readonly queryTransformer: QueryTransformer,
     private readonly serviceConfigOptions?: any,
     private readonly formatOptions?: any,
+    private readonly queryConfigOptions?: { continueAfterTimeout?: boolean },
   ) {
     this.region = region
     this.secretArn = secretArn
@@ -33,6 +34,7 @@ class DataApiDriver {
       formatOptions,
     })
     this.queryTransformer = queryTransformer
+    this.queryConfigOptions = serviceConfigOptions?.queryConfigOptions
   }
 
   public async query(query: string, parameters?: any[]): Promise<any> {
@@ -44,6 +46,7 @@ class DataApiDriver {
       sql: transformedQueryData.queryString,
       parameters: transformedQueryData.parameters,
       transactionId: this.transactionId,
+      continueAfterTimeout: this.queryConfigOptions?.continueAfterTimeout ?? false,
     })
 
     // TODO: Remove this hack when all Postgres calls in TypeORM use structured result
