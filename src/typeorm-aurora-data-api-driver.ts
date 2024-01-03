@@ -82,9 +82,15 @@ class DataApiDriver {
   }
 }
 
-const createMysqlDriver = (region: string, secretArn: string, resourceArn: string, database: string,
+const createMysqlDriver = (
+  region: string,
+  secretArn: string,
+  resourceArn: string,
+  database: string,
   loggerFn: (query: string, parameters?: any[]) => void = () => undefined,
-  serviceConfigOptions?: any, formatOptions?: any) => new DataApiDriver(
+  serviceConfigOptions?: any,
+  formatOptions?: any,
+) => new DataApiDriver(
   region,
   secretArn,
   resourceArn,
@@ -97,9 +103,15 @@ const createMysqlDriver = (region: string, secretArn: string, resourceArn: strin
 
 export default createMysqlDriver
 
-const createPostgresDriver = (region: string, secretArn: string, resourceArn: string, database: string,
+const createPostgresDriver = (
+  region: string,
+  secretArn: string,
+  resourceArn: string,
+  database: string,
   loggerFn: (query: string, parameters?: any[]) => void = () => undefined,
-  serviceConfigOptions?: any, formatOptions?: any) => new DataApiDriver(
+  serviceConfigOptions?: any,
+  formatOptions?: any,
+) => new DataApiDriver(
   region,
   secretArn,
   resourceArn,

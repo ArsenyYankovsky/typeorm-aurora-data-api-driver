@@ -65,7 +65,6 @@ export const stringToSimpleArray = (value: string|any): any[] => {
   return value
 }
 
-
 export const getDecimalCast = ({ precision, scale }: Pick<ColumnMetadata, 'scale' | 'precision'>): string => {
   if (!precision) return 'DECIMAL'
 

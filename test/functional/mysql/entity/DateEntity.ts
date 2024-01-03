@@ -11,17 +11,17 @@ export class DateEntity {
   // -------------------------------------------------------------------------
 
   @Column('date')
-  date!: string
+    date!: string
 
   @Column('datetime')
-  datetime!: Date
+    datetime!: Date
 
   @Column('timestamp')
-  timestamp!: Date
+    timestamp!: Date
 
   @Column('time')
-  time!: string
+    time!: string
 
   @Column('year')
-  year!: number
+    year!: number
 }

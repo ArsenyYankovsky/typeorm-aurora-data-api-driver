@@ -11,14 +11,14 @@ import {
 export default class User {
   @PrimaryGeneratedColumn('uuid')
   @Index()
-  id!: string
+    id!: string
 
   @Column()
-  name!: string
+    name!: string
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz', update: false })
-  createdAt!: Date
+    createdAt!: Date
 
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
-  updatedAt!: Date
+    updatedAt!: Date
 }

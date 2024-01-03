@@ -21,11 +21,11 @@ describe('aurora data api pg > simple queries', () => {
 
   it('should do a simple select', async () => {
     await useCleanDatabase('postgres', { logger: 'simple-console' }, async (connection) => {
-      const logSpy = jest.spyOn(global.console, 'log')
+      const logSpy = jest.spyOn(global.console, 'info')
 
       const result = await connection.query('select 1 as "1"')
 
-      expect(logSpy).toHaveBeenCalledWith('query: select 1 as "1"')
+      expect(logSpy).toHaveBeenCalledWith('query:', 'select 1 as "1"')
       expect(logSpy).toBeCalledTimes(1)
 
       expect(result[0][1]).toBe(1)
@@ -66,6 +66,7 @@ describe('aurora data api pg > simple queries', () => {
       const dbPost = await postRepository.findOneBy({
         id: {
           value: insertResult.id,
+          // @ts-ignore
           cast: 'uuid',
         },
       })
@@ -76,7 +77,6 @@ describe('aurora data api pg > simple queries', () => {
       expect(dbPost!.likesCount).toBe(4)
     })
   })
-
 
   it('should create a table with uuid primary key and be able to query it -- with UUID hack', async () => {
     await useCleanDatabase('postgres', { entities: [UuidPost, Category], formatOptions: { enableUuidHack: true, castParameters: true } }, async (connection) => {
@@ -89,10 +89,10 @@ describe('aurora data api pg > simple queries', () => {
 
       const insertResult = await postRepository.save(post)
 
-      // @ts-ignore
       const dbPost = await postRepository.findOneBy({
         id: {
           value: insertResult.id,
+          // @ts-ignore
           cast: 'uuid',
         },
       })
@@ -115,10 +115,10 @@ describe('aurora data api pg > simple queries', () => {
 
       await postRepository.save(post)
 
-      // @ts-ignore
       const dbPost = await postRepository.findOneBy({
         title: {
           value: 'f01bdc12-ed72-4260-86aa-b7123f08cab9',
+          // @ts-ignore
           cast: 'varchar',
         },
       })
@@ -458,7 +458,6 @@ describe('aurora data api pg > simple queries', () => {
       expect(loadedSimpleArrayEntity.array).toEqual([])
     })
   })
-
 
   it('should handle null values', async () => {
     await useCleanDatabase('postgres', { entities: [JsonEntity] }, async (connection) => {

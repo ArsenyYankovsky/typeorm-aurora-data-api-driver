@@ -2,12 +2,12 @@ version: 2
 jobs:
   checks:
     docker:
-      - image: "circleci/node:lts"
+      - image: "cimg/node:lts"
     steps:
       - checkout
       - run:
           name: yarn
-          command: yarn install && npm i --no-save typeorm@0.3
+          command: yarn && npm i --no-package-lock --no-save typeorm@0.3
       - run:
           name: lint
           command: yarn lint
@@ -17,7 +17,7 @@ jobs:
 
   release:
     docker:
-      - image: "circleci/node:lts"
+      - image: "cimg/node:lts"
     steps:
       - checkout
       - run:
@@ -32,7 +32,7 @@ jobs:
 
   prepare-func-tests-released:
     docker:
-      - image: "circleci/node:lts"
+      - image: "cimg/node:lts"
     steps:
       - checkout
       - run:
@@ -48,7 +48,7 @@ jobs:
 
   run-mysql-func-tests-released:
     machine:
-      image: ubuntu-2004:202201-02
+      image: ubuntu-2204:2023.04.2
     steps:
       - attach_workspace:
           at: .
@@ -57,7 +57,7 @@ jobs:
           echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
       - run:
           name: upgrade node
-          command: nvm install 14
+          command: nvm install --lts
       - run:
           name: install yarn
           command: |
@@ -71,14 +71,14 @@ jobs:
       - run:
           name: run mysql functional test
           command: |
-            nvm use 14
+            nvm use --lts
             unset MYSQL_SECRET_ARN
             unset MYSQL_RESOURCE_ARN
             yarn test:mysql-func
 
   run-pg-func-tests-released:
     machine:
-      image: ubuntu-2004:202201-02
+      image: ubuntu-2204:2023.04.2
     steps:
       - attach_workspace:
           at: .
@@ -87,7 +87,7 @@ jobs:
           echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
       - run:
           name: upgrade node
-          command: nvm install 14
+          command: nvm install --lts
       - run:
           name: install yarn
           command: |
@@ -101,14 +101,14 @@ jobs:
       - run:
           name: run mysql functional test
           command: |
-            nvm use 14
+            nvm use --lts
             unset PG_SECRET_ARN
             unset PG_RESOURCE_ARN
             yarn test:pg-func
 
   prepare-func-tests:
     docker:
-      - image: "circleci/node:lts"
+      - image: "cimg/node:lts"
     steps:
       - checkout
       - run:
@@ -116,7 +116,7 @@ jobs:
           command: yarn
       - run:
           name: install typeorm
-          command: npm i typeorm@0.3 --no-save
+          command: npm i --no-package-lock --no-save typeorm@0.3
       - run:
           name: build
           command: yarn build
@@ -130,7 +130,7 @@ jobs:
 
   run-mysql-func-tests:
     machine:
-      image: ubuntu-2004:202201-02
+      image: ubuntu-2204:2023.04.2
     steps:
       - attach_workspace:
           at: .
@@ -139,7 +139,7 @@ jobs:
           echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
       - run:
           name: upgrade node
-          command: nvm install 14
+          command: nvm install --lts
       - run:
           name: install yarn
           command: |
@@ -156,7 +156,7 @@ jobs:
       - run:
           name: run mysql functional test
           command: |
-            nvm use 14
+            nvm use --lts
             unset MYSQL_SECRET_ARN
             unset MYSQL_RESOURCE_ARN
             export AWS_ACCESS_KEY_ID="dummy"
@@ -166,7 +166,7 @@ jobs:
 
   run-pg-func-tests:
     machine:
-      image: ubuntu-2004:202201-02
+      image: ubuntu-2204:2023.04.2
     steps:
       - attach_workspace:
           at: .
@@ -175,7 +175,7 @@ jobs:
           echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
       - run:
           name: upgrade node
-          command: nvm install 14
+          command: nvm install --lts
       - run:
           name: install yarn
           command: |
@@ -192,7 +192,7 @@ jobs:
       - run:
           name: run mysql functional test
           command: |
-            nvm use 14
+            nvm use --lts
             unset PG_SECRET_ARN
             unset PG_RESOURCE_ARN
             export AWS_ACCESS_KEY_ID="dummy"
@@ -202,7 +202,7 @@ jobs:
 
   run-mysql-func-tests-server:
     docker:
-      - image: "circleci/node:lts"
+      - image: "cimg/node:lts"
     steps:
       - attach_workspace:
           at: .
@@ -217,7 +217,7 @@ jobs:
 
   run-mysql-func-tests-server-released:
     docker:
-      - image: "circleci/node:lts"
+      - image: "cimg/node:lts"
     steps:
       - attach_workspace:
           at: .
@@ -229,7 +229,7 @@ jobs:
 
   run-pg-func-tests-server:
     docker:
-      - image: "circleci/node:lts"
+      - image: "cimg/node:lts"
     steps:
       - attach_workspace:
           at: .
@@ -244,7 +244,7 @@ jobs:
 
   run-pg-func-tests-server-released:
     docker:
-      - image: "circleci/node:lts"
+      - image: "cimg/node:lts"
     steps:
       - attach_workspace:
           at: .

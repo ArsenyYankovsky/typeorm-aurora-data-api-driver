@@ -11,26 +11,26 @@ export class DateEntity {
   // -------------------------------------------------------------------------
 
   @Column('date')
-  date!: string
+    date!: string
 
   @Column('interval')
-  interval: any
+    interval: any
 
   @Column('time')
-  time!: string
+    time!: string
 
   @Column('time with time zone')
-  timeWithTimeZone!: string
+    timeWithTimeZone!: string
 
   @Column('timetz')
-  timetz!: string
+    timetz!: string
 
   @Column('timestamp')
-  timestamp!: Date
+    timestamp!: Date
 
   @Column('timestamp with time zone')
-  timestampWithTimeZone!: Date
+    timestampWithTimeZone!: Date
 
   @Column('timestamptz')
-  timestamptz!: Date
+    timestamptz!: Date
 }

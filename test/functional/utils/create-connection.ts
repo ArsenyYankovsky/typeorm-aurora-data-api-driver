@@ -22,6 +22,8 @@ const credentials = {
   },
 }
 
+export type DbType = 'mysql' | 'postgres'
+
 export const createConnection = async (dbType: DbType, partialOptions: any = {}) => typeormCreateConnection({
   ...partialOptions,
   name: dbType,
@@ -48,13 +50,10 @@ export const createConnectionAndResetData = async (
   await connection.synchronize(true)
   return connection
 }
-
-export type DbType = 'mysql' | 'postgres'
-
 export const useCleanDatabase = async (
   dbType: DbType,
   partialOptions: Partial<DataSourceOptions> = {},
-  invoke: (connection: DataSource) => Promise<void>,
+  invoke: (connection: DataSource) => Promise<void> = () => Promise.resolve(),
 ) => {
   const connection = await createConnectionAndResetData(dbType, partialOptions)
   try {
