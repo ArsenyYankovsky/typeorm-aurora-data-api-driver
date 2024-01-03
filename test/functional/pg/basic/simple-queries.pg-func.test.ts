@@ -77,7 +77,6 @@ describe('aurora data api pg > simple queries', () => {
     })
   })
 
-
   it('should create a table with uuid primary key and be able to query it -- with UUID hack', async () => {
     await useCleanDatabase('postgres', { entities: [UuidPost, Category], formatOptions: { enableUuidHack: true, castParameters: true } }, async (connection) => {
       const postRepository = connection.getRepository(UuidPost)
@@ -458,7 +457,6 @@ describe('aurora data api pg > simple queries', () => {
       expect(loadedSimpleArrayEntity.array).toEqual([])
     })
   })
-
 
   it('should handle null values', async () => {
     await useCleanDatabase('postgres', { entities: [JsonEntity] }, async (connection) => {

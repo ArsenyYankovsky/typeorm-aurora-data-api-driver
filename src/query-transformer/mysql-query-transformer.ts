@@ -166,15 +166,13 @@ export class MysqlQueryTransformer extends QueryTransformer {
   }
 
   protected expandArrayParameters(parameters: any[]): any[] {
-    return parameters.reduce(
-      (expandedParameters, parameter) => {
-        if (Array.isArray(parameter)) {
-          expandedParameters.push(...parameter)
-        } else {
-          expandedParameters.push(parameter)
-        }
-        return expandedParameters
-      }, [],
-    )
+    return parameters.reduce((expandedParameters, parameter) => {
+      if (Array.isArray(parameter)) {
+        expandedParameters.push(...parameter)
+      } else {
+        expandedParameters.push(parameter)
+      }
+      return expandedParameters
+    }, [])
   }
 }

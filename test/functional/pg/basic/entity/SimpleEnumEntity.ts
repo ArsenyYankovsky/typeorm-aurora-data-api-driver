@@ -30,7 +30,6 @@ export type ArrayDefinedStringEnumType = 'admin' | 'editor' | 'ghost'
 
 export type ArrayDefinedNumericEnumType = 11 | 12 | 13
 
-
 @Entity()
 export class SimpleEnumEntity {
   @PrimaryColumn()
