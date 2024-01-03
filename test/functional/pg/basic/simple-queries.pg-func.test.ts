@@ -21,11 +21,11 @@ describe('aurora data api pg > simple queries', () => {
 
   it('should do a simple select', async () => {
     await useCleanDatabase('postgres', { logger: 'simple-console' }, async (connection) => {
-      const logSpy = jest.spyOn(global.console, 'log')
+      const logSpy = jest.spyOn(global.console, 'info')
 
       const result = await connection.query('select 1 as "1"')
 
-      expect(logSpy).toHaveBeenCalledWith('query: select 1 as "1"')
+      expect(logSpy).toHaveBeenCalledWith('query:', 'select 1 as "1"')
       expect(logSpy).toBeCalledTimes(1)
 
       expect(result[0][1]).toBe(1)
