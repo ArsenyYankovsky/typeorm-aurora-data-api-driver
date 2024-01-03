@@ -21,7 +21,7 @@
   "scripts": {
     "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\"",
     "prebuild": "rimraf dist",
-    "build": "tsc --p tsconfig.build.json --module commonjs && rollup --bundleConfigAsCjs -c rollup.config.js && typedoc --out docs --theme minimal src",
+    "build": "tsc --p tsconfig.build.json --module commonjs && rollup --bundleConfigAsCjs -c rollup.config.js && typedoc --out docs src/typeorm-aurora-data-api-driver.ts",
     "start": "rollup -c rollup.config.ts -w",
     "test": "jest",
     "test:unit": "jest unit",
@@ -63,7 +63,7 @@
     "@typescript-eslint/parser": "^6.17.0",
     "aws-sdk": "^2.868.0",
     "colors": "^1.3.2",
-    "commitizen": "^3.0.0",
+    "commitizen": "^4.3.0",
     "coveralls": "^3.1.1",
     "cross-env": "^5.2.0",
     "cz-conventional-changelog": "^2.1.0",

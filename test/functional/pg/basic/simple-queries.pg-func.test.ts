@@ -66,6 +66,7 @@ describe('aurora data api pg > simple queries', () => {
       const dbPost = await postRepository.findOneBy({
         id: {
           value: insertResult.id,
+          // @ts-ignore
           cast: 'uuid',
         },
       })
@@ -88,10 +89,10 @@ describe('aurora data api pg > simple queries', () => {
 
       const insertResult = await postRepository.save(post)
 
-      // @ts-ignore
       const dbPost = await postRepository.findOneBy({
         id: {
           value: insertResult.id,
+          // @ts-ignore
           cast: 'uuid',
         },
       })
@@ -114,10 +115,10 @@ describe('aurora data api pg > simple queries', () => {
 
       await postRepository.save(post)
 
-      // @ts-ignore
       const dbPost = await postRepository.findOneBy({
         title: {
           value: 'f01bdc12-ed72-4260-86aa-b7123f08cab9',
+          // @ts-ignore
           cast: 'varchar',
         },
       })
