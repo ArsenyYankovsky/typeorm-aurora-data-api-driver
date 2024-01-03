@@ -7,7 +7,7 @@ jobs:
       - checkout
       - run:
           name: yarn
-          command: yarn install && npm i --no-save typeorm@0.3
+          command: yarn && npm i --no-package-lock --no-save typeorm@0.3
       - run:
           name: lint
           command: yarn lint
