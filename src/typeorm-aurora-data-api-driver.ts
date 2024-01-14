@@ -1,6 +1,5 @@
-// @ts-ignore
-import createDataApiClient from 'data-api-client'
 import { ColumnMetadata } from 'typeorm/metadata/ColumnMetadata'
+import { createDataApiClient } from './data-api-client'
 import { MysqlQueryTransformer, PostgresQueryTransformer, QueryTransformer } from './query-transformer'
 
 class DataApiDriver {

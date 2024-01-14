@@ -1,4 +1,3 @@
-import * as AWS from 'aws-sdk'
 import * as http from 'http'
 import {
   DataSource,
@@ -35,7 +34,7 @@ export const createConnection = async (dbType: DbType, partialOptions: any = {})
   logging: true,
   logger: 'simple-console',
   serviceConfigOptions: !credentials[dbType]?.secretArn && {
-    endpoint: new AWS.Endpoint('http://127.0.0.1:8080'),
+    endpoint: 'http://127.0.0.1:8080',
     httpOptions: {
       agent: new http.Agent(),
     },

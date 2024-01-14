@@ -1,14 +1,15 @@
-// @ts-ignore
-import createDataApiClient from 'data-api-client'
-import mysql, { pg } from '../src/typeorm-aurora-data-api-driver'
-
-jest.mock('data-api-client', () => {
+/* eslint-disable import/first */
+jest.mock('../src/data-api-client', () => {
   const query = jest.fn(async () => ({ result: '' }))
-  return { __esModule: true,
-    default: () => ({
+  return {
+    createDataApiClient: () => ({
       query,
-    }) }
+    }),
+  }
 })
+
+import { createDataApiClient } from '../src/data-api-client'
+import mysql, { pg } from '../src/typeorm-aurora-data-api-driver'
 
 describe('DataApiDriver', () => {
   describe.each([['pg', { driver: pg }], ['mysql', { driver: mysql }]])('driver class: %s', (_, { driver }) => {
