@@ -40,7 +40,7 @@ jobs:
           command: yarn
       - run:
           name: install additional dependencies
-          command: yarn add typeorm@0.3 aws-sdk typeorm-aurora-data-api-driver
+          command: yarn add typeorm@0.3 @aws-sdk/client-rds-data typeorm-aurora-data-api-driver
       - persist_to_workspace:
           root: .
           paths:
@@ -121,8 +121,8 @@ jobs:
           name: build
           command: yarn build
       - run:
-          name: install aws-sdk
-          command: npm i aws-sdk
+          name: install @aws-sdk/client-rds-data
+          command: npm i @aws-sdk/client-rds-data
       - persist_to_workspace:
           root: .
           paths:
