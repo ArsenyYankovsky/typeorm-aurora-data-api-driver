@@ -12,6 +12,8 @@
 
 This project is a bridge between [TypeORM](https://typeorm.io/#/) and [Aurora Data API](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/data-api.html). It allows you to migrate to Aurora Data API which is extremely useful is serverless environments by only modifying the connection configuration. 
 
+✔ AWS SDK V3
+
 ✔ Supports both Postgres and MySQL.
 
 ✔ Supports casting (allows using UUID, enums, properly formats date and time columns).
