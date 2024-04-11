@@ -25,6 +25,16 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "vitherain",
+      "name": "Vít Herain",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10929246?v=4",
+      "profile": "https://github.com/vitherain",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -33,5 +43,7 @@
   "projectOwner": "ArsenyYankovsky",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "commitType": "docs",
+  "commitConvention": "angular"
 }

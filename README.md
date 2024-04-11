@@ -1,6 +1,6 @@
 # typeorm-aurora-data-api-driver
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[badge-all-contributors]: https://img.shields.io/badge/all_contributors-2-orange.svg
+[badge-all-contributors]: https://img.shields.io/badge/all_contributors-3-orange.svg
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![typeorm-aurora-data-api-driver](https://circleci.com/gh/ArsenyYankovsky/typeorm-aurora-data-api-driver.svg?style=shield)](https://app.circleci.com/pipelines/github/ArsenyYankovsky/typeorm-aurora-data-api-driver)
 [![npm downloads](https://img.shields.io/npm/dw/typeorm-aurora-data-api-driver)](https://www.npmjs.com/package/typeorm-aurora-data-api-driver)
@@ -199,10 +199,13 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-  <tr>
-    <td align="center"><a href="https://danielpecos.com"><img src="https://avatars.githubusercontent.com/u/584298?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Daniel Pecos Martinez</b></sub></a><br /><a href="https://github.com/ArsenyYankovsky/typeorm-aurora-data-api-driver/commits?author=dpecos" title="Code">💻</a> <a href="https://github.com/ArsenyYankovsky/typeorm-aurora-data-api-driver/issues?q=author%3Adpecos" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="https://github.com/calvin-summer"><img src="https://avatars.githubusercontent.com/u/74207091?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Calvin</b></sub></a><br /><a href="https://github.com/ArsenyYankovsky/typeorm-aurora-data-api-driver/commits?author=calvin-summer" title="Code">💻</a> <a href="https://github.com/ArsenyYankovsky/typeorm-aurora-data-api-driver/commits?author=calvin-summer" title="Documentation">📖</a> <a href="https://github.com/ArsenyYankovsky/typeorm-aurora-data-api-driver/commits?author=calvin-summer" title="Tests">⚠️</a></td>
-  </tr>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://danielpecos.com"><img src="https://avatars.githubusercontent.com/u/584298?v=4?s=100" width="100px;" alt="Daniel Pecos Martinez"/><br /><sub><b>Daniel Pecos Martinez</b></sub></a><br /><a href="https://github.com/ArsenyYankovsky/typeorm-aurora-data-api-driver/commits?author=dpecos" title="Code">💻</a> <a href="https://github.com/ArsenyYankovsky/typeorm-aurora-data-api-driver/issues?q=author%3Adpecos" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/calvin-summer"><img src="https://avatars.githubusercontent.com/u/74207091?v=4?s=100" width="100px;" alt="Calvin"/><br /><sub><b>Calvin</b></sub></a><br /><a href="https://github.com/ArsenyYankovsky/typeorm-aurora-data-api-driver/commits?author=calvin-summer" title="Code">💻</a> <a href="https://github.com/ArsenyYankovsky/typeorm-aurora-data-api-driver/commits?author=calvin-summer" title="Documentation">📖</a> <a href="https://github.com/ArsenyYankovsky/typeorm-aurora-data-api-driver/commits?author=calvin-summer" title="Tests">⚠️</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/vitherain"><img src="https://avatars.githubusercontent.com/u/10929246?v=4?s=100" width="100px;" alt="Vít Herain"/><br /><sub><b>Vít Herain</b></sub></a><br /><a href="https://github.com/ArsenyYankovsky/typeorm-aurora-data-api-driver/commits?author=vitherain" title="Code">💻</a> <a href="https://github.com/ArsenyYankovsky/typeorm-aurora-data-api-driver/issues?q=author%3Avitherain" title="Bug reports">🐛</a></td>
+    </tr>
+  </tbody>
 </table>
 
 <!-- markdownlint-restore -->
