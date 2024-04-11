@@ -5,6 +5,7 @@ import { Category } from './entity/Category'
 import { DateEntity } from './entity/DateEntity'
 import { JsonEntity } from './entity/JsonEntity'
 import { SimpleArrayEntity } from './entity/SimpleArrayEntity'
+import { SpecificSchemaSimpleEnumEntity } from './entity/SpecificSchemaSimpleEnumEntity'
 import { Post } from './entity/Post'
 import {
   HeterogeneousEnum,
@@ -161,6 +162,33 @@ describe('aurora data api pg > simple queries', () => {
       const enumEntityRepository = connection.getRepository(SimpleEnumEntity)
 
       const enumEntity = new SimpleEnumEntity()
+      enumEntity.id = 1
+      enumEntity.numericEnum = NumericEnum.EDITOR
+      enumEntity.numericSimpleEnum = NumericEnum.EDITOR
+      enumEntity.stringEnum = StringEnum.ADMIN
+      enumEntity.stringNumericEnum = StringNumericEnum.TWO
+      enumEntity.heterogeneousEnum = HeterogeneousEnum.YES
+      enumEntity.arrayDefinedStringEnum = 'editor'
+      enumEntity.arrayDefinedNumericEnum = 13
+      enumEntity.enumWithoutdefault = StringEnum.ADMIN
+      await enumEntityRepository.save(enumEntity)
+
+      const loadedEnumEntity = await enumEntityRepository.findOneBy({ id: 1 })
+      expect(loadedEnumEntity!.numericEnum).toBe(NumericEnum.EDITOR)
+      expect(loadedEnumEntity!.numericSimpleEnum).toBe(NumericEnum.EDITOR)
+      expect(loadedEnumEntity!.stringEnum).toBe(StringEnum.ADMIN)
+      expect(loadedEnumEntity!.stringNumericEnum).toBe(StringNumericEnum.TWO)
+      expect(loadedEnumEntity!.heterogeneousEnum).toBe(HeterogeneousEnum.YES)
+      expect(loadedEnumEntity!.arrayDefinedStringEnum).toBe('editor')
+      expect(loadedEnumEntity!.arrayDefinedNumericEnum).toBe(13)
+    })
+  })
+
+  it('should correctly save and retrieve enums in different db schema', async () => {
+    await useCleanDatabase('postgres', { entities: [UuidPost, Category, SpecificSchemaSimpleEnumEntity] }, async (connection) => {
+      const enumEntityRepository = connection.getRepository(SpecificSchemaSimpleEnumEntity)
+
+      const enumEntity = new SpecificSchemaSimpleEnumEntity()
       enumEntity.id = 1
       enumEntity.numericEnum = NumericEnum.EDITOR
       enumEntity.numericSimpleEnum = NumericEnum.EDITOR
