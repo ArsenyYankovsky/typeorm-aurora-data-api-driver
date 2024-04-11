@@ -47,7 +47,7 @@ export const createConnectionAndResetData = async (
 ) => {
   const connection = await createConnection(dbType, { ...partialOptions, synchronize: false })
   if (dbType === 'postgres') {
-    await connection.query('DROP SCHEMA foo CASCADE; CREATE SCHEMA foo;')
+    await connection.query('DROP SCHEMA IF EXISTS foo CASCADE; CREATE SCHEMA foo;')
   }
   await connection.synchronize(true)
   return connection
