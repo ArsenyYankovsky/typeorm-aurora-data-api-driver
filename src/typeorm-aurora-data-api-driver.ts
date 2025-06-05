@@ -7,6 +7,8 @@ class DataApiDriver {
 
   private transactionId?: string
 
+  private transactionQueryChain: Promise<void>
+
   constructor(
     private readonly region: string,
     private readonly secretArn: string,
@@ -34,19 +36,35 @@ class DataApiDriver {
     })
     this.queryTransformer = queryTransformer
     this.queryConfigOptions = serviceConfigOptions?.queryConfigOptions
+    this.transactionQueryChain = Promise.resolve()
   }
 
   public async query(query: string, parameters?: any[]): Promise<any> {
-    const transformedQueryData = this.queryTransformer.transformQueryAndParameters(query, parameters)
+    const transformedQueryData = this.queryTransformer.transformQueryAndParameters(
+      query,
+      parameters,
+    )
 
     this.loggerFn(transformedQueryData.queryString, transformedQueryData.parameters)
 
-    let result = await this.client.query({
+    const config = {
       sql: transformedQueryData.queryString,
       parameters: transformedQueryData.parameters,
       transactionId: this.transactionId,
       continueAfterTimeout: this.queryConfigOptions?.continueAfterTimeout ?? false,
-    })
+    }
+
+    let notifyDone = () => {}
+    if (config.transactionId) {
+      notifyDone = await this.waitForTransaction()
+    }
+
+    let result: any
+    try {
+      result = await this.client.query(config)
+    } finally {
+      notifyDone()
+    }
 
     // TODO: Remove this hack when all Postgres calls in TypeORM use structured result
     if (result.records) {
@@ -78,6 +96,19 @@ class DataApiDriver {
   public async rollbackTransaction(): Promise<void> {
     await this.client.rollbackTransaction({ transactionId: this.transactionId })
     this.transactionId = undefined
+  }
+
+  private async waitForTransaction(): Promise<() => void> {
+    let notifyDone = () => {}
+    const thisQueryExecuting = new Promise<void>((resolve) => {
+      notifyDone = () => {
+        resolve(undefined)
+      }
+    })
+    const previousQuery = this.transactionQueryChain
+    this.transactionQueryChain = previousQuery.then(() => thisQueryExecuting)
+    await previousQuery
+    return notifyDone
   }
 }
 
